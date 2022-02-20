@@ -14,7 +14,8 @@ namespace Utilities
 		#region Variables
 
 		private readonly string path;
-		private readonly string name;
+		private readonly bool useResources;
+		private readonly bool bypassExceptions;
 
 		#endregion
 
@@ -26,12 +27,14 @@ namespace Utilities
 		{
 			CheckValidity();
 
-			string fullPath = $"{path}/{name}";
 			FileStream stream = null;
 
 			try
 			{
-				stream = File.Open(fullPath, FileMode.OpenOrCreate);
+				if (!Directory.Exists(Path.GetDirectoryName(path)))
+					Directory.CreateDirectory(Path.GetDirectoryName(path));
+
+				stream = File.Open($"{path}{(useResources ? ".bytes" : "")}", FileMode.OpenOrCreate);
 
 				BinaryFormatter formatter = new BinaryFormatter();
 
@@ -41,7 +44,10 @@ namespace Utilities
 			}
 			catch (Exception e)
 			{
-				throw e;
+				if (!bypassExceptions)
+					throw e;
+				else
+					return false;
 			}
 			finally
 			{
@@ -53,17 +59,18 @@ namespace Utilities
 		{
 			CheckValidity();
 
-			string fullPath = $"{path}/{name}";
+			if (!bypassExceptions && (useResources && !Resources.Load<TextAsset>(path) || !useResources && !File.Exists(path)))
+				throw new ArgumentException($"The file ({path}) doesn't exist");
 
-			if (!File.Exists(fullPath))
-				throw new ArgumentException("The given file name argument doesn't exist");
-
-			FileStream stream = null;
+			Stream stream = null;
 
 			try
 			{
+				if (useResources)
+					stream = new MemoryStream(Resources.Load<TextAsset>(path).bytes);
+				else
+					stream = File.Open(path, FileMode.OpenOrCreate);
 
-				stream = File.Open(fullPath, FileMode.OpenOrCreate);
 				BinaryFormatter formatter = new BinaryFormatter();
 				T data = formatter.Deserialize(stream) as T;
 
@@ -71,7 +78,10 @@ namespace Utilities
 			}
 			catch (Exception e)
 			{
-				throw e;
+				if (bypassExceptions)
+					return null;
+				else
+					throw e;
 			}
 			finally
 			{
@@ -79,45 +89,70 @@ namespace Utilities
 					stream.Close();
 			}
 		}
+		public void Delete()
+		{
+			CheckValidity();
+
+			if (useResources)
+			{
+				Debug.LogError("You can't delete a resource file, use normal path finding instead!");
+
+				return;
+			}
+
+			if (!bypassExceptions && !File.Exists(path))
+				throw new FileNotFoundException($"We couldn't delete ({path}), as it doesn't exist!");
+
+			try
+			{
+				File.Delete(path);
+			}
+			catch (Exception e)
+			{
+				if (!bypassExceptions)
+					throw e;
+			}
+		}
 
 		private void CheckValidity()
 		{
-			if (!Directory.Exists(path))
-				Directory.CreateDirectory(path);
+			if (useResources)
+				return;
 
-			FileAttributes fileAttributes = File.GetAttributes(path);
+			if (!Directory.Exists(Path.GetDirectoryName(path)))
+				Directory.CreateDirectory(Path.GetDirectoryName(path));
+
+			FileAttributes fileAttributes = File.GetAttributes(Path.GetDirectoryName(path));
 
 			if (!fileAttributes.HasFlag(FileAttributes.Directory))
-				throw new ArgumentException($"The `path` argument of value \"{path}\" is not a valid directory");
-
-			if (string.IsNullOrEmpty(name))
-				throw new ArgumentNullException("name", "The `name` argument cannot be null");
+				throw new DirectoryNotFoundException($"The `path` argument of value \"{Path.GetDirectoryName(path)}\" must be a valid directory");
 		}
 
-        #endregion
+		#endregion
 
-        #region Constructors & Operators
+		#region Constructors & Operators
 
-        #region Constructors
+		#region Constructors
 
-        public DataSerializationUtility(string path, string name)
+		public DataSerializationUtility(string path, bool loadFromResources, bool bypassExceptions = false)
 		{
 			this.path = path;
-			this.name = name;
+			this.useResources = loadFromResources;
+			this.bypassExceptions = bypassExceptions;
 
 			CheckValidity();
 		}
 
-        #endregion
+		#endregion
 
-        #region Operators
+		#region Operators
 
 		public static implicit operator bool(DataSerializationUtility<T> serializationUtility) => serializationUtility != null;
 
-        #endregion
+		#endregion
 
-        #endregion
+		#endregion
 
-        #endregion
-    }
+		#endregion
+	}
 }
