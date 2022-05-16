@@ -6,7 +6,7 @@ using UnityEditor;
 
 #endregion
 
-namespace Utilities
+namespace Utilities.Editor
 {
 	public static class ScriptableObjectUtility
 	{
@@ -37,8 +37,9 @@ namespace Utilities
 				return null;
 			}
 		}
-		[MenuItem("Assets/Create/ScriptableObjects/Empty Scriptable Object")]
-		public static void CreateNewAsset()
+
+		[MenuItem("Assets/Create/Empty Scriptable Object")]
+		internal static void CreateEmptyAsset()
 		{
 			CreateAsset<ScriptableObject>($"{AssetDatabase.GetAssetPath(Selection.activeObject)}/New Scriptable Object");
 		}

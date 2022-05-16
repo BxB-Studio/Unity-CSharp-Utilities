@@ -1,5 +1,6 @@
 ﻿#region Namespaces
 
+using System;
 using System.IO;
 using UnityEngine;
 using UnityEditor;
@@ -7,7 +8,7 @@ using System.Linq;
 
 #endregion
 
-namespace Utilities
+namespace Utilities.Editor
 {
 	public static class EditorUtilities
 	{
@@ -31,7 +32,7 @@ namespace Utilities
 					GUIStyle style = new GUIStyle("Button");
 
 #if UNITY_2019_3_OR_NEWER
-					style.normal.textColor = EditorGUIUtility.isProSkin ? UnityEngine.Color.white : UnityEngine.Color.black;
+					style.normal.textColor = EditorGUIUtility.isProSkin ? Color.white : Color.black;
 #else
 					style.normal = style.active;
 #endif
@@ -55,7 +56,13 @@ namespace Utilities
 					GUIStyle style = new GUIStyle("MiniButton");
 
 #if UNITY_2019_3_OR_NEWER
-					style.normal.textColor = EditorGUIUtility.isProSkin ? UnityEngine.Color.white : UnityEngine.Color.black;
+					style.normal = new GUIStyleState()
+					{
+						background = style.active.background,
+						scaledBackgrounds = style.active.scaledBackgrounds
+					};
+					style.normal.textColor = EditorGUIUtility.isProSkin ? Color.white : Color.black;
+
 #else
 					style.normal = style.active;
 #endif
@@ -79,7 +86,7 @@ namespace Utilities
 					GUIStyle style = new GUIStyle("MiniButtonMid");
 
 #if UNITY_2019_3_OR_NEWER
-					style.normal.textColor = EditorGUIUtility.isProSkin ? UnityEngine.Color.white : UnityEngine.Color.black;
+					style.normal.textColor = EditorGUIUtility.isProSkin ? Color.white : Color.black;
 #else
 					style.normal = style.active;
 #endif
@@ -103,7 +110,7 @@ namespace Utilities
 					GUIStyle style = new GUIStyle("MiniButtonLeft");
 
 #if UNITY_2019_3_OR_NEWER
-					style.normal.textColor = EditorGUIUtility.isProSkin ? UnityEngine.Color.white : UnityEngine.Color.black;
+					style.normal.textColor = EditorGUIUtility.isProSkin ? Color.white : Color.black;
 #else
 					style.normal = style.active;
 #endif
@@ -127,7 +134,7 @@ namespace Utilities
 					GUIStyle style = new GUIStyle("MiniButtonRight");
 
 #if UNITY_2019_3_OR_NEWER
-					style.normal.textColor = EditorGUIUtility.isProSkin ? UnityEngine.Color.white : UnityEngine.Color.black;
+					style.normal.textColor = EditorGUIUtility.isProSkin ? Color.white : Color.black;
 #else
 					style.normal = style.active;
 #endif
@@ -178,6 +185,54 @@ namespace Utilities
 		#endregion
 
 		#region Methods
+
+		#region Utilities
+
+		public static void AddScriptingDefineSymbol(string symbol)
+		{
+			string[] scriptingDefineSymbols = GetScriptingDefineSymbols();
+			bool emptySymbols = scriptingDefineSymbols.Length < 1;
+
+			if (emptySymbols || !ScriptingDefineSymbolExists(scriptingDefineSymbols, symbol))
+				PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup, $"{(!emptySymbols ? $"{scriptingDefineSymbols};" : "")}{symbol}");
+		}
+		public static void RemoveScriptingDefineSymbol(string symbol)
+		{
+			string[] scriptingDefineSymbols = GetScriptingDefineSymbols();
+			bool emptySymbols = scriptingDefineSymbols.Length < 1;
+
+			if (!emptySymbols)
+			{
+				if (ScriptingDefineSymbolExists(scriptingDefineSymbols, symbol))
+				{
+					ArrayUtility.Remove(ref scriptingDefineSymbols, symbol);
+					PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup, string.Join(";", scriptingDefineSymbols));
+				}
+			}
+		}
+		public static bool ScriptingDefineSymbolExists(string symbol)
+		{
+			string[] scriptingDefineSymbols = GetScriptingDefineSymbols();
+
+			return ScriptingDefineSymbolExists(scriptingDefineSymbols, symbol);
+		}
+		public static string[] GetScriptingDefineSymbols()
+		{
+			return GetScriptingDefineSymbols(EditorUserBuildSettings.selectedBuildTargetGroup);
+		}
+		public static string[] GetScriptingDefineSymbols(BuildTargetGroup buildTargetGroup)
+		{
+			return PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup).Split(';');
+		}
+
+		private static bool ScriptingDefineSymbolExists(string[] symbols, string symbol)
+		{
+			return Array.IndexOf(symbols, symbol) > -1;
+		}
+
+		#endregion
+
+		#region Menu Items
 
 		[MenuItem("Tools/Utilities/Debug/GameObject Bounds", true)]
 		public static bool DebugBoundsCheck()
@@ -281,6 +336,8 @@ namespace Utilities
 			AssetDatabase.Refresh();
 			EditorUtility.ClearProgressBar();
 		}
+
+		#endregion
 
 		#endregion
 	}
