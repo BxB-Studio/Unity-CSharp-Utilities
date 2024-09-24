@@ -24,13 +24,10 @@ namespace Utilities.Editor
 		[MenuItem("Tools/Utilities/Wheel Radius Calculator")]
 		public static void ShowWindow()
 		{
-			WheelRadiusCalculatorEditor window = GetWindow<WheelRadiusCalculatorEditor>(true, "Wheel Radius Calculator");
+			WheelRadiusCalculatorEditor window = GetWindow<WheelRadiusCalculatorEditor>(true, "Wheel Radius Calculator", true);
 
 			window.minSize = new Vector2(512f, 128f);
 			window.maxSize = window.minSize;
-
-			window.Show();
-			window.Focus();
 		}
 
 		#endregion

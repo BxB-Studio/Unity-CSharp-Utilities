@@ -1,0 +1,19 @@
+{
+  "displayName": "Utilities",
+  "name": "dev.bxbstudio.utilities",
+  "description": "The Unity CSharp Utilities library provides a bunch of useful tools that are missing from the UnityEngine assembly",
+  "version": "1.1.0",
+  "unity": "2021.3",
+  "unityRelease": "41f1",
+  "dependencies": {
+    "com.unity.mathematics": "1.2.6"
+  },
+  "documentationUrl": "https://github.com/BxB-Studio/Unity-CSharp-Utilities/blob/master/README.md",
+  "changelogUrl": "https://github.com/BxB-Studio/Unity-CSharp-Utilities/blob/master/README.md",
+  "licensesUrl": "https://github.com/BxB-Studio/Unity-CSharp-Utilities/blob/master/README.md",
+  "author": {
+    "name": "BxB Studio",
+    "email": "contact@bxbstudio.dev",
+    "url": "https://bxbstudio.dev"
+  }
+}

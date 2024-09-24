@@ -24,13 +24,10 @@ namespace Utilities.Editor
 		[MenuItem("Tools/Utilities/Units Converter")]
 		public static void ShowWindow()
 		{
-			UnitsConverterEditor window = GetWindow<UnitsConverterEditor>(true, "Units Converter");
+			UnitsConverterEditor window = GetWindow<UnitsConverterEditor>(true, "Units Converter", true);
 
 			window.minSize = new Vector2(512f, 128f);
 			window.maxSize = window.minSize;
-
-			window.Show();
-			window.Focus();
 		}
 
 		#endregion
