@@ -245,7 +245,7 @@ namespace Utilities.Editor
 		public static string[] GetScriptingDefineSymbols()
 		{
 #if UNITY_2021_2_OR_NEWER
-			GetScriptingDefineSymbols(GetCurrentBuildTargetGroup(), out string[] defines);
+			GetScriptingDefineSymbols(GetCurrentNamedBuildTarget(), out string[] defines);
 #else
 			GetScriptingDefineSymbols(GetCurrentBuildTargetGroup(), out string[] defines);
 #endif
