@@ -3279,6 +3279,22 @@ namespace Utilities
 		{
 			return math.min(math.min(a, b), math.min(c, d));
 		}
+		public static float Max(float a, float b, float c, float d, float e)
+		{
+			return math.max(math.max(math.max(a, b), math.max(c, d)), e);
+		}
+		public static float Min(float a, float b, float c, float d, float e)
+		{
+			return math.min(math.min(math.min(a, b), math.min(c, d)), e);
+		}
+		public static float Max(float a, float b, float c, float d, float e, float f)
+		{
+			return math.max(math.max(math.max(a, b), math.max(c, d)), math.max(e, f));
+		}
+		public static float Min(float a, float b, float c, float d, float e, float f)
+		{
+			return math.min(math.min(math.min(a, b), math.min(c, d)), math.min(e, f));
+		}
 		public static float Max(params float[] numbers)
 		{
 			if (numbers.Length < 1)

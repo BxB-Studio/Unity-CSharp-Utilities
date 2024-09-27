@@ -2,7 +2,7 @@
   "displayName": "Utilities",
   "name": "dev.bxbstudio.utilities",
   "description": "The Unity CSharp Utilities library provides a bunch of useful tools that are missing from the UnityEngine assembly",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "unity": "2021.3",
   "unityRelease": "41f1",
   "dependencies": {
