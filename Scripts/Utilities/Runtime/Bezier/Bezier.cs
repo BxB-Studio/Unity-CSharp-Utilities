@@ -60,7 +60,11 @@ namespace Utilities
 
 					if (loopedPath)
 					{
+#if UNITY_2021_2_OR_NEWER
 						points.Add(points[^1] * 2f - points[^2]);
+#else
+						points.Add(points[points.Count - 1] * 2f - points[points.Count - 2]);
+#endif
 						points.Add(points[0] * 2f - points[1]);
 
 						if (AutoCalculateControls)
@@ -235,13 +239,22 @@ namespace Utilities
 				}
 				else if (points.Count == 1)
 				{
+#if UNITY_2021_2_OR_NEWER
 					points.Add(Utility.Average(points[^1], position));
+#else
+					points.Add(Utility.Average(points[points.Count - 1], position));
+#endif
 					points.Add(Utility.Average(points[0], position));
 				}
 				else
 				{
+#if UNITY_2021_2_OR_NEWER
 					points.Add(points[^1] * 2f - points[^2]);
 					points.Add(Utility.Average(points[^1], position));
+#else
+					points.Add(points[points.Count - 1] * 2f - points[points.Count - 2]);
+					points.Add(Utility.Average(points[points.Count - 1], position));
+#endif
 				}
 
 				points.Add(position);
@@ -291,7 +304,11 @@ namespace Utilities
 				if (anchorIndex == 0)
 				{
 					if (loopedPath)
+#if UNITY_2021_2_OR_NEWER
 						points[^1] = points[2];
+#else
+						points[points.Count - 1] = points[2];
+#endif
 
 					points.RemoveRange(0, 3);
 				}
@@ -535,7 +552,11 @@ namespace Utilities
 					return;
 
 				points[1] = Utility.Average(points[0], points[2]);
+#if UNITY_2021_2_OR_NEWER
 				points[^2] = Utility.Average(points[^1], points[^3]);
+#else
+				points[points.Count - 2] = Utility.Average(points[points.Count - 1], points[points.Count - 3]);
+#endif
 			}
 			private void RefreshAnchorNormals()
 			{

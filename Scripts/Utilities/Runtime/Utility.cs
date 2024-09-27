@@ -120,6 +120,53 @@ namespace Utilities
 		{
 			return string.Join(separator, strings);
 		}
+#if !UNITY_2021_2_OR_NEWER
+		public static string[] Split(this string str, string separator)
+		{
+			if (str == null)
+				throw new ArgumentNullException("str");
+			else if (string.IsNullOrEmpty(separator))
+				throw new ArgumentException("String separator cannot be Null or empty", "separator");
+
+			List<int> partIndices = new List<int>();
+			int lastPartIndex = str.Length;
+
+			while (true)
+			{
+				lastPartIndex = str.Substring(0, lastPartIndex).LastIndexOf(separator);
+
+				if (lastPartIndex < 0)
+					break;
+
+				partIndices.Add(lastPartIndex);
+			}
+
+			partIndices.Sort();
+
+			List<string> parts = new List<string>(partIndices.Count + 1);
+
+			for (int i = 0; i < partIndices.Count + 1; i++)
+			{
+				int startIndex = i > 0 ? partIndices[i - 1] : 0;
+				int lastIndex = i < partIndices.Count ? partIndices[i] : str.Length;
+				int length = lastIndex - startIndex;
+				int finalStartIndex = startIndex;
+
+				if (i > 0)
+				{
+					finalStartIndex += separator.Length;
+					length -= separator.Length;
+				}
+
+				string part = str.Substring(finalStartIndex, length);
+
+				if (!string.IsNullOrEmpty(part))
+					parts.Add(part);
+			}
+
+			return parts.ToArray();
+		}
+#endif
 	}
 	public static class Utility
 	{
@@ -146,11 +193,11 @@ namespace Utilities
 
 		public static class Color
 		{
-			public static UnityEngine.Color darkGray = new(.25f, .25f, .25f);
-			public static UnityEngine.Color lightGray = new(.67f, .67f, .67f);
-			public static UnityEngine.Color orange = new(1f, .5f, 0f);
-			public static UnityEngine.Color purple = new(.5f, 0f, 1f);
-			public static UnityEngine.Color transparent = new(0f, 0f, 0f, 0f);
+			public static UnityEngine.Color darkGray = new UnityEngine.Color(.25f, .25f, .25f);
+			public static UnityEngine.Color lightGray = new UnityEngine.Color(.67f, .67f, .67f);
+			public static UnityEngine.Color orange = new UnityEngine.Color(1f, .5f, 0f);
+			public static UnityEngine.Color purple = new UnityEngine.Color(.5f, 0f, 1f);
+			public static UnityEngine.Color transparent = new UnityEngine.Color(0f, 0f, 0f, 0f);
 		}
 		public static class FormulaInterpolation
 		{
@@ -304,7 +351,18 @@ namespace Utilities
 			}
 			public override readonly int GetHashCode()
 			{
+#if UNITY_2021_2_OR_NEWER
 				return HashCode.Combine(min, max, overrideBorders, clampToZero);
+#else
+				int hashCode = 1847768447;
+
+				hashCode = hashCode * -1521134295 + min.GetHashCode();
+				hashCode = hashCode * -1521134295 + max.GetHashCode();
+				hashCode = hashCode * -1521134295 + overrideBorders.GetHashCode();
+				hashCode = hashCode * -1521134295 + clampToZero.GetHashCode();
+
+				return hashCode;
+#endif
 			}
 
 			#endregion
@@ -491,7 +549,18 @@ namespace Utilities
 			}
 			public override readonly int GetHashCode()
 			{
+#if UNITY_2021_2_OR_NEWER
 				return HashCode.Combine(min, max, overrideBorders, clampToZero);
+#else
+				int hashCode = 1847768447;
+
+				hashCode = hashCode * -1521134295 + min.GetHashCode();
+				hashCode = hashCode * -1521134295 + max.GetHashCode();
+				hashCode = hashCode * -1521134295 + overrideBorders.GetHashCode();
+				hashCode = hashCode * -1521134295 + clampToZero.GetHashCode();
+
+				return hashCode;
+#endif
 			}
 
 			#endregion
@@ -618,7 +687,16 @@ namespace Utilities
 			}
 			public override readonly int GetHashCode()
 			{
+#if UNITY_2021_2_OR_NEWER
 				return HashCode.Combine(x, y);
+#else
+				int hashCode = 1502939027;
+
+				hashCode = hashCode * -1521134295 + x.GetHashCode();
+				hashCode = hashCode * -1521134295 + y.GetHashCode();
+
+				return hashCode;
+#endif
 			}
 
 			#endregion
@@ -694,16 +772,26 @@ namespace Utilities
 
 			#region Virtual Methods
 
-			public readonly override bool Equals(object obj)
+			public override readonly bool Equals(object obj)
 			{
 				return obj is Interval3 interval &&
 					   EqualityComparer<Interval>.Default.Equals(x, interval.x) &&
 					   EqualityComparer<Interval>.Default.Equals(y, interval.y) &&
 					   EqualityComparer<Interval>.Default.Equals(z, interval.z);
 			}
-			public readonly override int GetHashCode()
+			public override readonly int GetHashCode()
 			{
+#if UNITY_2021_2_OR_NEWER
 				return HashCode.Combine(x, y, z);
+#else
+				int hashCode = 373119288;
+
+				hashCode = hashCode * -1521134295 + x.GetHashCode();
+				hashCode = hashCode * -1521134295 + y.GetHashCode();
+				hashCode = hashCode * -1521134295 + z.GetHashCode();
+
+				return hashCode;
+#endif
 			}
 
 			#endregion
@@ -920,7 +1008,7 @@ namespace Utilities
 
 			#region Virtual Methods
 
-			public readonly override bool Equals(object obj)
+			public override readonly bool Equals(object obj)
 			{
 				return obj is ColorSheet sheet &&
 					name == sheet.name &&
@@ -928,9 +1016,20 @@ namespace Utilities
 					metallic == sheet.metallic &&
 					smoothness == sheet.smoothness;
 			}
-			public readonly override int GetHashCode()
+			public override readonly int GetHashCode()
 			{
+#if UNITY_2021_2_OR_NEWER
 				return HashCode.Combine(name, color, metallic, smoothness);
+#else
+				int hashCode = 998921542;
+
+				hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(name);
+				hashCode = hashCode * -1521134295 + color.GetHashCode();
+				hashCode = hashCode * -1521134295 + metallic.GetHashCode();
+				hashCode = hashCode * -1521134295 + smoothness.GetHashCode();
+
+				return hashCode;
+#endif
 			}
 
 			#endregion
@@ -1019,16 +1118,27 @@ namespace Utilities
 
 			#region Methods
 
-			public readonly override bool Equals(object obj)
+			public override readonly bool Equals(object obj)
 			{
 				bool equalsColor = obj is SerializableColor color && r == color.r && g == color.g && b == color.b && a == color.a;
 				bool equalsUColor = obj is UnityEngine.Color uColor && r == uColor.r && g == uColor.g && b == uColor.b && a == uColor.a;
 
 				return equalsColor || equalsUColor;
 			}
-			public readonly override int GetHashCode()
+			public override readonly int GetHashCode()
 			{
+#if UNITY_2021_2_OR_NEWER
 				return HashCode.Combine(r, g, b, a);
+#else
+				int hashCode = -490236692;
+				
+				hashCode = hashCode * -1521134295 + r.GetHashCode();
+				hashCode = hashCode * -1521134295 + g.GetHashCode();
+				hashCode = hashCode * -1521134295 + b.GetHashCode();
+				hashCode = hashCode * -1521134295 + a.GetHashCode();
+				
+				return hashCode;
+#endif
 			}
 
 			#endregion
@@ -1496,7 +1606,7 @@ namespace Utilities
 
 			#region Operators
 
-			public static implicit operator TransformAccess(Transform transform) => new(transform);
+			public static implicit operator TransformAccess(Transform transform) => new TransformAccess(transform);
 
 			#endregion
 
@@ -1516,7 +1626,7 @@ namespace Utilities
 
 			#region Operators
 
-			public static implicit operator float1(float value) => new(value);
+			public static implicit operator float1(float value) => new float1(value);
 			public static implicit operator float(float1 value) => value.value;
 
 			#endregion
@@ -1547,13 +1657,13 @@ namespace Utilities
 		#region Variables
 
 		public static float DeltaTime => Time.inFixedTimeStep ? Time.fixedDeltaTime : Time.deltaTime;
-		public readonly static float2 Float2One = new(1f, 1f);
-		public readonly static float2 Float2Up = new(0f, 1f);
-		public readonly static float2 Float2Right = new(1f, 0f);
-		public readonly static float3 Float3One = new(1f, 1f, 1f);
-		public readonly static float3 Float3Up = new(0f, 1f, 0f);
-		public readonly static float3 Float3Right = new(1f, 0f, 0f);
-		public readonly static float3 Float3Forward = new(0f, 0f, 1f);
+		public readonly static float2 Float2One = new float2(1f, 1f);
+		public readonly static float2 Float2Up = new float2(0f, 1f);
+		public readonly static float2 Float2Right = new float2(1f, 0f);
+		public readonly static float3 Float3One = new float3(1f, 1f, 1f);
+		public readonly static float3 Float3Up = new float3(0f, 1f, 0f);
+		public readonly static float3 Float3Right = new float3(1f, 0f, 0f);
+		public readonly static float3 Float3Forward = new float3(0f, 0f, 1f);
 
 		private static readonly string[] disposableEmailDomains = new string[]
 		{
@@ -2616,10 +2726,10 @@ namespace Utilities
 		public static void DrawBoundsForDebug(Bounds bounds)
 		{
 			// bottom
-			Vector3 p1 = new(bounds.min.x, bounds.min.y, bounds.min.z);
-			Vector3 p2 = new(bounds.max.x, bounds.min.y, bounds.min.z);
-			Vector3 p3 = new(bounds.max.x, bounds.min.y, bounds.max.z);
-			Vector3 p4 = new(bounds.min.x, bounds.min.y, bounds.max.z);
+			Vector3 p1 = new Vector3(bounds.min.x, bounds.min.y, bounds.min.z);
+			Vector3 p2 = new Vector3(bounds.max.x, bounds.min.y, bounds.min.z);
+			Vector3 p3 = new Vector3(bounds.max.x, bounds.min.y, bounds.max.z);
+			Vector3 p4 = new Vector3(bounds.min.x, bounds.min.y, bounds.max.z);
 
 			Debug.DrawLine(p1, p2, UnityEngine.Color.blue);
 			Debug.DrawLine(p2, p3, UnityEngine.Color.red);
@@ -2627,10 +2737,10 @@ namespace Utilities
 			Debug.DrawLine(p4, p1, UnityEngine.Color.magenta);
 
 			// top
-			Vector3 p5 = new(bounds.min.x, bounds.max.y, bounds.min.z);
-			Vector3 p6 = new(bounds.max.x, bounds.max.y, bounds.min.z);
-			Vector3 p7 = new(bounds.max.x, bounds.max.y, bounds.max.z);
-			Vector3 p8 = new(bounds.min.x, bounds.max.y, bounds.max.z);
+			Vector3 p5 = new Vector3(bounds.min.x, bounds.max.y, bounds.min.z);
+			Vector3 p6 = new Vector3(bounds.max.x, bounds.max.y, bounds.min.z);
+			Vector3 p7 = new Vector3(bounds.max.x, bounds.max.y, bounds.max.z);
+			Vector3 p8 = new Vector3(bounds.min.x, bounds.max.y, bounds.max.z);
 
 			Debug.DrawLine(p5, p6, UnityEngine.Color.blue);
 			Debug.DrawLine(p6, p7, UnityEngine.Color.red);
@@ -2851,19 +2961,19 @@ namespace Utilities
 		}
 		public static float3 LerpUnclamped(float3 a, float3 b, float t)
 		{
-			return new(LerpUnclamped(a.x, b.x, t), LerpUnclamped(a.y, b.y, t), LerpUnclamped(a.z, b.z, t));
+			return new float3(LerpUnclamped(a.x, b.x, t), LerpUnclamped(a.y, b.y, t), LerpUnclamped(a.z, b.z, t));
 		}
 		public static Vector3 LerpUnclamped(Vector3 a, Vector3 b, float t)
 		{
-			return new(LerpUnclamped(a.x, b.x, t), LerpUnclamped(a.y, b.y, t), LerpUnclamped(a.z, b.z, t));
+			return new float3(LerpUnclamped(a.x, b.x, t), LerpUnclamped(a.y, b.y, t), LerpUnclamped(a.z, b.z, t));
 		}
 		public static float2 LerpUnclamped(float2 a, float2 b, float t)
 		{
-			return new(LerpUnclamped(a.x, b.x, t), LerpUnclamped(a.y, b.y, t));
+			return new float2(LerpUnclamped(a.x, b.x, t), LerpUnclamped(a.y, b.y, t));
 		}
 		public static Vector2 LerpUnclamped(Vector2 a, Vector2 b, float t)
 		{
-			return new(LerpUnclamped(a.x, b.x, t), LerpUnclamped(a.y, b.y, t));
+			return new float2(LerpUnclamped(a.x, b.x, t), LerpUnclamped(a.y, b.y, t));
 		}
 		public static quaternion LerpUnclamped(quaternion a, quaternion b, float t)
 		{
@@ -3468,7 +3578,7 @@ namespace Utilities
 		}
 		public static string[] GetEventListeners(UnityEvent unityEvent)
 		{
-			List<string> result = new();
+			List<string> result = new List<string>();
 
 			for (int i = 0; i < unityEvent.GetPersistentEventCount(); i++)
 				result.Add(unityEvent.GetPersistentMethodName(i));
@@ -3508,7 +3618,7 @@ namespace Utilities
 			if (!isReadable)
 				array.Apply(false, false);
 
-			Texture2D texture = new(array.width, array.height, array.format, array.mipMapBias > 0f);
+			Texture2D texture = new Texture2D(array.width, array.height, array.format, array.mipMapBias > 0f);
 
 			texture.SetPixels32(array.GetPixels32(index));
 			texture.Apply();
@@ -3563,15 +3673,15 @@ namespace Utilities
 		}
 		public static Texture2D TakeScreenshot(Camera camera, Vector2Int size, int depth = 72)
 		{
-			RenderTexture renderTexture = new(size.x, size.y, depth);
+			RenderTexture renderTexture = new RenderTexture(size.x, size.y, depth);
 
 			camera.targetTexture = renderTexture;
 			RenderTexture.active = renderTexture;
 
-			Texture2D texture = new(size.x, size.y, TextureFormat.RGB24, false);
+			Texture2D texture = new Texture2D(size.x, size.y, TextureFormat.RGB24, false);
 
 			camera.Render();
-			texture.ReadPixels(new(0, 0, size.x, size.y), 0, 0);
+			texture.ReadPixels(new Rect(0, 0, size.x, size.y), 0, 0);
 
 			camera.targetTexture = null;
 			RenderTexture.active = null;
@@ -3618,7 +3728,7 @@ namespace Utilities
 		}
 		public static GameObject[] FindGameObjectsWithLayerMask(int layerMask, bool includeInactive = true)
 		{
-			List<GameObject> gameObjects = new();
+			List<GameObject> gameObjects = new List<GameObject>();
 			IEnumerable<GameObject> rootGameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
 
 			foreach (GameObject rootGameObject in rootGameObjects)
@@ -3707,7 +3817,7 @@ namespace Utilities
 
 			for (int i = 0; i < rectTransforms.Length; i++)
 			{
-				Bounds newBounds = new(Divide(rectTransforms[i].position * scaleFactor, rectTransforms[i].lossyScale), new Vector3(rectTransforms[i].rect.width, rectTransforms[i].rect.height) * scaleFactor);
+				Bounds newBounds = new Bounds(Divide(rectTransforms[i].position * scaleFactor, rectTransforms[i].lossyScale), new Vector3(rectTransforms[i].rect.width, rectTransforms[i].rect.height) * scaleFactor);
 
 				if (i == 0)
 					bounds = newBounds;

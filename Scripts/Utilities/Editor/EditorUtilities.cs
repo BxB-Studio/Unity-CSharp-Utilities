@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Build;
@@ -16,7 +17,7 @@ namespace Utilities.Editor
 
 		public static class Styles
 		{
-			public static GUIStyle Button => new("Button")
+			public static GUIStyle Button => new GUIStyle("Button")
 			{
 #if UNITY_2019_3_OR_NEWER
 				normal = new GUIStyleState()
@@ -29,7 +30,7 @@ namespace Utilities.Editor
 			{
 				get
 				{
-					GUIStyle style = new("Button");
+					GUIStyle style = new GUIStyle("Button");
 
 #if UNITY_2019_3_OR_NEWER
 					style.normal.textColor = EditorGUIUtility.isProSkin ? Color.white : Color.black;
@@ -40,7 +41,7 @@ namespace Utilities.Editor
 					return style;
 				}
 			}
-			public static GUIStyle MiniButton => new("MiniButton")
+			public static GUIStyle MiniButton => new GUIStyle("MiniButton")
 			{
 #if UNITY_2019_3_OR_NEWER
 				normal = new GUIStyleState()
@@ -53,10 +54,10 @@ namespace Utilities.Editor
 			{
 				get
 				{
-					GUIStyle style = new("MiniButton");
+					GUIStyle style = new GUIStyle("MiniButton");
 
 #if UNITY_2019_3_OR_NEWER
-					style.normal = new()
+					style.normal = new GUIStyleState()
 					{
 						background = style.active.background,
 						scaledBackgrounds = style.active.scaledBackgrounds,
@@ -69,7 +70,7 @@ namespace Utilities.Editor
 					return style;
 				}
 			}
-			public static GUIStyle MiniButtonMiddle => new("MiniButtonMid")
+			public static GUIStyle MiniButtonMiddle => new GUIStyle("MiniButtonMid")
 			{
 #if UNITY_2019_3_OR_NEWER
 				normal = new GUIStyleState()
@@ -82,7 +83,7 @@ namespace Utilities.Editor
 			{
 				get
 				{
-					GUIStyle style = new("MiniButtonMid");
+					GUIStyle style = new GUIStyle("MiniButtonMid");
 
 #if UNITY_2019_3_OR_NEWER
 					style.normal.textColor = EditorGUIUtility.isProSkin ? Color.white : Color.black;
@@ -93,7 +94,7 @@ namespace Utilities.Editor
 					return style;
 				}
 			}
-			public static GUIStyle MiniButtonLeft => new("MiniButtonLeft")
+			public static GUIStyle MiniButtonLeft => new GUIStyle("MiniButtonLeft")
 			{
 #if UNITY_2019_3_OR_NEWER
 				normal = new GUIStyleState()
@@ -106,7 +107,7 @@ namespace Utilities.Editor
 			{
 				get
 				{
-					GUIStyle style = new("MiniButtonLeft");
+					GUIStyle style = new GUIStyle("MiniButtonLeft");
 
 #if UNITY_2019_3_OR_NEWER
 					style.normal.textColor = EditorGUIUtility.isProSkin ? Color.white : Color.black;
@@ -117,7 +118,7 @@ namespace Utilities.Editor
 					return style;
 				}
 			}
-			public static GUIStyle MiniButtonRight => new("MiniButtonRight")
+			public static GUIStyle MiniButtonRight => new GUIStyle("MiniButtonRight")
 			{
 #if UNITY_2019_3_OR_NEWER
 				normal = new GUIStyleState()
@@ -130,7 +131,7 @@ namespace Utilities.Editor
 			{
 				get
 				{
-					GUIStyle style = new("MiniButtonRight");
+					GUIStyle style = new GUIStyle("MiniButtonRight");
 
 #if UNITY_2019_3_OR_NEWER
 					style.normal.textColor = EditorGUIUtility.isProSkin ? Color.white : Color.black;
@@ -195,7 +196,11 @@ namespace Utilities.Editor
 			bool emptySymbols = scriptingDefineSymbols.Length < 1;
 
 			if (emptySymbols || !ScriptingDefineSymbolExists(scriptingDefineSymbols, symbol))
+#if UNITY_2021_2_OR_NEWER
 				PlayerSettings.SetScriptingDefineSymbols(GetCurrentNamedBuildTarget(), $"{(!emptySymbols ? $"{string.Join(';', scriptingDefineSymbols)};" : "")}{symbol}");
+#else
+				PlayerSettings.SetScriptingDefineSymbolsForGroup(GetCurrentBuildTargetGroup(), $"{(!emptySymbols ? $"{string.Join(";", scriptingDefineSymbols)};" : "")}{symbol}");
+#endif
 		}
 		public static void RemoveScriptingDefineSymbol(string symbol)
 		{
@@ -204,7 +209,11 @@ namespace Utilities.Editor
 			if (scriptingDefineSymbols.Length > 0 && ScriptingDefineSymbolExists(scriptingDefineSymbols, symbol, out int symbolIndex))
 			{
 				ArrayUtility.RemoveAt(ref scriptingDefineSymbols, symbolIndex);
+#if UNITY_2021_2_OR_NEWER
 				PlayerSettings.SetScriptingDefineSymbols(GetCurrentNamedBuildTarget(), scriptingDefineSymbols.Length > 0 ? string.Join(';', scriptingDefineSymbols) : "");
+#else
+				PlayerSettings.SetScriptingDefineSymbolsForGroup(GetCurrentBuildTargetGroup(), scriptingDefineSymbols.Length > 0 ? string.Join(";", scriptingDefineSymbols) : "");
+#endif
 			}
 		}
 		public static void RemoveScriptingDefineSymbol(int symbolIndex)
@@ -214,7 +223,11 @@ namespace Utilities.Editor
 			if (symbolIndex > -1 && symbolIndex < scriptingDefineSymbols.Length)
 			{
 				ArrayUtility.RemoveAt(ref scriptingDefineSymbols, symbolIndex);
+#if UNITY_2021_2_OR_NEWER
 				PlayerSettings.SetScriptingDefineSymbols(GetCurrentNamedBuildTarget(), scriptingDefineSymbols.Length > 0 ? string.Join(';', scriptingDefineSymbols) : "");
+#else
+				PlayerSettings.SetScriptingDefineSymbolsForGroup(GetCurrentBuildTargetGroup(), scriptingDefineSymbols.Length > 0 ? string.Join(";", scriptingDefineSymbols) : "");
+#endif
 			}
 		}
 		public static bool ScriptingDefineSymbolExists(string symbol)
@@ -231,18 +244,29 @@ namespace Utilities.Editor
 		}
 		public static string[] GetScriptingDefineSymbols()
 		{
-			GetScriptingDefineSymbols(GetCurrentNamedBuildTarget(), out string[] defines);
+#if UNITY_2021_2_OR_NEWER
+			GetScriptingDefineSymbols(GetCurrentBuildTargetGroup(), out string[] defines);
+#else
+			GetScriptingDefineSymbols(GetCurrentBuildTargetGroup(), out string[] defines);
+#endif
 
 			return defines;
 		}
-		public static void GetScriptingDefineSymbols(NamedBuildTarget buildTargetGroup, out string[] defines)
+#if UNITY_2021_2_OR_NEWER
+		public static void GetScriptingDefineSymbols(NamedBuildTarget namedBuildTarget, out string[] defines)
 		{
-			PlayerSettings.GetScriptingDefineSymbols(buildTargetGroup, out defines);
+			PlayerSettings.GetScriptingDefineSymbols(namedBuildTarget, out defines);
 		}
 		public static NamedBuildTarget GetCurrentNamedBuildTarget()
 		{
 			return NamedBuildTarget.FromBuildTargetGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
 		}
+#else
+		public static void GetScriptingDefineSymbols(BuildTargetGroup buildTargetGroup, out string[] defines)
+		{
+			PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup, out defines);
+		}
+#endif
 		public static BuildTargetGroup GetCurrentBuildTargetGroup()
 		{
 			return EditorUserBuildSettings.selectedBuildTargetGroup;
