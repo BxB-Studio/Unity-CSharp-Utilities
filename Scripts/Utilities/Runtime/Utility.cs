@@ -120,6 +120,13 @@ namespace Utilities
 		{
 			return string.Join(separator, strings);
 		}
+		public static string Replace(this string str, IEnumerable<string> find, string replacement)
+		{
+			foreach (var r in find)
+				str = str.Replace(r, replacement);
+
+			return str;
+		}
 #if !UNITY_2021_2_OR_NEWER
 		public static string[] Split(this string str, string separator)
 		{
@@ -167,6 +174,16 @@ namespace Utilities
 			return parts.ToArray();
 		}
 #endif
+		public static T GetAttribute<T>(this Enum enumValue) where T : Attribute
+		{
+			return enumValue.GetType().GetMember(enumValue.ToString()).First().GetCustomAttribute<T>();
+		}
+		public static Color SetAlpha(this Color color, float alpha)
+		{
+			color.a = alpha;
+
+			return color;
+		}
 	}
 	public static class Utility
 	{
