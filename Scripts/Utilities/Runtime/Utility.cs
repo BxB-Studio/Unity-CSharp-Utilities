@@ -485,6 +485,160 @@ namespace Utilities
 
 		}
 		[Serializable]
+		public struct SimpleInterval
+		{
+			#region Variables
+
+			public readonly float Length => math.abs(a - b);
+
+			public float a;
+			public float b;
+
+			#endregion
+
+			#region Methods
+
+			#region Virtual Methods
+
+			public override readonly bool Equals(object obj)
+			{
+				return obj is SimpleInterval interval &&
+						a == interval.a &&
+						b == interval.b;
+			}
+			public override readonly int GetHashCode()
+			{
+				return HashCode.Combine(a, b);
+			}
+
+			#endregion
+
+			#region Global Methods
+
+			public readonly bool InRange(float value)
+			{
+				return value >= math.min(a, b) && value <= math.max(a, b);
+			}
+			public readonly float Lerp(float value, bool clamped)
+			{
+				return clamped ? Lerp(value) : LerpUnclamped(value);
+			}
+			public readonly float Lerp(float time)
+			{
+				return Utility.Lerp(a, b, time);
+			}
+			public readonly float LerpUnclamped(float time)
+			{
+				return Utility.LerpUnclamped(a, b, time);
+			}
+			public readonly float InverseLerp(float value, bool clamped)
+			{
+				return clamped ? InverseLerp(value) : InverseLerpUnclamped(value);
+			}
+			public readonly float InverseLerp(float value)
+			{
+				return Utility.InverseLerp(a, b, value);
+			}
+			public readonly float InverseLerpUnclamped(float value)
+			{
+				return Utility.InverseLerpUnclamped(a, b, value);
+			}
+			public readonly float Clamp(float value)
+			{
+				return math.clamp(value, math.min(a, b), math.max(a, b));
+			}
+			public readonly float Random()
+			{
+				return UnityEngine.Random.Range(math.min(a, b), math.max(a, b));
+			}
+			public void Encapsulate(float value)
+			{
+				if (value < math.min(a, b))
+				{
+					b = math.max(a, b);
+					a = value;
+				}
+				else if (value > math.max(a, b))
+				{
+					a = math.min(a, b);
+					b = value;
+				}
+			}
+
+			#endregion
+
+			#endregion
+
+			#region Constructors & Operators
+
+			#region Constructors
+
+			public SimpleInterval(float a, float b)
+			{
+				this.a = a;
+				this.b = b;
+			}
+			public SimpleInterval(SimpleInterval interval)
+			{
+				a = interval.a;
+				b = interval.b;
+			}
+			public SimpleInterval(Interval interval)
+			{
+				a = interval.Min;
+				b = interval.Max;
+			}
+
+			#endregion
+
+			#region Operators
+
+			public static SimpleInterval operator +(SimpleInterval x, float y)
+			{
+				return new SimpleInterval(x.a + y, x.b + y);
+			}
+			public static SimpleInterval operator +(SimpleInterval x, SimpleInterval y)
+			{
+				return new SimpleInterval(x.a + y.a, x.b + y.b);
+			}
+			public static SimpleInterval operator -(SimpleInterval x, float y)
+			{
+				return new SimpleInterval(x.a - y, x.b - y);
+			}
+			public static SimpleInterval operator -(SimpleInterval x, SimpleInterval y)
+			{
+				return new SimpleInterval(x.a - y.a, x.b - y.b);
+			}
+			public static SimpleInterval operator *(SimpleInterval x, float y)
+			{
+				return new SimpleInterval(x.a * y, x.b * y);
+			}
+			public static SimpleInterval operator *(SimpleInterval x, SimpleInterval y)
+			{
+				return new SimpleInterval(x.a * y.a, x.b * y.b);
+			}
+			public static SimpleInterval operator /(SimpleInterval x, float y)
+			{
+				return new SimpleInterval(x.a / y, x.b / y);
+			}
+			public static SimpleInterval operator /(SimpleInterval x, SimpleInterval y)
+			{
+				return new SimpleInterval(x.a / y.a, x.b / y.b);
+			}
+			public static bool operator ==(SimpleInterval x, SimpleInterval y)
+			{
+				return x.Equals(y);
+			}
+			public static bool operator !=(SimpleInterval x, SimpleInterval y)
+			{
+				return !(x == y);
+			}
+
+			#endregion
+
+			#endregion
+		}
+		[Serializable]
 		public struct IntervalInt
 		{
 			#region Variables
@@ -768,6 +922,125 @@ namespace Utilities
 			public static implicit operator Interval(Interval2 interval)
 			{
 				return new Interval(interval.x);
+			}
+
+			#endregion
+
+			#endregion
+		}
+		[Serializable]
+		public struct SimpleInterval2
+		{
+			#region Constants
+
+			public static readonly SimpleInterval2 Empty = new(0f, 0f, 0f, 0f);
+
+			#endregion
+
+			#region Variables
+
+			#region Properties
+
+			public readonly Vector2 CenterVector2 => new((x.a + x.b) * .5f, (y.a + y.b) * .5f);
+			public readonly float2 CenterFloat2 => new((x.a + x.b) * .5f, (y.a + y.b) * .5f);
+
+			#endregion
+
+			#region Fields
+
+			public SimpleInterval x;
+			public SimpleInterval y;
+
+			#endregion
+
+			#endregion
+
+			#region Methods
+
+			#region Virtual Methods
+
+			public readonly override bool Equals(object obj)
+			{
+				return obj is Interval2 interval2 &&
+					x.Equals(interval2.x) &&
+					y.Equals(interval2.y);
+			}
+			public readonly override int GetHashCode()
+			{
+				return HashCode.Combine(x, y);
+			}
+
+			#endregion
+
+			#region Global Methods
+
+			public readonly bool InRange(float value)
+			{
+				return x.InRange(value) && y.InRange(value);
+			}
+			public readonly bool InRange(Vector2 value)
+			{
+				return x.InRange(value.x) && y.InRange(value.y);
+			}
+			public readonly bool InRange(float2 value)
+			{
+				return x.InRange(value.x) && y.InRange(value.y);
+			}
+			public void Encapsulate(Vector2 value)
+			{
+				x.Encapsulate(value.x);
+				y.Encapsulate(value.y);
+			}
+			public void Encapsulate(float2 value)
+			{
+				x.Encapsulate(value.x);
+				y.Encapsulate(value.y);
+			}
+			public void Encapsulate(float x, float y)
+			{
+				this.x.Encapsulate(x);
+				this.y.Encapsulate(y);
+			}
+
+			#endregion
+
+			#endregion
+
+			#region Constructors & Operators
+
+			#region Constructors
+
+			public SimpleInterval2(float xA, float xB, float yA, float yB)
+			{
+				x = new SimpleInterval(xA, xB);
+				y = new SimpleInterval(yA, yB);
+			}
+			public SimpleInterval2(SimpleInterval x, SimpleInterval y)
+			{
+				this.x = x;
+				this.y = y;
+			}
+			public SimpleInterval2(SimpleInterval2 interval)
+			{
+				x = new SimpleInterval(interval.x);
+				y = new SimpleInterval(interval.y);
+			}
+
+			#endregion
+
+			#region Operators
+
+			public static bool operator ==(SimpleInterval2 a, SimpleInterval2 b)
+			{
+				return a.Equals(b);
+			}
+			public static bool operator !=(SimpleInterval2 a, SimpleInterval2 b)
+			{
+				return !(a == b);
+			}
+			public static implicit operator SimpleInterval(SimpleInterval2 interval)
+			{
+				return new SimpleInterval(interval.x);
 			}
 
 			#endregion
