@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -246,7 +247,9 @@ namespace Utilities
 			public int Length => items != null ? items.Length : 0;
 
 			[SerializeField]
+#pragma warning disable IDE0044 // Add readonly modifier
 			private T[] items;
+#pragma warning restore IDE0044 // Add readonly modifier
 
 			#endregion
 
@@ -347,9 +350,9 @@ namespace Utilities
 			private float min;
 			[SerializeField]
 			private float max;
-			[SerializeField]
+			[SerializeField, MarshalAs(UnmanagedType.U1)]
 			private bool overrideBorders;
-			[SerializeField]
+			[SerializeField, MarshalAs(UnmanagedType.U1)]
 			private bool clampToZero;
 
 			#endregion
@@ -508,7 +511,16 @@ namespace Utilities
 			}
 			public override readonly int GetHashCode()
 			{
+#if UNITY_2021_2_OR_NEWER
 				return HashCode.Combine(a, b);
+#else
+				int hashCode = 2118541809;
+
+				hashCode = hashCode * -1521134295 + a.GetHashCode();
+				hashCode = hashCode * -1521134295 + b.GetHashCode();
+
+				return hashCode;
+#endif
 			}
 
 			#endregion
@@ -699,9 +711,9 @@ namespace Utilities
 			private int min;
 			[SerializeField]
 			private int max;
-			[SerializeField]
+			[SerializeField, MarshalAs(UnmanagedType.U1)]
 			private bool overrideBorders;
-			[SerializeField]
+			[SerializeField, MarshalAs(UnmanagedType.U1)]
 			private bool clampToZero;
 
 			#endregion
@@ -933,7 +945,7 @@ namespace Utilities
 		{
 			#region Constants
 
-			public static readonly SimpleInterval2 Empty = new(0f, 0f, 0f, 0f);
+			public static readonly SimpleInterval2 Empty = new SimpleInterval2(0f, 0f, 0f, 0f);
 
 			#endregion
 
@@ -941,8 +953,8 @@ namespace Utilities
 
 			#region Properties
 
-			public readonly Vector2 CenterVector2 => new((x.a + x.b) * .5f, (y.a + y.b) * .5f);
-			public readonly float2 CenterFloat2 => new((x.a + x.b) * .5f, (y.a + y.b) * .5f);
+			public readonly Vector2 CenterVector2 => new Vector2((x.a + x.b) * .5f, (y.a + y.b) * .5f);
+			public readonly float2 CenterFloat2 => new float2((x.a + x.b) * .5f, (y.a + y.b) * .5f);
 
 			#endregion
 
@@ -961,13 +973,22 @@ namespace Utilities
 
 			public readonly override bool Equals(object obj)
 			{
-				return obj is Interval2 interval2 &&
+				return obj is SimpleInterval2 interval2 &&
 					x.Equals(interval2.x) &&
 					y.Equals(interval2.y);
 			}
 			public readonly override int GetHashCode()
 			{
+#if UNITY_2021_2_OR_NEWER
 				return HashCode.Combine(x, y);
+#else
+				int hashCode = 1502939027;
+
+				hashCode = hashCode * -1521134295 + x.GetHashCode();
+				hashCode = hashCode * -1521134295 + y.GetHashCode();
+
+				return hashCode;
+#endif
 			}
 
 			#endregion
@@ -1143,6 +1164,149 @@ namespace Utilities
 			public static implicit operator Interval(Interval3 interval)
 			{
 				return new Interval(interval.x);
+			}
+
+			#endregion
+
+			#endregion
+		}
+		[Serializable]
+		public struct SimpleInterval3
+		{
+			#region Constants
+
+			public static readonly SimpleInterval3 Empty = new SimpleInterval3(0f, 0f, 0f, 0f, 0f, 0f);
+
+			#endregion
+
+			#region Variables
+
+			#region Properties
+
+			public readonly Vector3 CenterVector3 => new Vector3((x.a + x.b) * .5f, (y.a + y.b) * .5f, (z.a + z.b) * .5f);
+			public readonly float3 CenterFloat3 => new float3((x.a + x.b) * .5f, (y.a + y.b) * .5f, (z.a + z.b) * .5f);
+
+			#endregion
+
+			#region Fields
+
+			public SimpleInterval x;
+			public SimpleInterval y;
+			public SimpleInterval z;
+
+			#endregion
+
+			#endregion
+
+			#region Methods
+
+			#region Virtual Methods
+
+			public readonly override bool Equals(object obj)
+			{
+				return obj is SimpleInterval3 interval3 &&
+					x.Equals(interval3.x) &&
+					y.Equals(interval3.y) &&
+					z.Equals(interval3.z);
+			}
+			public readonly override int GetHashCode()
+			{
+#if UNITY_2021_2_OR_NEWER
+				return HashCode.Combine(x, y);
+#else
+				int hashCode = 1502939027;
+
+				hashCode = hashCode * -1521134295 + x.GetHashCode();
+				hashCode = hashCode * -1521134295 + y.GetHashCode();
+				hashCode = hashCode * -1521134295 + z.GetHashCode();
+
+				return hashCode;
+#endif
+			}
+
+			#endregion
+
+			#region Global Methods
+
+			public readonly bool InRange(float value)
+			{
+				return x.InRange(value) && y.InRange(value);
+			}
+			public readonly bool InRange(Vector3 value)
+			{
+				return x.InRange(value.x) && y.InRange(value.y) && z.InRange(value.z);
+			}
+			public readonly bool InRange(float3 value)
+			{
+				return x.InRange(value.x) && y.InRange(value.y) && z.InRange(value.z);
+			}
+			public void Encapsulate(Vector3 value)
+			{
+				x.Encapsulate(value.x);
+				y.Encapsulate(value.y);
+				z.Encapsulate(value.z);
+			}
+			public void Encapsulate(float3 value)
+			{
+				x.Encapsulate(value.x);
+				y.Encapsulate(value.y);
+				z.Encapsulate(value.z);
+			}
+			public void Encapsulate(float x, float y, float z)
+			{
+				this.x.Encapsulate(x);
+				this.y.Encapsulate(y);
+				this.z.Encapsulate(z);
+			}
+
+			#endregion
+
+			#endregion
+
+			#region Constructors & Operators
+
+			#region Constructors
+
+			public SimpleInterval3(float xA, float xB, float yA, float yB, float zA, float zB)
+			{
+				x = new SimpleInterval(xA, xB);
+				y = new SimpleInterval(yA, yB);
+				z = new SimpleInterval(zA, zB);
+			}
+			public SimpleInterval3(float xA, float xB, float yA, float yB)
+			{
+				x = new SimpleInterval(xA, xB);
+				y = new SimpleInterval(yA, yB);
+				z = new SimpleInterval(0f, 0f);
+			}
+			public SimpleInterval3(SimpleInterval x, SimpleInterval y, SimpleInterval z)
+			{
+				this.x = x;
+				this.y = y;
+				this.z = z;
+			}
+			public SimpleInterval3(SimpleInterval3 interval)
+			{
+				x = new SimpleInterval(interval.x);
+				y = new SimpleInterval(interval.y);
+				z = new SimpleInterval(interval.z);
+			}
+
+			#endregion
+
+			#region Operators
+
+			public static bool operator ==(SimpleInterval3 a, SimpleInterval3 b)
+			{
+				return a.Equals(b);
+			}
+			public static bool operator !=(SimpleInterval3 a, SimpleInterval3 b)
+			{
+				return !(a == b);
+			}
+			public static implicit operator SimpleInterval2(SimpleInterval3 interval)
+			{
+				return new SimpleInterval2(interval.x, interval.y);
 			}
 
 			#endregion
@@ -1842,10 +2006,12 @@ namespace Utilities
 		{
 			#region Variables
 
+			[MarshalAs(UnmanagedType.U1)]
 			public readonly bool isCreated;
 			public int childCount;
 			public float3 eulerAngles;
 			public float3 forward;
+			[MarshalAs(UnmanagedType.U1)]
 			public bool hasChanged;
 			public int hierarchyCapacity;
 			public int hierarchyCount;
@@ -1910,7 +2076,9 @@ namespace Utilities
 			#region Variables
 
 			[SerializeField]
+#pragma warning disable IDE0044 // Add readonly modifier
 			private float value;
+#pragma warning restore IDE0044 // Add readonly modifier
 
 			#endregion
 
@@ -3880,9 +4048,9 @@ namespace Utilities
 			Type type = typeof(T);
 			T target = destination.AddComponent<T>();
 			BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Default | BindingFlags.DeclaredOnly;
-			PropertyInfo[] propertyInfos = type.GetProperties(flags);
+			PropertyInfo[] propertyInfoArray = type.GetProperties(flags);
 
-			foreach (var propertyInfo in propertyInfos)
+			foreach (var propertyInfo in propertyInfoArray)
 				if (propertyInfo.CanWrite)
 					try
 					{
@@ -3890,9 +4058,9 @@ namespace Utilities
 					}
 					catch { }
 
-			FieldInfo[] fieldInfos = type.GetFields(flags);
+			FieldInfo[] fieldInfoArray = type.GetFields(flags);
 
-			foreach (var fieldInfo in fieldInfos)
+			foreach (var fieldInfo in fieldInfoArray)
 				try
 				{
 					fieldInfo.SetValue(target, fieldInfo.GetValue(original));
