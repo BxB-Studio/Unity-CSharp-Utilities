@@ -1,7 +1,12 @@
-﻿using System;
+﻿#region Namespaces
+
+using System;
+using System.IO;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEditor;
-using System.IO;
+
+#endregion
 
 namespace Utilities.Editor
 {
@@ -63,7 +68,7 @@ namespace Utilities.Editor
 			{
 				data.firstName = EditorGUILayout.TextField("First Name", data.firstName);
 				data.lastName = EditorGUILayout.TextField("Last Name", data.lastName);
-				data.age = Utility.ClampInfinity(EditorGUILayout.IntField("Age", data.age));
+				data.age = math.max(EditorGUILayout.IntField("Age", data.age), 0);
 
 				if (GUILayout.Button("Serialize Data"))
 				{

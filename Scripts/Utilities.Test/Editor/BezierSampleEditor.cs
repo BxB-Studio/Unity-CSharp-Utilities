@@ -1,5 +1,6 @@
 ﻿#region Namespaces
 
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEditor;
 
@@ -165,10 +166,10 @@ namespace Utilities.Editor
 				EditorGUI.indentLevel++;
 
 				Material newMeshMaterial = EditorGUILayout.ObjectField("Material", Instance.meshMaterial, typeof(Material), false) as Material;
-				float newMeshSpacing = Utility.ClampInfinity(EditorGUILayout.FloatField("Spacing", Instance.meshSpacing), .1f);
-				int newMeshResolution = Utility.ClampInfinity(EditorGUILayout.IntField("Resolution", Instance.meshResolution));
-				float newMeshWidth = Utility.ClampInfinity(EditorGUILayout.FloatField("Width", Instance.meshWidth));
-				float newMeshTiling = Utility.ClampInfinity(EditorGUILayout.FloatField("Tiling", Instance.meshTiling));
+				float newMeshSpacing = math.max(EditorGUILayout.FloatField("Spacing", Instance.meshSpacing), .1f);
+				int newMeshResolution = math.max(EditorGUILayout.IntField("Resolution", Instance.meshResolution), 0);
+				float newMeshWidth = math.max(EditorGUILayout.FloatField("Width", Instance.meshWidth), 0f);
+				float newMeshTiling = math.max(EditorGUILayout.FloatField("Tiling", Instance.meshTiling), 0f);
 
 				if (Instance.meshMaterial != newMeshMaterial || Instance.meshSpacing != newMeshSpacing || Instance.meshResolution != newMeshResolution || Instance.meshWidth != newMeshWidth || Instance.meshTiling != newMeshTiling)
 				{

@@ -2891,11 +2891,20 @@ namespace Utilities
 				_ => 0f,
 			};
 		}
+		[Obsolete]
 		public static float BrakingDistance(float speed, float friction)
 		{
 			friction = InverseLerpUnclamped(1f, 1.5f, friction);
 
 			return ClampInfinity(LerpUnclamped(LerpUnclamped(30f, 26f, friction), LerpUnclamped(143f, 113f, friction), InverseLerpUnclamped(40f, 110f, speed)));
+		}
+		public static float BrakingDistance(float velocity, float friction, float gravity = 9.81f)
+		{
+			return velocity * velocity / (2f * friction * gravity);
+		}
+		public static float BrakingDistance(float velocity, float targetVelocity, float friction, float gravity = 9.81f)
+		{
+			return (velocity * velocity - targetVelocity * targetVelocity) / (2f * friction * gravity);
 		}
 		public static float RPMToSpeed(float rpm, float radius)
 		{
@@ -3889,50 +3898,62 @@ namespace Utilities
 
 			return min;
 		}
+		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static float ClampInfinity(float number, float min = 0f)
 		{
 			return min >= 0f ? math.max(number, min) : math.min(number, min);
 		}
+		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static int ClampInfinity(int number, int min = 0)
 		{
 			return min >= 0 ? math.max(number, min) : math.min(number, min);
 		}
+		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static float ClampInfinityAbs(float number, float min = 0f)
 		{
 			return math.max(math.abs(number), min);
 		}
+		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static int ClampInfinityAbs(int number, int min = 0)
 		{
 			return math.max(math.abs(number), min);
 		}
+		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static Vector3 ClampInfinity(Vector3 vector, float min = 0f)
 		{
 			return min >= 0f ? new Vector3(math.max(vector.x, min), math.max(vector.y, min), math.max(vector.z, min)) : new Vector3(math.min(vector.x, min), math.min(vector.y, min), math.min(vector.z, min));
 		}
+		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static Vector3 ClampInfinity(Vector3 vector, Vector3 min)
 		{
 			return Average(min.x, min.y, min.z) >= 0f ? new Vector3(math.max(vector.x, min.x), math.max(vector.y, min.y), math.max(vector.z, min.z)) : new Vector3(math.min(vector.x, min.x), math.min(vector.y, min.y), math.min(vector.z, min.z));
 		}
+		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static Vector2 ClampInfinity(Vector2 vector, float min = 0f)
 		{
 			return min >= 0f ? new Vector2(math.max(vector.x, min), math.max(vector.y, min)) : new Vector2(math.min(vector.x, min), math.min(vector.y, min));
 		}
+		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static Vector2 ClampInfinity(Vector2 vector, Vector2 min)
 		{
 			return Average(min.x, min.y) >= 0f ? new Vector2(math.max(vector.x, min.x), math.max(vector.y, min.y)) : new Vector2(math.min(vector.x, min.x), math.min(vector.y, min.y));
 		}
+		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static float3 ClampInfinity(float3 vector, float min = 0f)
 		{
 			return min >= 0f ? new float3(math.max(vector.x, min), math.max(vector.y, min), math.max(vector.z, min)) : new float3(math.min(vector.x, min), math.min(vector.y, min), math.min(vector.z, min));
 		}
+		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static float3 ClampInfinity(float3 vector, float3 min)
 		{
 			return Average(min.x, min.y, min.z) >= 0f ? new float3(math.max(vector.x, min.x), math.max(vector.y, min.y), math.max(vector.z, min.z)) : new float3(math.min(vector.x, min.x), math.min(vector.y, min.y), math.min(vector.z, min.z));
 		}
+		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static float2 ClampInfinity(float2 vector, float min = 0f)
 		{
 			return min >= 0f ? new float2(math.max(vector.x, min), math.max(vector.y, min)) : new float2(math.min(vector.x, min), math.min(vector.y, min));
 		}
+		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static float2 ClampInfinity(float2 vector, float2 min)
 		{
 			return Average(min.x, min.y) >= 0f ? new float2(math.max(vector.x, min.x), math.max(vector.y, min.y)) : new float2(math.min(vector.x, min.x), math.min(vector.y, min.y));

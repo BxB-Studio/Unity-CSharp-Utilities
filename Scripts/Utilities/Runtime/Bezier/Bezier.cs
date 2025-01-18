@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 #endregion
@@ -162,7 +163,7 @@ namespace Utilities
 
 				for (int i = 0; i < spacedPoints.Length; i++)
 				{
-					if ((i < spacedPoints.Length - 1 || loopedPath) && IsSegmentDisbaled(ClosestAnchorPoint(spacedPoints[i]) / 3) && Utility.Distance(spacedPoints[i], spacedPoints[(i + 1) % spacedPoints.Length]) > spacing * 2f)
+					if ((i < spacedPoints.Length - 1 || loopedPath) && IsSegmentDisabled(ClosestAnchorPoint(spacedPoints[i]) / 3) && Utility.Distance(spacedPoints[i], spacedPoints[(i + 1) % spacedPoints.Length]) > spacing * 2f)
 					{
 						vertexIndex += 2;
 						triangleIndex += 6;
@@ -175,7 +176,7 @@ namespace Utilities
 					if (i < spacedPoints.Length - 1 || loopedPath)
 						forward += Utility.DirectionUnNormalized(spacedPoints[i], spacedPoints[(i + 1) % spacedPoints.Length]);
 
-					if ((i > 0 || loopedPath) && !IsSegmentDisbaled(ClosestAnchorPoint(spacedPoints[(i - 1 + spacedPoints.Length) % spacedPoints.Length]) / 3))
+					if ((i > 0 || loopedPath) && !IsSegmentDisabled(ClosestAnchorPoint(spacedPoints[(i - 1 + spacedPoints.Length) % spacedPoints.Length]) / 3))
 						forward += Utility.DirectionUnNormalized(spacedPoints[(i - 1 + spacedPoints.Length) % spacedPoints.Length], spacedPoints[i]);
 
 					forward.Normalize();
@@ -283,7 +284,7 @@ namespace Utilities
 				else
 					AutoSetAnchorControls(index * 3 + 3);
 			}
-			public bool IsSegmentDisbaled(int index)
+			public bool IsSegmentDisabled(int index)
 			{
 				return disabledSegments.IndexOf(index) > -1;
 			}
@@ -324,8 +325,8 @@ namespace Utilities
 				if (SegmentsCount < 1)
 					return null;
 
-				spacing = Utility.ClampInfinity(spacing, .1f);
-				resolution = Utility.ClampInfinity(resolution, 1);
+				spacing = math.max(spacing, .1f);
+				resolution = math.max(resolution, 1);
 
 				List<Vector3> spacedPoints = new List<Vector3>();
 				List<Vector3> newPointsNormals = new List<Vector3>();
