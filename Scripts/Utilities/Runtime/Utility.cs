@@ -2869,6 +2869,30 @@ namespace Utilities
 		{
 			return (from Transform child in gameObject.GetComponentsInChildren<Transform>() where gameObject.transform != child select child.gameObject).ToArray();
 		}
+#if UNITY_6000_0_OR_NEWER
+		public static float EvaluateFriction(float slip, PhysicsMaterial refMaterial, PhysicsMaterial material)
+		{
+			return refMaterial.frictionCombine switch
+			{
+				PhysicsMaterialCombine.Average => Round(slip, 2) != 0f ? (refMaterial.dynamicFriction + material.dynamicFriction) * .5f : (refMaterial.staticFriction + material.staticFriction) * .5f,
+				PhysicsMaterialCombine.Multiply => Round(slip, 2) != 0f ? refMaterial.dynamicFriction * material.dynamicFriction : refMaterial.staticFriction * material.staticFriction,
+				PhysicsMaterialCombine.Minimum => Round(slip, 2) != 0f ? math.min(refMaterial.dynamicFriction, material.dynamicFriction) : math.min(refMaterial.staticFriction, material.staticFriction),
+				PhysicsMaterialCombine.Maximum => Round(slip, 2) != 0f ? math.max(refMaterial.dynamicFriction, material.dynamicFriction) : math.max(refMaterial.staticFriction, material.staticFriction),
+				_ => 0f,
+			};
+		}
+		public static float EvaluateFriction(float slip, PhysicsMaterial refMaterial, float stiffness)
+		{
+			return refMaterial.frictionCombine switch
+			{
+				PhysicsMaterialCombine.Average => Round(slip, 2) != 0f ? (refMaterial.dynamicFriction + stiffness) * .5f : (refMaterial.staticFriction + stiffness) * .5f,
+				PhysicsMaterialCombine.Multiply => Round(slip, 2) != 0f ? refMaterial.dynamicFriction * stiffness : refMaterial.staticFriction * stiffness,
+				PhysicsMaterialCombine.Minimum => Round(slip, 2) != 0f ? math.min(refMaterial.dynamicFriction, stiffness) : math.max(refMaterial.staticFriction, stiffness),
+				PhysicsMaterialCombine.Maximum => Round(slip, 2) != 0f ? math.max(refMaterial.dynamicFriction, stiffness) : math.max(refMaterial.staticFriction, stiffness),
+				_ => 0f,
+			};
+		}
+#else
 		public static float EvaluateFriction(float slip, PhysicMaterial refMaterial, PhysicMaterial material)
 		{
 			return refMaterial.frictionCombine switch
@@ -2891,6 +2915,7 @@ namespace Utilities
 				_ => 0f,
 			};
 		}
+#endif
 		[Obsolete]
 		public static float BrakingDistance(float speed, float friction)
 		{

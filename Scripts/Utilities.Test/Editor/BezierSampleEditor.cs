@@ -223,9 +223,17 @@ namespace Utilities.Editor
 				Vector3 position;
 
 				if (Path.IsAnchorPoint(i))
-					position = Handles.FreeMoveHandle(Path[i], Quaternion.identity, anchorPointSize, Vector3.zero, Handles.SphereHandleCap);
+					position = Handles.FreeMoveHandle(Path[i],
+#if !UNITY_2022_2_OR_NEWER
+						Quaternion.identity,
+#endif
+						anchorPointSize, Vector3.zero, Handles.SphereHandleCap);
 				else
-					position = Handles.FreeMoveHandle(Path[i], Quaternion.identity, controlPointSize, Vector3.zero, Handles.DotHandleCap);
+					position = Handles.FreeMoveHandle(Path[i],
+#if !UNITY_2022_2_OR_NEWER
+						Quaternion.identity,
+#endif
+						controlPointSize, Vector3.zero, Handles.DotHandleCap);
 
 				if (Path[i] != position)
 				{
