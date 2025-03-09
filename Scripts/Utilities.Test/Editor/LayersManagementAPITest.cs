@@ -7,32 +7,59 @@ using UnityEditor;
 
 namespace Utilities.Editor.Test
 {
+	/// <summary>
+	/// A test editor window for layers management API.
+	/// </summary>
 	public class LayersManagementAPITest : EditorWindow
 	{
 		#region Enumerators
 
+		/// <summary>
+		/// The type of input for the layers management API test.
+		/// </summary>
 		private enum InputType { Integer, String }
-		private InputType currentInputType = InputType.Integer;
-
+		
 		#endregion
 
 		#region Variables
 
+		/// <summary>
+		/// The current input type for the layers management API test.
+		/// </summary>
+		private InputType currentInputType = InputType.Integer;
+		/// <summary>
+		/// The index of the layer.
+		/// </summary>
 		private int layerIndex;
+		/// <summary>
+		/// The name of the layer.
+		/// </summary>
 		private string layerName = string.Empty;
-		private string renameLayerTarget = string.Empty;   // For Rename: target layer (name or index)
-		private string renameLayerNewName = string.Empty;  // For Rename: new name
+		/// <summary>
+		/// The target layer for renaming.
+		/// </summary>
+		private string renameLayerTarget = string.Empty;
+		/// <summary>
+		/// The new name for the layer.
+		/// </summary>
+		private string renameLayerNewName = string.Empty;
 
 		#endregion
 
 		#region Utilities
 
+		/// <summary>
+		/// Shows the layers management API test window.
+		/// </summary>
 		[MenuItem("Tools/Utilities/Layers Management API Test")]
 		public static void ShowWindow()
 		{
 			GetWindow<LayersManagementAPITest>("Layers Management API Test");
 		}
 
+		/// <summary>
+		/// Tries to add a layer.
+		/// </summary>
 		private void TryAddLayer()
 		{
 			try
@@ -45,6 +72,9 @@ namespace Utilities.Editor.Test
 				Debug.LogError($"Error adding layer: {ex.Message}");
 			}
 		}
+		/// <summary>
+		/// Tries to remove a layer by name.
+		/// </summary>
 		private void TryRemoveLayerByName()
 		{
 			try
@@ -57,6 +87,9 @@ namespace Utilities.Editor.Test
 				Debug.LogError($"Error removing layer by name: {ex.Message}");
 			}
 		}
+		/// <summary>
+		/// Tries to remove a layer by index.
+		/// </summary>
 		private void TryRemoveLayerByIndex()
 		{
 			try
@@ -69,6 +102,9 @@ namespace Utilities.Editor.Test
 				Debug.LogError($"Error removing layer by index: {ex.Message}");
 			}
 		}
+		/// <summary>
+		/// Tries to rename a layer.
+		/// </summary>
 		private void TryRenameLayer()
 		{
 			try
@@ -97,6 +133,9 @@ namespace Utilities.Editor.Test
 				Debug.LogError($"Error renaming layer: {ex.Message}");
 			}
 		}
+		/// <summary>
+		/// Tries to check if a layer is empty.
+		/// </summary>
 		private void TryCheckIfLayerIsEmpty()
 		{
 			try
@@ -114,6 +153,9 @@ namespace Utilities.Editor.Test
 
 		#region Methods
 
+		/// <summary>
+		/// Draws the GUI for the layers management API test.
+		/// </summary>
 		private void OnGUI()
 		{
 			GUILayout.Label("Layers Management API Test", EditorStyles.boldLabel);

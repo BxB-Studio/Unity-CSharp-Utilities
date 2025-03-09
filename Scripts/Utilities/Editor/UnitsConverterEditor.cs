@@ -7,12 +7,24 @@ using UnityEditor;
 
 namespace Utilities.Editor
 {
+	/// <summary>
+	/// Editor window for converting units.
+	/// </summary>
 	public class UnitsConverterEditor : EditorWindow
 	{
 		#region Variables
 
+		/// <summary>
+		/// The unit to convert.
+		/// </summary>
 		private static Utility.Units unit = Utility.Units.Distance;
+		/// <summary>
+		/// The metric value.
+		/// </summary>
 		private static float metricValue = 1f;
+		/// <summary>
+		/// The imperial value.
+		/// </summary>
 		private static float imperialValue = 3.28084f;
 
 		#endregion
@@ -21,6 +33,9 @@ namespace Utilities.Editor
 
 		#region Static Methods
 
+		/// <summary>
+		/// Shows the Units Converter window.
+		/// </summary>
 		[MenuItem("Tools/Utilities/Units Converter")]
 		public static void ShowWindow()
 		{
@@ -34,6 +49,9 @@ namespace Utilities.Editor
 
 		#region Global Methods
 
+		/// <summary>
+		/// Draws the GUI for the Units Converter.
+		/// </summary>
 		private void OnGUI()
 		{
 			EditorGUILayout.Space();

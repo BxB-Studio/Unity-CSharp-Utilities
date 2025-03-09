@@ -10,24 +10,39 @@ using UnityEditorInternal;
 
 namespace Utilities.Editor
 {
+	/// <summary>
+	/// Manages layers in Unity.
+	/// </summary>
 	public static class LayersManager
 	{
 		#region Constants
 
+		/// <summary>
+		/// The maximum number of layers in Unity.
+		/// </summary>
 		public const int MaxLayersCount = 32; // Total number of layers in Unity
 
 		#endregion
 
 		#region Variables
 
-		// Built-in layers have specific names and indices
+		/// <summary>
+		/// The built-in layer names.
+		/// </summary>
 		private static readonly string[] BuiltInLayerNames = { "Default", "TransparentFX", "Ignore Raycast", "Water", "UI" };
+		/// <summary>
+		/// The built-in layer indices.
+		/// </summary>
 		private static readonly int[] BuiltInLayerIndices = { 0, 1, 2, 4, 5 };
 
 		#endregion
 
 		#region Methods
 
+		/// <summary>
+		/// Adds a layer.
+		/// </summary>
+		/// <param name="name">The name of the layer.</param>
 		public static void AddLayer(string name)
 		{
 			// Get current layers
@@ -55,6 +70,10 @@ namespace Utilities.Editor
 			// Save the updated layers to TagManager
 			SetLayers(layers);
 		}
+		/// <summary>
+		/// Removes a layer.
+		/// </summary>
+		/// <param name="layerIndex">The index of the layer.</param>
 		public static void RemoveLayer(int layerIndex)
 		{
 			if (Array.Exists(BuiltInLayerIndices, index => index == layerIndex))
@@ -71,6 +90,10 @@ namespace Utilities.Editor
 			layers[layerIndex] = string.Empty; // Mark the layer as empty
 			SetLayers(layers); // Save the updated layers
 		}
+		/// <summary>
+		/// Removes a layer.
+		/// </summary>
+		/// <param name="name">The name of the layer.</param>
 		public static void RemoveLayer(string name)
 		{
 			// Check if the name is one of the built-in layers
@@ -87,6 +110,11 @@ namespace Utilities.Editor
 
 			RemoveLayer(layerIndex); // Reuse RemoveLayer by index
 		}
+		/// <summary>
+		/// Renames a layer.
+		/// </summary>
+		/// <param name="layerIndex">The index of the layer.</param>
+		/// <param name="name">The new name of the layer.</param>
 		public static void RenameLayer(int layerIndex, string name)
 		{
 			// Validate index
@@ -115,6 +143,11 @@ namespace Utilities.Editor
 			layers[layerIndex] = name;
 			SetLayers(layers);
 		}
+		/// <summary>
+		/// Renames a layer.
+		/// </summary>
+		/// <param name="currentName">The current name of the layer.</param>
+		/// <param name="newName">The new name of the layer.</param>
 		public static void RenameLayer(string currentName, string newName)
 		{
 			int layerIndex = LayerMask.NameToLayer(currentName);
@@ -125,6 +158,11 @@ namespace Utilities.Editor
 
 			RenameLayer(layerIndex, newName);
 		}
+		/// <summary>
+		/// Checks if a layer is empty.
+		/// </summary>
+		/// <param name="layerIndex">The index of the layer.</param>
+		/// <returns>True if the layer is empty, false otherwise.</returns>
 		public static bool IsLayerEmpty(int layerIndex)
 		{
 			if (layerIndex < 0 || layerIndex >= MaxLayersCount)
@@ -135,16 +173,29 @@ namespace Utilities.Editor
 			string[] layers = GetLayersFromTagManager();
 			return string.IsNullOrEmpty(layers[layerIndex]);
 		}
+		/// <summary>
+		/// Checks if a layer exists.
+		/// </summary>
+		/// <param name="name">The name of the layer.</param>
+		/// <returns>True if the layer exists, false otherwise.</returns>
 		public static bool LayerExists(string name)
 		{
 			return LayerMask.NameToLayer(name) > -1;
 		}
+		/// <summary>
+		/// Gets the layers.
+		/// </summary>
+		/// <returns>The layers.</returns>
 		public static string[] GetLayers()
 		{
 			// Returning the currently used layers without empty slots
 			return InternalEditorUtility.layers;
 		}
 
+		/// <summary>
+		/// Gets the layers from TagManager.asset.
+		/// </summary>
+		/// <returns>The layers.</returns>
 		private static string[] GetLayersFromTagManager()
 		{
 			// Get the TagManager.asset file, which contains all the layers
@@ -159,6 +210,10 @@ namespace Utilities.Editor
 
 			return layers;
 		}
+		/// <summary>
+		/// Sets the layers.
+		/// </summary>
+		/// <param name="layers">The layers.</param>
 		private static void SetLayers(string[] layers)
 		{
 			// Save the layers back to TagManager.asset
@@ -172,6 +227,11 @@ namespace Utilities.Editor
 
 			tagManager.ApplyModifiedProperties();
 		}
+		/// <summary>
+		/// Finds an empty layer slot.
+		/// </summary>
+		/// <param name="layers">The layers.</param>
+		/// <returns>The index of the empty layer slot.</returns>
 		private static int FindEmptyLayerSlot(string[] layers)
 		{
 			// Start searching from index 8 to avoid built-in layers (0-7 are reserved)

@@ -9,12 +9,25 @@ using UnityEngine;
 
 namespace Utilities
 {
+	/// <summary>
+	/// Utility class for serializing and deserializing data to a file.
+	/// </summary>
+	/// <typeparam name="T">The type of data to serialize and deserialize.</typeparam>
 	public class DataSerializationUtility<T> where T : class
 	{
 		#region Variables
 
+		/// <summary>
+		/// The path to save and load the data.
+		/// </summary>
 		private readonly string path;
+		/// <summary>
+		/// Whether to load the data from resources.
+		/// </summary>
 		private readonly bool useResources;
+		/// <summary>
+		/// Whether to bypass exceptions.
+		/// </summary>
 		private readonly bool bypassExceptions;
 
 		#endregion
@@ -23,6 +36,11 @@ namespace Utilities
 
 		#region Utilities
 
+		/// <summary>
+		/// Saves data to a file.
+		/// </summary>
+		/// <param name="data">The data to save.</param>
+		/// <returns>True if the data was saved, false otherwise.</returns>
 		public bool SaveOrCreate(T data)
 		{
 			CheckValidity();
@@ -54,6 +72,10 @@ namespace Utilities
 				stream?.Close();
 			}
 		}
+		/// <summary>
+		/// Loads data from a file.
+		/// </summary>
+		/// <returns>The loaded data.</returns>
 		public T Load()
 		{
 			CheckValidity();
@@ -92,6 +114,10 @@ namespace Utilities
 				stream?.Close();
 			}
 		}
+		/// <summary>
+		/// Deletes a file.
+		/// </summary>
+		/// <returns>True if the file was deleted, false otherwise.</returns>
 		public bool Delete()
 		{
 			CheckValidity();
@@ -131,6 +157,9 @@ namespace Utilities
 			return true;
 		}
 
+		/// <summary>
+		/// Checks if the path is valid.
+		/// </summary>
 		private void CheckValidity()
 		{
 			if (useResources)
@@ -151,10 +180,16 @@ namespace Utilities
 
 		#region Constructors
 
+		/// <summary>
+		/// Initializes a new instance of the DataSerializationUtility class.
+		/// </summary>
+		/// <param name="path">The path to save and load the data.</param>
+		/// <param name="loadFromResources">Whether to load the data from resources.</param>
+		/// <param name="bypassExceptions">Whether to bypass exceptions.</param>
 		public DataSerializationUtility(string path, bool loadFromResources, bool bypassExceptions = false)
 		{
 			this.path = path;
-			this.useResources = loadFromResources;
+			useResources = loadFromResources;
 			this.bypassExceptions = bypassExceptions;
 
 			CheckValidity();
@@ -164,6 +199,11 @@ namespace Utilities
 
 		#region Operators
 
+		/// <summary>
+		/// Implicitly converts a DataSerializationUtility<T> to a boolean.
+		/// </summary>
+		/// <param name="serializationUtility">The DataSerializationUtility<T> to convert.</param>
+		/// <returns>True if the DataSerializationUtility<T> is not null, false otherwise.</returns>
 		public static implicit operator bool(DataSerializationUtility<T> serializationUtility) => serializationUtility != null;
 
 		#endregion

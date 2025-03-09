@@ -10,10 +10,16 @@ using UnityEditor;
 
 namespace Utilities.Editor
 {
+	/// <summary>
+	/// A sample editor window for data serialization.
+	/// </summary>
 	internal class DataSerializationSample : EditorWindow
 	{
 		#region Modules
 
+		/// <summary>
+		/// A sample data class for serialization.
+		/// </summary>
 		[Serializable]
 		private class DataSample
 		{
@@ -26,20 +32,35 @@ namespace Utilities.Editor
 
 		#region Variables
 
+		/// <summary>
+		/// The serialization utility for the data sample.
+		/// </summary>
 		private DataSerializationUtility<DataSample> serializationUtility;
+		/// <summary>
+		/// The data sample.
+		/// </summary>
 		private DataSample data;
+		/// <summary>
+		/// The path to the data sample.
+		/// </summary>
 		private string DataPath => $"{Application.dataPath}/Resources/Assets/DataSample.data";
 
 		#endregion
 
 		#region Methods
 
+		/// <summary>
+		/// Shows the data serialization sample window.
+		/// </summary>
 		[MenuItem("Tools/Utilities/Debug/Data File Sample...")]
 		public static void ShowWindow()
 		{
 			GetWindow<DataSerializationSample>(true, "Data File Sample").Show();
 		}
 
+		/// <summary>
+		/// Loads the data sample.
+		/// </summary>
 		private void Load()
 		{
 			if (!serializationUtility)
@@ -47,6 +68,9 @@ namespace Utilities.Editor
 
 			data = serializationUtility.Load();
 		}
+		/// <summary>
+		/// Saves the data sample.
+		/// </summary>
 		private void Save()
 		{
 			if (!serializationUtility)
@@ -56,6 +80,9 @@ namespace Utilities.Editor
 
 			AssetDatabase.Refresh();
 		}
+		/// <summary>
+		/// Draws the GUI for the data serialization sample.
+		/// </summary>
 		private void OnGUI()
 		{
 

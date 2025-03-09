@@ -8,6 +8,9 @@ using UnityEditor;
 
 namespace Utilities.Editor
 {
+	/// <summary>
+	/// Custom editor for the BezierSample class.
+	/// </summary>
 	[CustomEditor(typeof(BezierSample))]
 	public class BezierSampleEditor : UnityEditor.Editor
 	{
@@ -15,20 +18,50 @@ namespace Utilities.Editor
 
 		#region Static Variables
 
+		/// <summary>
+		/// The color of the bezier curve.
+		/// </summary>
 		public static Color bezierCurveColor = Color.cyan;
+		/// <summary>
+		/// The color of the bezier curve when it is selected.
+		/// </summary>
 		public static Color bezierCurveSelectedColor = Color.yellow;
+		/// <summary>
+		/// The color of the anchor point.
+		/// </summary>
 		public static Color anchorPointColor = Color.blue;
+		/// <summary>
+		/// The color of the control point.
+		/// </summary>
 		public static Color controlPointColor = Color.white;
+		/// <summary>
+		/// The color of the control point when it is disabled.
+		/// </summary>
 		public static Color controlPointDisabledColor = Color.gray;
+		/// <summary>
+		/// The color of the control line.
+		/// </summary>
 		public static Color controlLineColor = Color.black;
+		/// <summary>
+		/// The width of the bezier curve.
+		/// </summary>
 		public static float bezierCurveWidth = 2f;
+		/// <summary>
+		/// The size of the anchor point.
+		/// </summary>
 		public static float anchorPointSize = .2f;
+		/// <summary>
+		/// The size of the control point.
+		/// </summary>
 		public static float controlPointSize = .05f;
 
 		#endregion
 
 		#region Global Variables
 
+		/// <summary>
+		/// The instance of the BezierSample class.
+		/// </summary>
 		private BezierSample Instance
 		{
 			get
@@ -39,8 +72,17 @@ namespace Utilities.Editor
 				return instance;
 			}
 		}
+		/// <summary>
+		/// The instance of the BezierSample class.
+		/// </summary>
 		private BezierSample instance;
+		/// <summary>
+		/// The path of the BezierSample class.
+		/// </summary>
 		private Bezier.Path Path => Instance.path;
+		/// <summary>
+		/// The selected segment index.
+		/// </summary>
 		private int selectedSegmentIndex = -1;
 
 		#endregion
@@ -51,6 +93,9 @@ namespace Utilities.Editor
 
 		#region Editor
 
+		/// <summary>
+		/// Draws the inspector GUI.
+		/// </summary>
 		public override void OnInspectorGUI()
 		{
 			EditorGUI.BeginChangeCheck();
@@ -201,6 +246,9 @@ namespace Utilities.Editor
 
 		#region Utilities
 
+		/// <summary>
+		/// Draws the bezier gizmos.
+		/// </summary>
 		private void BezierGizmos()
 		{
 			Event e = Event.current;
@@ -249,6 +297,9 @@ namespace Utilities.Editor
 			if (e.type == EventType.Repaint && Instance.ShowMesh)
 				Instance.UpdateMesh();
 		}
+		/// <summary>
+		/// Handles user input.
+		/// </summary>
 		private void UserInput()
 		{
 			Event e = Event.current;
@@ -317,11 +368,17 @@ namespace Utilities.Editor
 
 		#endregion
 
+		/// <summary>
+		/// Called when the editor is enabled.
+		/// </summary>
 		private void OnEnable()
 		{
 			if (!Path)
 				Instance.CreatePath();
 		}
+		/// <summary>
+		/// Called when the scene is drawn.
+		/// </summary>
 		private void OnSceneGUI()
 		{
 			UserInput();

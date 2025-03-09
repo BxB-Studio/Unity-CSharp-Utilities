@@ -11,12 +11,21 @@ using UnityEditor.Build;
 
 namespace Utilities.Editor
 {
+	/// <summary>
+	/// Utility class for editor-related functions.
+	/// </summary>
 	public static class EditorUtilities
 	{
 		#region Modules
 
+		/// <summary>
+		/// Utility class for editor-related styles.
+		/// </summary>
 		public static class Styles
 		{
+			/// <summary>
+			/// The button style.
+			/// </summary>
 			public static GUIStyle Button => new GUIStyle("Button")
 			{
 #if UNITY_2019_3_OR_NEWER
@@ -26,6 +35,9 @@ namespace Utilities.Editor
 				}
 #endif
 			};
+			/// <summary>
+			/// The active button style.
+			/// </summary>
 			public static GUIStyle ButtonActive
 			{
 				get
@@ -41,6 +53,9 @@ namespace Utilities.Editor
 					return style;
 				}
 			}
+			/// <summary>
+			/// The mini button style.
+			/// </summary>
 			public static GUIStyle MiniButton => new GUIStyle("MiniButton")
 			{
 #if UNITY_2019_3_OR_NEWER
@@ -50,6 +65,9 @@ namespace Utilities.Editor
 				}
 #endif
 			};
+			/// <summary>
+			/// The active mini button style.
+			/// </summary>
 			public static GUIStyle MiniButtonActive
 			{
 				get
@@ -70,6 +88,9 @@ namespace Utilities.Editor
 					return style;
 				}
 			}
+			/// <summary>
+			/// The mini button middle style.
+			/// </summary>
 			public static GUIStyle MiniButtonMiddle => new GUIStyle("MiniButtonMid")
 			{
 #if UNITY_2019_3_OR_NEWER
@@ -79,6 +100,9 @@ namespace Utilities.Editor
 				}
 #endif
 			};
+			/// <summary>
+			/// The active mini button middle style.
+			/// </summary>
 			public static GUIStyle MiniButtonMiddleActive
 			{
 				get
@@ -94,6 +118,9 @@ namespace Utilities.Editor
 					return style;
 				}
 			}
+			/// <summary>
+			/// The mini button left style.
+			/// </summary>
 			public static GUIStyle MiniButtonLeft => new GUIStyle("MiniButtonLeft")
 			{
 #if UNITY_2019_3_OR_NEWER
@@ -103,6 +130,9 @@ namespace Utilities.Editor
 				}
 #endif
 			};
+			/// <summary>
+			/// The active mini button left style.
+			/// </summary>
 			public static GUIStyle MiniButtonLeftActive
 			{
 				get
@@ -118,6 +148,9 @@ namespace Utilities.Editor
 					return style;
 				}
 			}
+			/// <summary>
+			/// The mini button right style.
+			/// </summary>
 			public static GUIStyle MiniButtonRight => new GUIStyle("MiniButtonRight")
 			{
 #if UNITY_2019_3_OR_NEWER
@@ -127,6 +160,9 @@ namespace Utilities.Editor
 				}
 #endif
 			};
+			/// <summary>
+			/// The active mini button right style.
+			/// </summary>
 			public static GUIStyle MiniButtonRightActive
 			{
 				get
@@ -143,37 +179,126 @@ namespace Utilities.Editor
 				}
 			}
 		}
+		/// <summary>
+		/// Utility class for editor-related icons.
+		/// </summary>
 		public static class Icons
 		{
+			/// <summary>
+			/// The add icon.
+			/// </summary>
 			public static Texture2D Add => Resources.Load($"{IconsPath}/{IconsThemeFolder}/plus") as Texture2D;
+			/// <summary>
+			/// The caret up icon.
+			/// </summary>
 			public static Texture2D CaretUp => Resources.Load($"{IconsPath}/{IconsThemeFolder}/caret-up") as Texture2D;
+			/// <summary>
+			/// The caret down icon.
+			/// </summary>
 			public static Texture2D CaretDown => Resources.Load($"{IconsPath}/{IconsThemeFolder}/caret-down") as Texture2D;
+			/// <summary>
+			/// The caret left icon.
+			/// </summary>
 			public static Texture2D CaretLeft => Resources.Load($"{IconsPath}/{IconsThemeFolder}/caret-left") as Texture2D;
+			/// <summary>
+			/// The caret right icon.
+			/// </summary>
 			public static Texture2D CaretRight => Resources.Load($"{IconsPath}/{IconsThemeFolder}/caret-right") as Texture2D;
+			/// <summary>
+			/// The chart icon.
+			/// </summary>
 			public static Texture2D Chart => Resources.Load($"{IconsPath}/{IconsThemeFolder}/chart") as Texture2D;
+			/// <summary>
+			/// The chevron up icon.
+			/// </summary>
 			public static Texture2D ChevronUp => Resources.Load($"{IconsPath}/{IconsThemeFolder}/chevron-up") as Texture2D;
+			/// <summary>
+			/// The chevron down icon.
+			/// </summary>
 			public static Texture2D ChevronDown => Resources.Load($"{IconsPath}/{IconsThemeFolder}/chevron-down") as Texture2D;
+			/// <summary>
+			/// The chevron left icon.
+			/// </summary>
 			public static Texture2D ChevronLeft => Resources.Load($"{IconsPath}/{IconsThemeFolder}/chevron-left") as Texture2D;
+			/// <summary>
+			/// The chevron right icon.
+			/// </summary>
 			public static Texture2D ChevronRight => Resources.Load($"{IconsPath}/{IconsThemeFolder}/chevron-right") as Texture2D;
+			/// <summary>
+			/// The check icon.
+			/// </summary>
 			public static Texture2D Check => Resources.Load($"{IconsPath}/{IconsThemeFolder}/check") as Texture2D;
+			/// <summary>
+			/// The check circle icon.
+			/// </summary>
 			public static Texture2D CheckCircle => Resources.Load($"{IconsPath}/{IconsThemeFolder}/check-circle") as Texture2D;
+			/// <summary>
+			/// The check circle colored icon.
+			/// </summary>
 			public static Texture2D CheckCircleColored => Resources.Load($"{IconsPath}/check-circle") as Texture2D;
-			public static Texture2D CheckColored => Resources.Load($"{IconsPath}/check") as Texture2D;
+			/// <summary>
+			/// The clone icon.
+			/// </summary>
 			public static Texture2D Clone => Resources.Load($"{IconsPath}/{IconsThemeFolder}/clone") as Texture2D;
+			/// <summary>
+			/// The box icon.
+			/// </summary>
 			public static Texture2D Box => Resources.Load($"{IconsPath}/{IconsThemeFolder}/box") as Texture2D;
+			/// <summary>
+			/// The cross icon.
+			/// </summary>
 			public static Texture2D Cross => Resources.Load($"{IconsPath}/{IconsThemeFolder}/cross") as Texture2D;
+			/// <summary>
+			/// The error icon.
+			/// </summary>
 			public static Texture2D Error => Resources.Load($"{IconsPath}/exclamation-circle") as Texture2D;
+			/// <summary>
+			/// The exclamation circle icon.
+			/// </summary>
 			public static Texture2D ExclamationCircle => Resources.Load($"{IconsPath}/{IconsThemeFolder}/exclamation-circle") as Texture2D;
+			/// <summary>
+			/// The exclamation triangle icon.
+			/// </summary>
 			public static Texture2D ExclamationTriangle => Resources.Load($"{IconsPath}/{IconsThemeFolder}/exclamation-triangle") as Texture2D;
+			/// <summary>
+			/// The exclamation square icon.
+			/// </summary>
 			public static Texture2D ExclamationSquare => Resources.Load($"{IconsPath}/{IconsThemeFolder}/exclamation-square") as Texture2D;
+			/// <summary>
+			/// The eye icon.
+			/// </summary>
 			public static Texture2D Eye => Resources.Load($"{IconsPath}/{IconsThemeFolder}/eye") as Texture2D;
+			/// <summary>
+			/// The info icon.
+			/// </summary>
 			public static Texture2D Info => Resources.Load($"{IconsPath}/exclamation-square") as Texture2D;
+			/// <summary>
+			/// The pencil icon.
+			/// </summary>
 			public static Texture2D Pencil => Resources.Load($"{IconsPath}/{IconsThemeFolder}/pencil") as Texture2D;
+			/// <summary>
+			/// The reload icon.
+			/// </summary>
 			public static Texture2D Reload => Resources.Load($"{IconsPath}/{IconsThemeFolder}/reload") as Texture2D;
+			/// <summary>
+			/// The settings icon.
+			/// </summary>
 			public static Texture2D Settings => Resources.Load($"{IconsPath}/{IconsThemeFolder}/cog") as Texture2D;
+			/// <summary>
+			/// The save icon.
+			/// </summary>
 			public static Texture2D Save => Resources.Load($"{IconsPath}/{IconsThemeFolder}/save") as Texture2D;
+			/// <summary>
+			/// The sort icon.
+			/// </summary>
 			public static Texture2D Sort => Resources.Load($"{IconsPath}/{IconsThemeFolder}/sort") as Texture2D;
+			/// <summary>
+			/// The trash icon.
+			/// </summary>
 			public static Texture2D Trash => Resources.Load($"{IconsPath}/{IconsThemeFolder}/trash") as Texture2D;
+			/// <summary>
+			/// The warning icon.
+			/// </summary>
 			public static Texture2D Warning => Resources.Load($"{IconsPath}/exclamation-triangle") as Texture2D;
 		}
 
@@ -181,7 +306,13 @@ namespace Utilities.Editor
 
 		#region Variables
 
+		/// <summary>
+		/// The path to the icons.
+		/// </summary>
 		private static readonly string IconsPath = "Editor/Icons";
+		/// <summary>
+		/// The theme folder for the icons.
+		/// </summary>
 		private static readonly string IconsThemeFolder = EditorGUIUtility.isProSkin ? "Pro" : "Personal";
 
 		#endregion
@@ -190,6 +321,10 @@ namespace Utilities.Editor
 
 		#region Utilities
 
+		/// <summary>
+		/// Adds a scripting define symbol.
+		/// </summary>
+		/// <param name="symbol">The symbol to add.</param>
 		public static void AddScriptingDefineSymbol(string symbol)
 		{
 			string[] scriptingDefineSymbols = GetScriptingDefineSymbols();
@@ -202,6 +337,10 @@ namespace Utilities.Editor
 				PlayerSettings.SetScriptingDefineSymbolsForGroup(GetCurrentBuildTargetGroup(), $"{(!emptySymbols ? $"{string.Join(";", scriptingDefineSymbols)};" : "")}{symbol}");
 #endif
 		}
+		/// <summary>
+		/// Removes a scripting define symbol.
+		/// </summary>
+		/// <param name="symbol">The symbol to remove.</param>
 		public static void RemoveScriptingDefineSymbol(string symbol)
 		{
 			string[] scriptingDefineSymbols = GetScriptingDefineSymbols();
@@ -216,6 +355,10 @@ namespace Utilities.Editor
 #endif
 			}
 		}
+		/// <summary>
+		/// Removes a scripting define symbol at a specific index.
+		/// </summary>
+		/// <param name="symbolIndex">The index of the symbol to remove.</param>
 		public static void RemoveScriptingDefineSymbol(int symbolIndex)
 		{
 			string[] scriptingDefineSymbols = GetScriptingDefineSymbols();
@@ -230,18 +373,33 @@ namespace Utilities.Editor
 #endif
 			}
 		}
+		/// <summary>
+		/// Checks if a scripting define symbol exists.
+		/// </summary>
+		/// <param name="symbol">The symbol to check.</param>
+		/// <returns>True if the symbol exists, false otherwise.</returns>
 		public static bool ScriptingDefineSymbolExists(string symbol)
 		{
 			string[] scriptingDefineSymbols = GetScriptingDefineSymbols();
 
 			return ScriptingDefineSymbolExists(scriptingDefineSymbols, symbol);
 		}
+		/// <summary>
+		/// Checks if a scripting define symbol exists.
+		/// </summary>
+		/// <param name="symbol">The symbol to check.</param>
+		/// <param name="symbolIndex">The index of the symbol.</param>
+		/// <returns>True if the symbol exists, false otherwise.</returns>
 		public static bool ScriptingDefineSymbolExists(string symbol, out int symbolIndex)
 		{
 			string[] scriptingDefineSymbols = GetScriptingDefineSymbols();
 
 			return ScriptingDefineSymbolExists(scriptingDefineSymbols, symbol, out symbolIndex);
 		}
+		/// <summary>
+		/// Gets the scripting define symbols.
+		/// </summary>
+		/// <returns>The scripting define symbols.</returns>
 		public static string[] GetScriptingDefineSymbols()
 		{
 #if UNITY_2021_2_OR_NEWER
@@ -253,6 +411,11 @@ namespace Utilities.Editor
 			return defines;
 		}
 #if UNITY_2021_2_OR_NEWER
+		/// <summary>
+		/// Gets the scripting define symbols.
+		/// </summary>
+		/// <param name="namedBuildTarget">The named build target.</param>
+		/// <param name="defines">The defines.</param>
 		public static void GetScriptingDefineSymbols(NamedBuildTarget namedBuildTarget, out string[] defines)
 		{
 			PlayerSettings.GetScriptingDefineSymbols(namedBuildTarget, out defines);
@@ -262,24 +425,50 @@ namespace Utilities.Editor
 			return NamedBuildTarget.FromBuildTargetGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
 		}
 #else
+		/// <summary>
+		/// Gets the scripting define symbols.
+		/// </summary>
+		/// <param name="buildTargetGroup">The build target group.</param>
+		/// <param name="defines">The defines.</param>
 		public static void GetScriptingDefineSymbols(BuildTargetGroup buildTargetGroup, out string[] defines)
 		{
 			PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup, out defines);
 		}
 #endif
+		/// <summary>
+		/// Gets the current build target group.
+		/// </summary>
+		/// <returns>The current build target group.</returns>
 		public static BuildTargetGroup GetCurrentBuildTargetGroup()
 		{
 			return EditorUserBuildSettings.selectedBuildTargetGroup;
 		}
+		/// <summary>
+		/// Gets the current build target.
+		/// </summary>
+		/// <returns>The current build target.</returns>
 		public static BuildTarget GetCurrentBuildTarget()
 		{
 			return EditorUserBuildSettings.activeBuildTarget;
 		}
 
+		/// <summary>
+		/// Checks if a scripting define symbol exists.
+		/// </summary>
+		/// <param name="symbols">The symbols.</param>
+		/// <param name="symbol">The symbol to check.</param>
+		/// <returns>True if the symbol exists, false otherwise.</returns>
 		private static bool ScriptingDefineSymbolExists(string[] symbols, string symbol)
 		{
 			return Array.IndexOf(symbols, symbol) > -1;
 		}
+		/// <summary>
+		/// Checks if a scripting define symbol exists.
+		/// </summary>
+		/// <param name="symbols">The symbols.</param>
+		/// <param name="symbol">The symbol to check.</param>
+		/// <param name="index">The index of the symbol.</param>
+		/// <returns>True if the symbol exists, false otherwise.</returns>
 		private static bool ScriptingDefineSymbolExists(string[] symbols, string symbol, out int index)
 		{
 			index = Array.IndexOf(symbols, symbol);

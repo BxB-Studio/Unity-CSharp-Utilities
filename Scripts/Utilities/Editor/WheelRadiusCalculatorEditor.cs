@@ -11,8 +11,17 @@ namespace Utilities.Editor
 	{
 		#region Variables
 
+		/// <summary>
+		/// The width of the wheel.
+		/// </summary>
 		private static int width = 225;
+		/// <summary>
+		/// The aspect ratio of the wheel.
+		/// </summary>
 		private static int aspect = 55;
+		/// <summary>
+		/// The diameter of the wheel.
+		/// </summary>
 		private static int diameter = 17;
 
 		#endregion
@@ -21,6 +30,9 @@ namespace Utilities.Editor
 
 		#region Static Methods
 
+		/// <summary>
+		/// Shows the Wheel Radius Calculator window.
+		/// </summary>
 		[MenuItem("Tools/Utilities/Wheel Radius Calculator")]
 		public static void ShowWindow()
 		{
@@ -34,6 +46,9 @@ namespace Utilities.Editor
 
 		#region Global Methods
 
+		/// <summary>
+		/// Draws the GUI for the Wheel Radius Calculator.
+		/// </summary>
 		private void OnGUI()
 		{
 			EditorGUILayout.Space();

@@ -10,10 +10,16 @@ using UnityEngine;
 
 namespace Utilities
 {
+	/// <summary>
+	/// Utility class for handling Bezier curves.
+	/// </summary>
 	public static class Bezier
 	{
 		#region Modules
 
+		/// <summary>
+		/// Represents a Bezier path.
+		/// </summary>
 		[Serializable]
 		public class Path
 		{
@@ -21,8 +27,17 @@ namespace Utilities
 
 			#region Global Variables
 
+			/// <summary>
+			/// The number of segments in the path.
+			/// </summary>
 			public int SegmentsCount => points.Count / 3;
+			/// <summary>
+			/// The number of points in the path.
+			/// </summary>
 			public int PointsCount => points.Count;
+			/// <summary>
+			/// Whether to automatically calculate the controls.
+			/// </summary>
 			public bool AutoCalculateControls
 			{
 				get
@@ -40,6 +55,9 @@ namespace Utilities
 						AutoSetControls();
 				}
 			}
+			/// <summary>
+			/// Whether the path is looped.
+			/// </summary>
 			public bool LoopedPath
 			{
 				get
@@ -83,9 +101,18 @@ namespace Utilities
 					}
 				}
 			}
+			/// <summary>
+			/// The disabled segments in the path.
+			/// </summary>
 			public List<int> disabledSegments;
+			/// <summary>
+			/// The ground layer mask.
+			/// </summary>
 			public LayerMask groundLayerMask;
 
+			/// <summary>
+			/// Whether to refresh the points normals.
+			/// </summary>
 			private bool ShouldRefreshPointsNormals
 			{
 				get
@@ -93,12 +120,24 @@ namespace Utilities
 					return pointsNormals == null || pointsNormals.Count != SegmentsCount + 1;
 				}
 			}
+			/// <summary>
+			/// The points in the path.
+			/// </summary>
 			[SerializeField, HideInInspector]
 			private List<Vector3> points;
+			/// <summary>
+			/// The points normals in the path.
+			/// </summary>
 			[SerializeField, HideInInspector]
 			private List<Vector3> pointsNormals;
+			/// <summary>
+			/// Whether the path is looped.
+			/// </summary>
 			[SerializeField, HideInInspector]
 			private bool loopedPath;
+			/// <summary>
+			/// Whether to automatically calculate the controls.
+			/// </summary>
 			[SerializeField, HideInInspector]
 			private bool autoCalculateControls;
 
@@ -106,6 +145,11 @@ namespace Utilities
 
 			#region Indexers
 
+			/// <summary>
+			/// Gets or sets the point at the specified index.
+			/// </summary>
+			/// <param name="index">The index of the point.</param>
+			/// <returns>The point at the specified index.</returns>
 			public Vector3 this[int index]
 			{
 				get
@@ -147,6 +191,12 @@ namespace Utilities
 
 			#region Methods
 
+			/// <summary>
+			/// Creates a mesh for the path.
+			/// </summary>
+			/// <param name="width">The width of the mesh.</param>
+			/// <param name="spacing">The spacing of the mesh.</param>
+			/// <param name="resolution">The resolution of the mesh.</param>
 			public Mesh CreateMesh(float width, float spacing, int resolution, float tiling = 1f)
 			{
 				Vector3[] spacedPoints = GetSpacedPoints(spacing, resolution);
@@ -214,6 +264,10 @@ namespace Utilities
 					uv = uv
 				};
 			}
+			/// <summary>
+			/// Estimates the length of the path.
+			/// </summary>
+			/// <returns>The estimated length of the path.</returns>
 			public float EstimatedLength()
 			{
 				float length = 0f;
@@ -223,6 +277,11 @@ namespace Utilities
 
 				return length;
 			}
+			/// <summary>
+			/// Estimates the length of a segment.
+			/// </summary>
+			/// <param name="index">The index of the segment.</param>
+			/// <returns>The estimated length of the segment.</returns>
 			public float EstimatedSegmentLength(int index)
 			{
 				Vector3[] segmentPoints = GetSegmentPoints(index);
@@ -230,6 +289,10 @@ namespace Utilities
 				
 				return Utility.Distance(segmentPoints[0], segmentPoints[3]) + controlNetLength * .5f;
 			}
+			/// <summary>
+			/// Adds a segment to the path.
+			/// </summary>
+			/// <param name="position">The position of the segment.</param>
 			public void AddSegment(Vector3 position)
 			{
 				if (points.Count < 1)
@@ -265,6 +328,11 @@ namespace Utilities
 
 				RefreshAnchorNormals();
 			}
+			/// <summary>
+			/// Splits a segment at the specified position.
+			/// </summary>
+			/// <param name="position">The position to split the segment at.</param>
+			/// <param name="index">The index of the segment to split.</param>
 			public void SplitSegment(Vector3 position, int index)
 			{
 				if (SegmentsCount < 1)
@@ -284,19 +352,36 @@ namespace Utilities
 				else
 					AutoSetAnchorControls(index * 3 + 3);
 			}
+			/// <summary>
+			/// Checks if a segment is disabled.
+			/// </summary>
+			/// <param name="index">The index of the segment.</param>
+			/// <returns>True if the segment is disabled, false otherwise.</returns>
 			public bool IsSegmentDisabled(int index)
 			{
 				return disabledSegments.IndexOf(index) > -1;
 			}
+			/// <summary>
+			/// Enables a segment.
+			/// </summary>
+			/// <param name="index">The index of the segment.</param>
 			public void EnableSegment(int index)
 			{
 				disabledSegments.Remove(index);
 			}
+			/// <summary>
+			/// Disables a segment.
+			/// </summary>
+			/// <param name="index">The index of the segment.</param>
 			public void DisableSegment(int index)
 			{
 				if (disabledSegments.IndexOf(index) < 0)
 					disabledSegments.Add(index);
 			}
+			/// <summary>
+			/// Removes a segment.
+			/// </summary>
+			/// <param name="anchorIndex">The index of the anchor of the segment.</param>
 			public void RemoveSegment(int anchorIndex)
 			{
 				if (SegmentsCount < 3 && loopedPath || SegmentsCount < 2)
@@ -318,6 +403,13 @@ namespace Utilities
 				else
 					points.RemoveRange(anchorIndex - 1, 3);
 			}
+			/// <summary>
+			/// Gets the spaced points of the path.
+			/// </summary>
+			/// <param name="spacing">The spacing of the points.</param>
+			/// <param name="pointsNormals">The normals of the points.</param>
+			/// <param name="resolution">The resolution of the points.</param>
+			/// <returns>The spaced points of the path.</returns>
 			public Vector3[] GetSpacedPoints(float spacing, out Vector3[] pointsNormals, int resolution = 1)
 			{
 				pointsNormals = null;
@@ -370,10 +462,21 @@ namespace Utilities
 
 				return spacedPoints.ToArray();
 			}
+			/// <summary>
+			/// Gets the spaced points of the path.
+			/// </summary>
+			/// <param name="spacing">The spacing of the points.</param>
+			/// <param name="resolution">The resolution of the points.</param>
+			/// <returns>The spaced points of the path.</returns>
 			public Vector3[] GetSpacedPoints(float spacing, int resolution = 1)
 			{
 				return GetSpacedPoints(spacing, out _, resolution);
 			}
+			/// <summary>
+			/// Gets the points of a segment.
+			/// </summary>
+			/// <param name="index">The index of the segment.</param>
+			/// <returns>The points of the segment.</returns>
 			public Vector3[] GetSegmentPoints(int index)
 			{
 				if (SegmentsCount < 1)
@@ -387,6 +490,12 @@ namespace Utilities
 					points[LoopIndex(index * 3 + 3)]
 				};
 			}
+			/// <summary>
+			/// Gets the closest segment to the specified position.
+			/// </summary>
+			/// <param name="position">The position to get the closest segment to.</param>
+			/// <param name="distanceRange">The distance range to get the closest segment to.</param>
+			/// <returns>The closest segment to the specified position.</returns>
 			public int ClosestSegment(Vector3 position, float distanceRange)
 			{
 				if (SegmentsCount < 2)
@@ -409,14 +518,30 @@ namespace Utilities
 
 				return closestSegmentIndex;
 			}
+			/// <summary>
+			/// Gets the closest segment to the specified position.
+			/// </summary>
+			/// <param name="position">The position to get the closest segment to.</param>
+			/// <returns>The closest segment to the specified position.</returns>
 			public int ClosestSegment(Vector3 position)
 			{
 				return ClosestSegment(position, Mathf.Infinity);
 			}
+			/// <summary>
+			/// Checks if an anchor point is at the specified index.
+			/// </summary>
+			/// <param name="index">The index of the point.</param>
+			/// <returns>True if the point is an anchor point, false otherwise.</returns>
 			public bool IsAnchorPoint(int index)
 			{
 				return index % 3 == 0;
 			}
+			/// <summary>
+			/// Gets the closest anchor point to the specified position.
+			/// </summary>
+			/// <param name="position">The position to get the closest anchor point to.</param>
+			/// <param name="distanceRange">The distance range to get the closest anchor point to.</param>
+			/// <returns>The closest anchor point to the specified position.</returns>
 			public int ClosestAnchorPoint(Vector3 position, float distanceRange)
 			{
 				int closestAnchorIndex = -1;
@@ -434,10 +559,20 @@ namespace Utilities
 
 				return closestAnchorIndex;
 			}
+			/// <summary>
+			/// Gets the closest anchor point to the specified position.
+			/// </summary>
+			/// <param name="position">The position to get the closest anchor point to.</param>
+			/// <returns>The closest anchor point to the specified position.</returns>
 			public int ClosestAnchorPoint(Vector3 position)
 			{
 				return ClosestAnchorPoint(position, Mathf.Infinity);
 			}
+			/// <summary>
+			/// Gets the anchor point at the specified index.
+			/// </summary>
+			/// <param name="index">The index of the anchor point.</param>
+			/// <returns>The anchor point at the specified index.</returns>
 			public Vector3 GetAnchorPoint(int index)
 			{
 				if (PointsCount < 1)
@@ -448,6 +583,11 @@ namespace Utilities
 
 				return points[LoopIndex(index * 3)];
 			}
+			/// <summary>
+			/// Gets the anchor point normal at the specified index.
+			/// </summary>
+			/// <param name="index">The index of the anchor point.</param>
+			/// <returns>The anchor point normal at the specified index.</returns>
 			public Vector3 GetAnchorPointNormal(int index)
 			{
 				if (PointsCount < 1)
@@ -458,6 +598,11 @@ namespace Utilities
 
 				return pointsNormals[LoopIndex(index * 3) / 3];
 			}
+			/// <summary>
+			/// Sets the anchor point at the specified index.
+			/// </summary>
+			/// <param name="index">The index of the anchor point.</param>
+			/// <param name="value">The value of the anchor point.</param>
 			public void SetAnchorPoint(int index, Vector3 value)
 			{
 				index = LoopIndex(index * 3);
@@ -484,16 +629,27 @@ namespace Utilities
 				if (index - 1 > -1 || loopedPath)
 					points[LoopIndex(index - 1)] += deltaMove;
 			}
+			/// <summary>
+			/// Gets the anchor points of the path.
+			/// </summary>
+			/// <returns>The anchor points of the path.</returns>
 			public Vector3[] GetAnchorPoints()
 			{
 				return points.Where((point, index) => index % 3 == 0).ToArray();
 			}
+			/// <summary>
+			/// Offsets all points of the path.
+			/// </summary>
+			/// <param name="offset">The offset to offset the points by.</param>
 			public void OffsetAllPoints(Vector3 offset)
 			{
 				for (int i = 0; i < points.Count; i++)
 					points[i] += offset;
 			}
 
+			/// <summary>
+			/// Automatically sets the controls for the path.
+			/// </summary>
 			private void AutoSetControls()
 			{
 				for (int i = 0; i < points.Count; i += 3)
@@ -501,6 +657,10 @@ namespace Utilities
 
 				AutoSetStartEndControls();
 			}
+			/// <summary>
+			/// Automatically sets the controls for a moved anchor point.
+			/// </summary>
+			/// <param name="anchorIndex">The index of the anchor point.</param>
 			private void AutoSetMovedAnchorControls(int anchorIndex)
 			{
 				if (SegmentsCount < 1)
@@ -512,6 +672,10 @@ namespace Utilities
 
 				AutoSetStartEndControls();
 			}
+			/// <summary>
+			/// Automatically sets the controls for an anchor point.
+			/// </summary>
+			/// <param name="anchorIndex">The index of the anchor point.</param>
 			private void AutoSetAnchorControls(int anchorIndex)
 			{
 				if (SegmentsCount < 1)
@@ -547,6 +711,9 @@ namespace Utilities
 						points[LoopIndex(controlIndex)] = anchorPosition + .5f * neighborDistances[i] * direction;
 				}
 			}
+			/// <summary>
+			/// Automatically sets the controls for the start and end of the path.
+			/// </summary>
 			private void AutoSetStartEndControls()
 			{
 				if (loopedPath || SegmentsCount < 1)
@@ -559,6 +726,9 @@ namespace Utilities
 				points[points.Count - 2] = Utility.Average(points[points.Count - 1], points[points.Count - 3]);
 #endif
 			}
+			/// <summary>
+			/// Refreshes the anchor normals.
+			/// </summary>
 			private void RefreshAnchorNormals()
 			{
 				pointsNormals = new List<Vector3>();
@@ -574,6 +744,11 @@ namespace Utilities
 				for (int i = 1; i < SegmentsCount; i++)
 					pointsNormals.Add(GetPointNormal(GetSegmentPoints(i)[3]));
 			}
+			/// <summary>
+			/// Gets the normal of a point.
+			/// </summary>
+			/// <param name="point">The point to get the normal of.</param>
+			/// <returns>The normal of the point.</returns>
 			private Vector3 GetPointNormal(Vector3 point)
 			{
 				RaycastHit[] hits = new RaycastHit[2];
@@ -590,6 +765,11 @@ namespace Utilities
 
 				return Vector3.up;
 			}
+			/// <summary>
+			/// Loops an index.
+			/// </summary>
+			/// <param name="index">The index to loop.</param>
+			/// <returns>The looped index.</returns>
 			private int LoopIndex(int index)
 			{
 				while (index < 0)
@@ -604,12 +784,21 @@ namespace Utilities
 
 			#region Constructors
 
+			/// <summary>
+			/// Initializes a new instance of the Path class.
+			/// </summary>
+			/// <param name="groundLayerMask">The ground layer mask.</param>
 			public Path(LayerMask groundLayerMask)
 			{
 				points = new List<Vector3>();
 				disabledSegments = new List<int>();
 				this.groundLayerMask = groundLayerMask;
 			}
+			/// <summary>
+			/// Initializes a new instance of the Path class.
+			/// </summary>
+			/// <param name="center">The center of the path.</param>
+			/// <param name="groundLayerMask">The ground layer mask.</param>
 			public Path(Vector3 center, LayerMask groundLayerMask)
 			{
 				points = new List<Vector3>
@@ -627,6 +816,11 @@ namespace Utilities
 
 			#region Operators
 
+			/// <summary>
+			/// Implicitly converts a Path to a boolean.
+			/// </summary>
+			/// <param name="path">The Path to convert.</param>
+			/// <returns>True if the Path is not null, false otherwise.</returns>
 			public static implicit operator bool(Path path) => path != null;
 
 			#endregion
@@ -634,14 +828,32 @@ namespace Utilities
 			#endregion
 		}
 
+		/// <summary>
+		/// Represents a point transform.
+		/// </summary>
 		private struct PointTransform
 		{
 			#region Variables
 
+			/// <summary>
+			/// The position of the point.
+			/// </summary>
 			public Vector3 position;
+			/// <summary>
+			/// The rotation of the point.
+			/// </summary>
 			public Quaternion rotation;
+			/// <summary>
+			/// The forward direction of the point.
+			/// </summary>
 			public Vector3 forward;
+			/// <summary>
+			/// The normal of the point.
+			/// </summary>
 			public Vector3 normal;
+			/// <summary>
+			/// The right direction of the point.
+			/// </summary>
 			public Vector3 right;
 
 			#endregion
@@ -671,10 +883,25 @@ namespace Utilities
 
 		#region Methods
 
+		/// <summary>
+		/// Evaluates a linear Bezier curve.
+		/// </summary>
+		/// <param name="a">The start point.</param>
+		/// <param name="b">The end point.</param>
+		/// <param name="t">The interpolation factor.</param>
+		/// <returns>The evaluated point.</returns>
 		public static Vector3 EvaluateLinear(Vector3 a, Vector3 b, float t)
 		{
 			return Vector3.Lerp(a, b, t);
 		}
+		/// <summary>
+		/// Evaluates a quadratic Bezier curve.
+		/// </summary>
+		/// <param name="a">The start point.</param>
+		/// <param name="b">The control point.</param>
+		/// <param name="c">The end point.</param>
+		/// <param name="t">The interpolation factor.</param>
+		/// <returns>The evaluated point.</returns>
 		public static Vector3 EvaluateQuadratic(Vector3 a, Vector3 b, Vector3 c, float t)
 		{
 			Vector3 p0 = EvaluateLinear(a, b, t);
@@ -682,6 +909,15 @@ namespace Utilities
 
 			return Vector3.Lerp(p0, p1, t);
 		}
+		/// <summary>
+		/// Evaluates a cubic Bezier curve.
+		/// </summary>
+		/// <param name="a">The start point.</param>
+		/// <param name="b">The first control point.</param>
+		/// <param name="c">The second control point.</param>
+		/// <param name="d">The end point.</param>
+		/// <param name="t">The interpolation factor.</param>
+		/// <returns>The evaluated point.</returns>
 		public static Vector3 EvaluateCubic(Vector3 a, Vector3 b, Vector3 c, Vector3 d, float t)
 		{
 			Vector3 p0 = EvaluateQuadratic(a, b, c, t);
@@ -689,7 +925,7 @@ namespace Utilities
 
 			return Vector3.Lerp(p0, p1, t);
 		}
-
+		
 		#endregion
 	}
 }

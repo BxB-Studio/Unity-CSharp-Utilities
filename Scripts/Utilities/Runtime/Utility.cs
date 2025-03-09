@@ -21,8 +21,18 @@ using UnityEngine.SceneManagement;
 
 namespace Utilities
 {
+	/// <summary>
+	/// Provides extension methods for various Unity and .NET types.
+	/// </summary>
 	public static class Extensions
 	{
+		/// <summary>
+		/// Finds a direct child of the transform with the specified name.
+		/// </summary>
+		/// <param name="transform">The transform to search in.</param>
+		/// <param name="name">The name of the child to find.</param>
+		/// <param name="caseSensitive">Whether the name comparison should be case-sensitive.</param>
+		/// <returns>The found child transform, or null if no matching child was found.</returns>
 		public static Transform Find(this Transform transform, string name, bool caseSensitive = true)
 		{
 			for (int i = 0; i < transform.childCount; i++)
@@ -31,6 +41,13 @@ namespace Utilities
 
 			return null;
 		}
+		/// <summary>
+		/// Finds a direct child of the transform whose name starts with the specified string.
+		/// </summary>
+		/// <param name="transform">The transform to search in.</param>
+		/// <param name="name">The prefix to search for.</param>
+		/// <param name="caseSensitive">Whether the name comparison should be case-sensitive.</param>
+		/// <returns>The found child transform, or null if no matching child was found.</returns>
 		public static Transform FindStartsWith(this Transform transform, string name, bool caseSensitive = true)
 		{
 			for (int i = 0; i < transform.childCount; i++)
@@ -39,6 +56,13 @@ namespace Utilities
 
 			return null;
 		}
+		/// <summary>
+		/// Finds a direct child of the transform whose name ends with the specified string.
+		/// </summary>
+		/// <param name="transform">The transform to search in.</param>
+		/// <param name="name">The suffix to search for.</param>
+		/// <param name="caseSensitive">Whether the name comparison should be case-sensitive.</param>
+		/// <returns>The found child transform, or null if no matching child was found.</returns>
 		public static Transform FindEndsWith(this Transform transform, string name, bool caseSensitive = true)
 		{
 			for (int i = 0; i < transform.childCount; i++)
@@ -47,6 +71,13 @@ namespace Utilities
 
 			return null;
 		}
+		/// <summary>
+		/// Finds a direct child of the transform whose name contains the specified string.
+		/// </summary>
+		/// <param name="transform">The transform to search in.</param>
+		/// <param name="name">The substring to search for.</param>
+		/// <param name="caseSensitive">Whether the name comparison should be case-sensitive.</param>
+		/// <returns>The found child transform, or null if no matching child was found.</returns>
 		public static Transform FindContains(this Transform transform, string name, bool caseSensitive = true)
 		{
 			for (int i = 0; i < transform.childCount; i++)
@@ -55,14 +86,35 @@ namespace Utilities
 
 			return null;
 		}
+		/// <summary>
+		/// Clamps all keyframes in the animation curve to the range [0,1] for both time and value.
+		/// </summary>
+		/// <param name="curve">The animation curve to clamp.</param>
+		/// <returns>A new animation curve with clamped keyframes.</returns>
 		public static AnimationCurve Clamp01(this AnimationCurve curve)
 		{
 			return curve.Clamp(0f, 1f, 0f, 1f);
 		}
+		/// <summary>
+		/// Clamps all keyframes in the animation curve to the range defined by min and max keyframes.
+		/// </summary>
+		/// <param name="curve">The animation curve to clamp.</param>
+		/// <param name="min">The minimum keyframe defining the lower bounds for time and value.</param>
+		/// <param name="max">The maximum keyframe defining the upper bounds for time and value.</param>
+		/// <returns>A new animation curve with clamped keyframes.</returns>
 		public static AnimationCurve Clamp(this AnimationCurve curve, Keyframe min, Keyframe max)
 		{
 			return curve.Clamp(min.time, max.time, min.value, max.value);
 		}
+		/// <summary>
+		/// Clamps all keyframes in the animation curve to the specified ranges for time and value.
+		/// </summary>
+		/// <param name="curve">The animation curve to clamp.</param>
+		/// <param name="timeMin">The minimum time value.</param>
+		/// <param name="timeMax">The maximum time value.</param>
+		/// <param name="valueMin">The minimum keyframe value.</param>
+		/// <param name="valueMax">The maximum keyframe value.</param>
+		/// <returns>A new animation curve with clamped keyframes.</returns>
 		public static AnimationCurve Clamp(this AnimationCurve curve, float timeMin, float timeMax, float valueMin, float valueMax)
 		{
 			AnimationCurve newCurve;
@@ -97,6 +149,11 @@ namespace Utilities
 
 			return newCurve;
 		}
+		/// <summary>
+		/// Creates a deep copy of an AnimationCurve.
+		/// </summary>
+		/// <param name="curve">The animation curve to clone.</param>
+		/// <returns>A new animation curve with the same keyframes and wrap modes.</returns>
 		public static AnimationCurve Clone(this AnimationCurve curve)
 		{
 			Keyframe[] newKeys = new Keyframe[curve.length];
@@ -109,18 +166,41 @@ namespace Utilities
 				preWrapMode = curve.preWrapMode
 			};
 		}
+		/// <summary>
+		/// Determines whether the specified string is null or empty.
+		/// </summary>
+		/// <param name="str">The string to test.</param>
+		/// <returns>true if the string is null or empty; otherwise, false.</returns>
 		public static bool IsNullOrEmpty(this string str)
 		{
 			return string.IsNullOrEmpty(str);
 		}
+		/// <summary>
+		/// Determines whether the specified string is null, empty, or consists only of white-space characters.
+		/// </summary>
+		/// <param name="str">The string to test.</param>
+		/// <returns>true if the string is null, empty, or consists only of white-space characters; otherwise, false.</returns>
 		public static bool IsNullOrWhiteSpace(this string str)
 		{
 			return string.IsNullOrWhiteSpace(str);
 		}
+		/// <summary>
+		/// Concatenates the elements of a string collection, using the specified separator between each element.
+		/// </summary>
+		/// <param name="strings">A collection of strings to join.</param>
+		/// <param name="separator">The string to use as a separator.</param>
+		/// <returns>A string that consists of the elements of the collection delimited by the separator string.</returns>
 		public static string Join(this IEnumerable<string> strings, string separator)
 		{
 			return string.Join(separator, strings);
 		}
+		/// <summary>
+		/// Replaces all occurrences of strings in the specified collection with another specified string.
+		/// </summary>
+		/// <param name="str">The string to perform replacements on.</param>
+		/// <param name="find">A collection of strings to be replaced.</param>
+		/// <param name="replacement">The string to replace all occurrences of the strings in the find collection.</param>
+		/// <returns>A new string with all occurrences of the specified strings replaced.</returns>
 		public static string Replace(this string str, IEnumerable<string> find, string replacement)
 		{
 			foreach (var r in find)
@@ -129,6 +209,14 @@ namespace Utilities
 			return str;
 		}
 #if !UNITY_2021_2_OR_NEWER
+		/// <summary>
+		/// Splits a string into an array of substrings using the specified separator.
+		/// </summary>
+		/// <param name="str">The string to split.</param>
+		/// <param name="separator">The string that delimits the substrings in the input string.</param>
+		/// <returns>An array of strings that contains the substrings delimited by the separator.</returns>
+		/// <exception cref="ArgumentNullException">Thrown when the input string is null.</exception>
+		/// <exception cref="ArgumentException">Thrown when the separator is null or empty.</exception>
 		public static string[] Split(this string str, string separator)
 		{
 			if (str == null)
@@ -175,10 +263,22 @@ namespace Utilities
 			return parts.ToArray();
 		}
 #endif
+		/// <summary>
+		/// Gets the first attribute of the specified type applied to the enum value.
+		/// </summary>
+		/// <typeparam name="T">The type of attribute to retrieve.</typeparam>
+		/// <param name="enumValue">The enum value to get the attribute from.</param>
+		/// <returns>The first attribute of the specified type applied to the enum value.</returns>
 		public static T GetAttribute<T>(this Enum enumValue) where T : Attribute
 		{
 			return enumValue.GetType().GetMember(enumValue.ToString()).First().GetCustomAttribute<T>();
 		}
+		/// <summary>
+		/// Sets the alpha component of a color and returns the modified color.
+		/// </summary>
+		/// <param name="color">The color to modify.</param>
+		/// <param name="alpha">The new alpha value to set (0-1 range).</param>
+		/// <returns>A new color with the specified alpha value.</returns>
 		public static Color SetAlpha(this Color color, float alpha)
 		{
 			color.a = alpha;
@@ -186,21 +286,54 @@ namespace Utilities
 			return color;
 		}
 	}
+	/// <summary>
+	/// Provides utility functions for various operations in Unity development.
+	/// </summary>
 	public static class Utility
 	{
 		#region Modules & Enumerators
 
 		#region Enumerators
 
+		/// <summary>
+		/// Defines precision levels for calculations and display.
+		/// </summary>
 		public enum Precision { Simple, Advanced }
+		/// <summary>
+		/// Defines unit systems for measurements.
+		/// </summary>
 		public enum UnitType { Metric, Imperial }
+		/// <summary>
+		/// Defines various unit types for different physical quantities.
+		/// </summary>
 		public enum Units { AngularVelocity, Area, AreaAccurate, AreaLarge, ElectricConsumption, Density, Distance, DistanceAccurate, DistanceLong, ElectricCapacity, Force, Frequency, FuelConsumption, Liquid, Power, Pressure, Size, SizeAccurate, Speed, Time, TimeAccurate, Torque, Velocity, Volume, VolumeAccurate, VolumeLarge, Weight }
+		/// <summary>
+		/// Defines the available render pipelines in Unity.
+		/// </summary>
 		public enum RenderPipeline { Unknown = -1, Standard, URP, HDRP, Custom }
+		/// <summary>
+		/// Defines texture encoding formats for saving textures.
+		/// </summary>
 		public enum TextureEncodingType { EXR, JPG, PNG, TGA }
+		/// <summary>
+		/// Defines relative positions in world space.
+		/// </summary>
 		public enum WorldSide { Left = -1, Center, Right }
+		/// <summary>
+		/// Defines coordinate planes in 3D space.
+		/// </summary>
 		public enum WorldSurface { XY, XZ, YZ }
+		/// <summary>
+		/// Defines axes in 2D space.
+		/// </summary>
 		public enum Axis2 { X, Y }
+		/// <summary>
+		/// Defines axes in 3D space.
+		/// </summary>
 		public enum Axis3 { X, Y, Z }
+		/// <summary>
+		/// Defines axes in 4D space.
+		/// </summary>
 		public enum Axis4 { X, Y, Z, W }
 
 		#endregion
@@ -209,24 +342,60 @@ namespace Utilities
 
 		#region Static Modules
 
+		/// <summary>
+		/// Provides additional color constants not available in UnityEngine.Color.
+		/// </summary>
 		public static class Color
 		{
+			/// <summary>
+			/// A dark gray color (R:0.25, G:0.25, B:0.25, A:1.0).
+			/// </summary>
 			public static UnityEngine.Color darkGray = new UnityEngine.Color(.25f, .25f, .25f);
+			/// <summary>
+			/// A light gray color (R:0.67, G:0.67, B:0.67, A:1.0).
+			/// </summary>
 			public static UnityEngine.Color lightGray = new UnityEngine.Color(.67f, .67f, .67f);
+			/// <summary>
+			/// An orange color (R:1.0, G:0.5, B:0.0, A:1.0).
+			/// </summary>
 			public static UnityEngine.Color orange = new UnityEngine.Color(1f, .5f, 0f);
+			/// <summary>
+			/// A purple color (R:0.5, G:0.0, B:1.0, A:1.0).
+			/// </summary>
 			public static UnityEngine.Color purple = new UnityEngine.Color(.5f, 0f, 1f);
+			/// <summary>
+			/// A fully transparent color (R:0.0, G:0.0, B:0.0, A:0.0).
+			/// </summary>
 			public static UnityEngine.Color transparent = new UnityEngine.Color(0f, 0f, 0f, 0f);
 		}
+		/// <summary>
+		/// Provides interpolation formulas for smooth transitions.
+		/// </summary>
 		public static class FormulaInterpolation
 		{
+			/// <summary>
+			/// Linear interpolation formula that clamps the input parameter between 0 and 1.
+			/// </summary>
+			/// <param name="t">The interpolation parameter (0 to 1).</param>
+			/// <returns>The clamped value of t.</returns>
 			public static float Linear(float t)
 			{
 				return Clamp01(t);
 			}
+			/// <summary>
+			/// Circular interpolation formula that starts slow and ends fast.
+			/// </summary>
+			/// <param name="t">The interpolation parameter (0 to 1).</param>
+			/// <returns>The interpolated value using a circular function.</returns>
 			public static float CircularLowToHigh(float t)
 			{
 				return Clamp01(1f - math.pow(math.cos(math.PI * Mathf.Rad2Deg * Clamp01(t) * .5f), .5f));
 			}
+			/// <summary>
+			/// Circular interpolation formula that starts fast and ends slow.
+			/// </summary>
+			/// <param name="t">The interpolation parameter (0 to 1).</param>
+			/// <returns>The interpolated value using a circular function.</returns>
 			public static float CircularHighToLow(float t)
 			{
 				return Clamp01(math.pow(math.abs(math.sin(math.PI * Mathf.Rad2Deg * Clamp01(t) * .5f)), .5f));
@@ -237,6 +406,10 @@ namespace Utilities
 
 		#region Global Modules
 
+		/// <summary>
+		/// A serializable wrapper for arrays that can be used in JSON serialization.
+		/// </summary>
+		/// <typeparam name="T">The type of elements in the array.</typeparam>
 		[Serializable]
 		public class JsonArray<T>
 		{
@@ -244,6 +417,9 @@ namespace Utilities
 
 			#region  Global Variables
 
+			/// <summary>
+			/// Gets the length of the array. Returns 0 if the array is null.
+			/// </summary>
 			public int Length => items != null ? items.Length : 0;
 
 			[SerializeField]
@@ -255,6 +431,11 @@ namespace Utilities
 
 			#region Indexers
 
+			/// <summary>
+			/// Gets or sets the element at the specified index.
+			/// </summary>
+			/// <param name="index">The index of the element to get or set.</param>
+			/// <returns>The element at the specified index.</returns>
 			public T this[int index]
 			{
 				get
@@ -269,10 +450,18 @@ namespace Utilities
 
 			#region Methods
 
+			/// <summary>
+			/// Returns an enumerator that iterates through the array.
+			/// </summary>
+			/// <returns>An enumerator that can be used to iterate through the array.</returns>
 			public IEnumerator GetEnumerator()
 			{
 				return items.GetEnumerator();
 			}
+			/// <summary>
+			/// Converts the JsonArray to a regular array.
+			/// </summary>
+			/// <returns>A regular array containing the elements of the JsonArray.</returns>
 			public T[] ToArray()
 			{
 				return items;
@@ -282,6 +471,10 @@ namespace Utilities
 
 			#region Constructors
 
+			/// <summary>
+			/// Initializes a new instance of the JsonArray class with the specified array.
+			/// </summary>
+			/// <param name="array">The array to initialize the JsonArray with.</param>
 			public JsonArray(T[] array)
 			{
 				items = array.Distinct().ToArray();
@@ -289,11 +482,19 @@ namespace Utilities
 
 			#endregion
 		}
+		/// <summary>
+		/// Represents a range of values defined by minimum and maximum boundaries.
+		/// Provides methods for clamping, interpolation, and range checking.
+		/// </summary>
 		[Serializable]
 		public struct Interval
 		{
 			#region Variables
 
+			/// <summary>
+			/// Gets or sets the minimum value of the interval.
+			/// When setting, the value is clamped to ensure it doesn't exceed the maximum value unless OverrideBorders is true.
+			/// </summary>
 			public float Min
 			{
 				readonly get
@@ -305,6 +506,11 @@ namespace Utilities
 					min = math.clamp(value, -math.INFINITY, OverrideBorders ? math.INFINITY : Max);
 				}
 			}
+			
+			/// <summary>
+			/// Gets or sets the maximum value of the interval.
+			/// When setting, the value is clamped to ensure it isn't less than the minimum value unless OverrideBorders is true.
+			/// </summary>
 			public float Max
 			{
 				readonly get
@@ -316,6 +522,11 @@ namespace Utilities
 					max = math.clamp(value, OverrideBorders ? -math.INFINITY : Min, math.INFINITY);
 				}
 			}
+			
+			/// <summary>
+			/// Gets or sets whether the interval allows Min to be greater than Max.
+			/// When set to false, the Min and Max values are adjusted to maintain the constraint that Min ≤ Max.
+			/// </summary>
 			public bool OverrideBorders
 			{
 				readonly get
@@ -333,6 +544,11 @@ namespace Utilities
 					overrideBorders = value;
 				}
 			}
+			
+			/// <summary>
+			/// Gets or sets whether the minimum value should be clamped to zero.
+			/// This property only has an effect when OverrideBorders is true.
+			/// </summary>
 			public bool ClampToZero
 			{
 				readonly get
@@ -361,6 +577,11 @@ namespace Utilities
 
 			#region Virtual Methods
 
+			/// <summary>
+			/// Determines whether the specified object is equal to the current Interval.
+			/// </summary>
+			/// <param name="obj">The object to compare with the current Interval.</param>
+			/// <returns>true if the specified object is equal to the current Interval; otherwise, false.</returns>
 			public override readonly bool Equals(object obj)
 			{
 				return obj is Interval interval &&
@@ -369,6 +590,11 @@ namespace Utilities
 					   overrideBorders == interval.overrideBorders &&
 					   clampToZero == interval.clampToZero;
 			}
+			
+			/// <summary>
+			/// Returns a hash code for the current Interval.
+			/// </summary>
+			/// <returns>A hash code for the current Interval.</returns>
 			public override readonly int GetHashCode()
 			{
 #if UNITY_2021_2_OR_NEWER
@@ -389,26 +615,65 @@ namespace Utilities
 
 			#region Global Methods
 
+			/// <summary>
+			/// Determines whether the specified integer value is within the interval range.
+			/// </summary>
+			/// <param name="value">The value to check.</param>
+			/// <returns>true if the value is within the interval range; otherwise, false.</returns>
 			public readonly bool InRange(int value)
 			{
 				return value >= min && value <= max;
 			}
+			
+			/// <summary>
+			/// Determines whether the specified float value is within the interval range.
+			/// </summary>
+			/// <param name="value">The value to check.</param>
+			/// <returns>true if the value is within the interval range; otherwise, false.</returns>
 			public readonly bool InRange(float value)
 			{
 				return value >= min && value <= max;
 			}
+			
+			/// <summary>
+			/// Linearly interpolates between the minimum and maximum values of the interval.
+			/// </summary>
+			/// <param name="time">The interpolation parameter (0 to 1).</param>
+			/// <param name="clamped">Whether to clamp the interpolation parameter between 0 and 1.</param>
+			/// <returns>The interpolated value.</returns>
 			public readonly float Lerp(int time, bool clamped = true)
 			{
 				return clamped ? Utility.Lerp(Min, Max, time) : LerpUnclamped(Min, Max, time);
 			}
+			
+			/// <summary>
+			/// Linearly interpolates between the minimum and maximum values of the interval.
+			/// </summary>
+			/// <param name="time">The interpolation parameter (0 to 1).</param>
+			/// <param name="clamped">Whether to clamp the interpolation parameter between 0 and 1.</param>
+			/// <returns>The interpolated value.</returns>
 			public readonly float Lerp(float time, bool clamped = true)
 			{
 				return clamped ? Utility.Lerp(Min, Max, time) : LerpUnclamped(Min, Max, time);
 			}
+			
+			/// <summary>
+			/// Calculates the interpolation parameter that would result in the specified value when linearly interpolating between the minimum and maximum values of the interval.
+			/// </summary>
+			/// <param name="value">The value to find the interpolation parameter for.</param>
+			/// <param name="clamped">Whether to clamp the result between 0 and 1.</param>
+			/// <returns>The interpolation parameter.</returns>
 			public readonly float InverseLerp(int value, bool clamped = true)
 			{
 				return clamped ? Utility.InverseLerp(Min, Max, value) : InverseLerpUnclamped(Min, Max, value);
 			}
+			
+			/// <summary>
+			/// Calculates the interpolation parameter that would result in the specified value when linearly interpolating between the minimum and maximum values of the interval.
+			/// </summary>
+			/// <param name="value">The value to find the interpolation parameter for.</param>
+			/// <param name="clamped">Whether to clamp the result between 0 and 1.</param>
+			/// <returns>The interpolation parameter.</returns>
 			public readonly float InverseLerp(float value, bool clamped = true)
 			{
 				return clamped ? Utility.InverseLerp(Min, Max, value) : InverseLerpUnclamped(Min, Max, value);
@@ -422,6 +687,13 @@ namespace Utilities
 
 			#region Constructors
 
+			/// <summary>
+			/// Initializes a new instance of the Interval struct with the specified minimum and maximum values.
+			/// </summary>
+			/// <param name="min">The minimum value of the interval.</param>
+			/// <param name="max">The maximum value of the interval.</param>
+			/// <param name="overrideBorders">Whether to allow the minimum value to be greater than the maximum value.</param>
+			/// <param name="clampToZero">Whether to clamp the minimum value to zero (only applies when overrideBorders is true).</param>
 			public Interval(float min, float max, bool overrideBorders = false, bool clampToZero = false)
 			{
 				this.min = math.clamp(min, clampToZero ? 0f : -math.INFINITY, overrideBorders ? math.INFINITY : max);
@@ -487,6 +759,10 @@ namespace Utilities
 			#endregion
 
 		}
+		/// <summary>
+		/// A simplified interval structure that represents a range between two values without enforcing min/max ordering.
+		/// Provides methods for range checking, interpolation, and value manipulation.
+		/// </summary>
 		[Serializable]
 		public struct SimpleInterval
 		{
@@ -650,6 +926,10 @@ namespace Utilities
 
 			#endregion
 		}
+		/// <summary>
+		/// Represents a range of integer values defined by minimum and maximum boundaries.
+		/// Provides methods for clamping, interpolation, and range checking with integer values.
+		/// </summary>
 		[Serializable]
 		public struct IntervalInt
 		{
@@ -848,6 +1128,10 @@ namespace Utilities
 			#endregion
 
 		}
+		/// <summary>
+		/// Represents a 2D interval with separate X and Y ranges.
+		/// Useful for defining rectangular regions and performing range checks in 2D space.
+		/// </summary>
 		[Serializable]
 		public struct Interval2
 		{
@@ -940,6 +1224,10 @@ namespace Utilities
 
 			#endregion
 		}
+		/// <summary>
+		/// A simplified 2D interval structure that represents a rectangular region without enforcing min/max ordering.
+		/// Provides methods for range checking, interpolation, and region manipulation in 2D space.
+		/// </summary>
 		[Serializable]
 		public struct SimpleInterval2
 		{
@@ -1068,6 +1356,10 @@ namespace Utilities
 
 			#endregion
 		}
+		/// <summary>
+		/// Represents a 3D interval with separate X, Y, and Z ranges.
+		/// Useful for defining cuboid regions and performing range checks in 3D space.
+		/// </summary>
 		[Serializable]
 		public struct Interval3
 		{
@@ -1170,6 +1462,10 @@ namespace Utilities
 
 			#endregion
 		}
+		/// <summary>
+		/// A simplified 3D interval structure that represents a cuboid region without enforcing min/max ordering.
+		/// Provides methods for range checking, interpolation, and region manipulation in 3D space.
+		/// </summary>
 		[Serializable]
 		public struct SimpleInterval3
 		{
@@ -1313,6 +1609,10 @@ namespace Utilities
 
 			#endregion
 		}
+		/// <summary>
+		/// Represents a 2D vector with separate X and Y components.
+		/// Provides methods for vector operations and serialization.
+		/// </summary>
 		[Serializable]
 		public struct SerializableVector2
 		{
@@ -1384,6 +1684,10 @@ namespace Utilities
 
 			#endregion
 		}
+		/// <summary>
+		/// Represents a 2D rectangle with separate X, Y, width, and height components.
+		/// Provides methods for rectangle operations and serialization.
+		/// </summary>
 		[Serializable]
 		public struct SerializableRect
 		{
@@ -1446,6 +1750,10 @@ namespace Utilities
 
 			#endregion
 		}
+		/// <summary>
+		/// Represents a color sheet with a name, color, metallic, and smoothness value.
+		/// Provides methods for setting the material properties of a color sheet.
+		/// </summary>
 		[Serializable]
 		public struct ColorSheet
 		{
@@ -1558,6 +1866,10 @@ namespace Utilities
 
 			#endregion
 		}
+		/// <summary>
+		/// Represents a color with separate red, green, blue, and alpha components.
+		/// Provides methods for color comparison and serialization.
+		/// </summary>
 		[Serializable]
 		public struct SerializableColor
 		{
@@ -1642,6 +1954,10 @@ namespace Utilities
 
 			#endregion
 		}
+		/// <summary>
+		/// Represents an audio clip with a resource path and a reference to the audio clip.
+		/// Provides methods for loading the audio clip from a resource path and reloading it when needed.
+		/// </summary>
 		[Serializable]
 		public class SerializableAudioClip
 		{
@@ -1732,6 +2048,10 @@ namespace Utilities
 
 			#endregion
 		}
+		/// <summary>
+		/// Represents a particle system with a resource path and a reference to the particle system.
+		/// Provides methods for loading the particle system from a resource path and reloading it when needed.
+		/// </summary>
 		[Serializable]
 		public class SerializableParticleSystem
 		{
@@ -1822,6 +2142,10 @@ namespace Utilities
 
 			#endregion
 		}
+		/// <summary>
+		/// Represents a material with a resource path and a reference to the material.
+		/// Provides methods for loading the material from a resource path and reloading it when needed.
+		/// </summary>
 		[Serializable]
 		public class SerializableMaterial
 		{
@@ -1912,6 +2236,10 @@ namespace Utilities
 
 			#endregion
 		}
+		/// <summary>
+		/// Represents a light with a resource path and a reference to the light.
+		/// Provides methods for loading the light from a resource path and reloading it when needed.
+		/// </summary>
 		[Serializable]
 		public class SerializableLight
 		{
@@ -2002,6 +2330,11 @@ namespace Utilities
 
 			#endregion
 		}
+		/// <summary>
+		/// Represents a transform access with various properties of a Unity Transform.
+		/// Provides methods for accessing and manipulating the transform's properties.
+		/// </summary>
+		[Serializable]
 		public struct TransformAccess
 		{
 			#region Variables
@@ -2068,6 +2401,10 @@ namespace Utilities
 
 			#endregion
 		}
+		/// <summary>
+		/// Represents a single float value with a serialized field.
+		/// Provides methods for conversion between float and float1 types.
+		/// </summary>
 		[Serializable]
 #pragma warning disable IDE1006 // Naming Styles
 		public struct float1
@@ -2107,21 +2444,75 @@ namespace Utilities
 
 		#region Constants
 
+		/// <summary>
+		/// Represents the air density in kilograms per cubic meter.
+		/// </summary>
 		public const float airDensity = 1.29f;
+		/// <summary>
+		/// Represents an empty string.
+		/// </summary>
 		public const string emptyString = "";
 
 		#endregion
 
 		#region Variables
 
+		/// <summary>
+		/// Gets the time delta between frames, adjusted for fixed time steps.
+		/// </summary>
 		public static float DeltaTime => Time.inFixedTimeStep ? Time.fixedDeltaTime : Time.deltaTime;
+		/// <summary>
+		/// Represents a float2 vector with components (1, 1).
+		/// </summary>
 		public readonly static float2 Float2One = new float2(1f, 1f);
+		/// <summary>
+		/// Represents a float2 vector with components (0, 1).
+		/// </summary>
 		public readonly static float2 Float2Up = new float2(0f, 1f);
+		/// <summary>
+		/// Represents a float2 vector with components (1, 0).
+		/// </summary>
 		public readonly static float2 Float2Right = new float2(1f, 0f);
+		/// <summary>
+		/// Represents a float3 vector with components (1, 1, 1).
+		/// </summary>
 		public readonly static float3 Float3One = new float3(1f, 1f, 1f);
+		/// <summary>
+		/// Represents a float3 vector with components (0, 1, 0).
+		/// </summary>
 		public readonly static float3 Float3Up = new float3(0f, 1f, 0f);
+		/// <summary>
+		/// Represents a float3 vector with components (1, 0, 0).
+		/// </summary>
 		public readonly static float3 Float3Right = new float3(1f, 0f, 0f);
+		/// <summary>
+		/// Represents a float3 vector with components (0, 0, 1).
+		/// </summary>
 		public readonly static float3 Float3Forward = new float3(0f, 0f, 1f);
+		/// <summary>
+		/// Represents a float4 vector with components (1, 1, 1, 1).
+		/// </summary>
+		public readonly static float4 Float4One = new float4(1f, 1f, 1f, 1f);
+		/// <summary>
+		/// Represents a float4 vector with components (0, 1, 0, 0).
+		/// </summary>
+		public readonly static float4 Float4Up = new float4(0f, 1f, 0f, 0f);
+		/// <summary>
+		/// Represents a float4 vector with components (1, 0, 0, 0).
+		/// </summary>
+		public readonly static float4 Float4Right = new float4(1f, 0f, 0f, 0f);
+		/// <summary>
+		/// Represents a float4 vector with components (0, 0, 1, 0).
+		/// </summary>
+		public readonly static float4 Float4Forward = new float4(0f, 0f, 1f, 0f);
+		/// <summary>
+		/// Represents a float4 vector with components (0, 0, 0, 1).
+		/// </summary>
+		public readonly static float4 Float4Identity = new float4(0f, 0f, 0f, 1f);
+		/// <summary>
+		/// Represents a float4 vector with components (0, 0, 0, 0).
+		/// </summary>
+		public readonly static float4 Float4Zero = new float4(0f, 0f, 0f, 0f);
 
 		private static readonly string[] disposableEmailDomains = new string[]
 		{
@@ -2686,10 +3077,19 @@ namespace Utilities
 
 		#region Methods
 
+		/// <summary>
+		/// Empty method that does nothing. Can be used as a placeholder.
+		/// </summary>
 		public static void Dummy()
 		{
 
 		}
+		/// <summary>
+		/// Gets the conversion multiplier for a specific unit type between metric and imperial systems.
+		/// </summary>
+		/// <param name="unit">The unit type to get the multiplier for.</param>
+		/// <param name="unitType">The unit system (Metric or Imperial).</param>
+		/// <returns>The conversion multiplier between metric and imperial units.</returns>
 		public static float UnitMultiplier(Units unit, UnitType unitType)
 		{
 			return unit switch
@@ -2717,6 +3117,12 @@ namespace Utilities
 				_ => 1f,
 			};
 		}
+		/// <summary>
+		/// Gets the abbreviated unit symbol for a specific unit type in either metric or imperial system.
+		/// </summary>
+		/// <param name="unit">The unit type to get the symbol for.</param>
+		/// <param name="unitType">The unit system (Metric or Imperial).</param>
+		/// <returns>The abbreviated unit symbol as a string.</returns>
 		public static string Unit(Units unit, UnitType unitType)
 		{
 			return unit switch
@@ -2751,6 +3157,12 @@ namespace Utilities
 				_ => default,
 			};
 		}
+		/// <summary>
+		/// Gets the full name of the unit for a specific unit type in either metric or imperial system.
+		/// </summary>
+		/// <param name="unit">The unit type to get the full name for.</param>
+		/// <param name="unitType">The unit system (Metric or Imperial).</param>
+		/// <returns>The full name of the unit as a string.</returns>
 		public static string FullUnit(Units unit, UnitType unitType)
 		{
 			return unit switch
@@ -2785,6 +3197,11 @@ namespace Utilities
 				_ => default,
 			};
 		}
+		/// <summary>
+		/// Extracts a numeric value from a string that may contain a unit.
+		/// </summary>
+		/// <param name="value">The string containing a number and possibly a unit.</param>
+		/// <returns>The extracted numeric value, or 0 if no valid number is found.</returns>
 		public static float ValueWithUnitToNumber(string value)
 		{
 			string[] valueArray = value.Split(' ');
@@ -2797,6 +3214,12 @@ namespace Utilities
 
 			return !value.IsNullOrEmpty() && !value.IsNullOrWhiteSpace() && float.TryParse(value, out float result) ? result : 0f;
 		}
+		/// <summary>
+		/// Extracts a numeric value from a string that may contain a unit, with unit type conversion.
+		/// </summary>
+		/// <param name="value">The string containing a number and possibly a unit.</param>
+		/// <param name="unit">The unit type to convert to.</param>
+		/// <param name="unitType">The unit system (Metric or Imperial).</param>
 		public static float ValueWithUnitToNumber(string value, Units unit, UnitType unitType)
 		{
 			string[] valueArray = value.Split(' ');
@@ -2809,6 +3232,13 @@ namespace Utilities
 
 			return !value.IsNullOrEmpty() && !value.IsNullOrWhiteSpace() && float.TryParse(value, out float result) ? (IsDividerUnit(unit) && unitType != UnitType.Metric ? UnitMultiplier(unit, unitType) / result : result / UnitMultiplier(unit, unitType)) : 0f;
 		}
+		/// <summary>
+		/// Formats a number with a unit string, with optional rounding.
+		/// </summary>
+		/// <param name="number">The numeric value to format.</param>
+		/// <param name="unit">The unit string to append.</param>
+		/// <param name="rounded">Whether to round the number to the nearest integer.</param>
+		/// <returns>A formatted string with the number and unit.</returns>
 		public static string NumberToValueWithUnit(float number, string unit, bool rounded)
 		{
 			if (number == math.INFINITY)
@@ -2818,6 +3248,13 @@ namespace Utilities
 
 			return $"{(rounded ? math.round(number) : number)} {unit}";
 		}
+		/// <summary>
+		/// Formats a number with a unit string, with a specified number of decimal places.
+		/// </summary>
+		/// <param name="number">The numeric value to format.</param>
+		/// <param name="unit">The unit string to append.</param>
+		/// <param name="decimals">The number of decimal places to include.</param>
+		/// <returns>A formatted string with the number and unit.</returns>
 		public static string NumberToValueWithUnit(float number, string unit, uint decimals)
 		{
 			if (number == math.INFINITY)
@@ -2827,6 +3264,14 @@ namespace Utilities
 
 			return $"{Round(number, decimals)} {unit}";
 		}
+		/// <summary>
+		/// Formats a number with a unit type and system, with optional rounding.
+		/// </summary>
+		/// <param name="number">The numeric value to format.</param>
+		/// <param name="unit">The unit type to use.</param>
+		/// <param name="unitType">The unit system (Metric or Imperial).</param>
+		/// <param name="rounded">Whether to round the number to the nearest integer.</param>
+		/// <returns>A formatted string with the number and appropriate unit symbol.</returns>
 		public static string NumberToValueWithUnit(float number, Units unit, UnitType unitType, bool rounded)
 		{
 			if (number == math.INFINITY)
@@ -2841,6 +3286,14 @@ namespace Utilities
 
 			return $"{(rounded ? math.round(number) : number)} {Unit(unit, unitType)}";
 		}
+		/// <summary>
+		/// Formats a number with a unit type and system, with a specified number of decimal places.
+		/// </summary>
+		/// <param name="number">The numeric value to format.</param>
+		/// <param name="unit">The unit type to use.</param>
+		/// <param name="unitType">The unit system (Metric or Imperial).</param>
+		/// <param name="decimals">The number of decimal places to include.</param>
+		/// <returns>A formatted string with the number and appropriate unit symbol.</returns>
 		public static string NumberToValueWithUnit(float number, Units unit, UnitType unitType, uint decimals)
 		{
 			if (number == math.INFINITY)
@@ -2855,6 +3308,11 @@ namespace Utilities
 
 			return $"{Round(number, decimals)} {Unit(unit, unitType)}";
 		}
+		/// <summary>
+		/// Converts a number to its ordinal representation (1st, 2nd, 3rd, etc.).
+		/// </summary>
+		/// <param name="number">The number to convert.</param>
+		/// <returns>The ordinal representation of the number.</returns>
 		public static string ClassifyNumber(int number)
 		{
 			return number.ToString().LastOrDefault() switch
@@ -2865,11 +3323,23 @@ namespace Utilities
 				_ => number + "th",
 			};
 		}
+		/// <summary>
+		/// Gets all child GameObjects of a parent GameObject.
+		/// </summary>
+		/// <param name="gameObject">The parent GameObject.</param>
+		/// <returns>An array of child GameObjects.</returns>
 		public static GameObject[] GetChilds(GameObject gameObject)
 		{
 			return (from Transform child in gameObject.GetComponentsInChildren<Transform>() where gameObject.transform != child select child.gameObject).ToArray();
 		}
 #if UNITY_6000_0_OR_NEWER
+		/// <summary>
+		/// Evaluates the friction between two physics materials based on slip value and friction combine mode.
+		/// </summary>
+		/// <param name="slip">The slip value to determine whether to use static or dynamic friction.</param>
+		/// <param name="refMaterial">The reference physics material.</param>
+		/// <param name="material">The second physics material.</param>
+		/// <returns>The calculated friction value.</returns>
 		public static float EvaluateFriction(float slip, PhysicsMaterial refMaterial, PhysicsMaterial material)
 		{
 			return refMaterial.frictionCombine switch
@@ -2881,6 +3351,14 @@ namespace Utilities
 				_ => 0f,
 			};
 		}
+		
+		/// <summary>
+		/// Evaluates the friction between a physics material and a stiffness value based on slip value and friction combine mode.
+		/// </summary>
+		/// <param name="slip">The slip value to determine whether to use static or dynamic friction.</param>
+		/// <param name="refMaterial">The reference physics material.</param>
+		/// <param name="stiffness">The stiffness value to combine with the material's friction.</param>
+		/// <returns>The calculated friction value.</returns>
 		public static float EvaluateFriction(float slip, PhysicsMaterial refMaterial, float stiffness)
 		{
 			return refMaterial.frictionCombine switch
@@ -2893,6 +3371,13 @@ namespace Utilities
 			};
 		}
 #else
+		/// <summary>
+		/// Evaluates the friction between two physics materials based on slip value and friction combine mode.
+		/// </summary>
+		/// <param name="slip">The slip value to determine whether to use static or dynamic friction.</param>
+		/// <param name="refMaterial">The reference physics material.</param>
+		/// <param name="material">The second physics material.</param>
+		/// <returns>The calculated friction value.</returns>
 		public static float EvaluateFriction(float slip, PhysicMaterial refMaterial, PhysicMaterial material)
 		{
 			return refMaterial.frictionCombine switch
@@ -2916,6 +3401,12 @@ namespace Utilities
 			};
 		}
 #endif
+		/// <summary>
+		/// Calculates the braking distance based on speed and friction using a simplified model.
+		/// </summary>
+		/// <param name="speed">The initial speed.</param>
+		/// <param name="friction">The friction coefficient.</param>
+		/// <returns>The estimated braking distance.</returns>
 		[Obsolete]
 		public static float BrakingDistance(float speed, float friction)
 		{
@@ -2923,18 +3414,49 @@ namespace Utilities
 
 			return ClampInfinity(LerpUnclamped(LerpUnclamped(30f, 26f, friction), LerpUnclamped(143f, 113f, friction), InverseLerpUnclamped(40f, 110f, speed)));
 		}
+		
+		/// <summary>
+		/// Calculates the braking distance using the physics formula for stopping distance.
+		/// </summary>
+		/// <param name="velocity">The initial velocity.</param>
+		/// <param name="friction">The friction coefficient.</param>
+		/// <param name="gravity">The gravity acceleration (default is Earth's gravity).</param>
+		/// <returns>The calculated braking distance.</returns>
 		public static float BrakingDistance(float velocity, float friction, float gravity = 9.81f)
 		{
 			return velocity * velocity / (2f * friction * gravity);
 		}
+		
+		/// <summary>
+		/// Calculates the braking distance to slow down from an initial velocity to a target velocity.
+		/// </summary>
+		/// <param name="velocity">The initial velocity.</param>
+		/// <param name="targetVelocity">The target velocity to slow down to.</param>
+		/// <param name="friction">The friction coefficient.</param>
+		/// <param name="gravity">The gravity acceleration (default is Earth's gravity).</param>
+		/// <returns>The calculated braking distance.</returns>
 		public static float BrakingDistance(float velocity, float targetVelocity, float friction, float gravity = 9.81f)
 		{
 			return (velocity * velocity - targetVelocity * targetVelocity) / (2f * friction * gravity);
 		}
+		
+		/// <summary>
+		/// Converts RPM (Revolutions Per Minute) to linear speed based on radius.
+		/// </summary>
+		/// <param name="rpm">The rotational speed in RPM.</param>
+		/// <param name="radius">The radius in meters.</param>
+		/// <returns>The linear speed in meters per second.</returns>
 		public static float RPMToSpeed(float rpm, float radius)
 		{
 			return radius * .377f * rpm;
 		}
+		
+		/// <summary>
+		/// Converts linear speed to RPM (Revolutions Per Minute) based on radius.
+		/// </summary>
+		/// <param name="speed">The linear speed in meters per second.</param>
+		/// <param name="radius">The radius in meters.</param>
+		/// <returns>The rotational speed in RPM.</returns>
 		public static float SpeedToRPM(float speed, float radius)
 		{
 			if (radius <= 0f)
@@ -2942,54 +3464,130 @@ namespace Utilities
 
 			return speed / radius / .377f;
 		}
+		/// <summary>
+		/// Checks if a layer mask contains a specific layer.
+		/// </summary>
+		/// <param name="mask">The layer mask to check.</param>
+		/// <param name="layer">The layer to check for.</param>
+		/// <returns>True if the layer mask contains the layer, false otherwise.</returns>
 		public static bool MaskHasLayer(LayerMask mask, int layer)
 		{
 			return MaskHasLayer(mask.value, layer);
 		}
+		/// <summary>
+		/// Checks if a layer mask contains a specific layer.
+		/// </summary>
+		/// <param name="mask">The layer mask to check.</param>
+		/// <param name="layer">The layer to check for.</param>
+		/// <returns>True if the layer mask contains the layer, false otherwise.</returns>
 		public static bool MaskHasLayer(int mask, int layer)
 		{
 			return (mask & 1 << layer) != 0;
 		}
+		/// <summary>
+		/// Checks if a layer mask contains a specific layer.
+		/// </summary>
+		/// <param name="mask">The layer mask to check.</param>
+		/// <param name="layer">The layer to check for.</param>
+		/// <returns>True if the layer mask contains the layer, false otherwise.</returns>
 		public static bool MaskHasLayer(LayerMask mask, string layer)
 		{
 			return MaskHasLayer(mask.value, layer);
 		}
+		/// <summary>
+		/// Checks if a layer mask contains a specific layer.
+		/// </summary>
+		/// <param name="mask">The layer mask to check.</param>
+		/// <param name="layer">The layer to check for.</param>
+		/// <returns>True if the layer mask contains the layer, false otherwise.</returns>
 		public static bool MaskHasLayer(int mask, string layer)
 		{
 			return MaskHasLayer(mask, LayerMask.NameToLayer(layer));
 		}
+		/// <summary>
+		/// Creates an exclusive layer mask from a single layer name.
+		/// </summary>
+		/// <param name="name">The name of the layer to create a mask for.</param>
+		/// <returns>The exclusive layer mask.</returns>
 		public static int ExclusiveMask(string name)
 		{
 			return ExclusiveMask(new string[] { name });
 		}
+		/// <summary>
+		/// Creates an exclusive layer mask from a single layer.
+		/// </summary>
+		/// <param name="layer">The layer to create a mask for.</param>
+		/// <returns>The exclusive layer mask.</returns>
 		public static int ExclusiveMask(int layer)
 		{
 			return ExclusiveMask(new int[] { layer });
 		}
+		/// <summary>
+		/// Creates an exclusive layer mask from a list of layer names.
+		/// </summary>
+		/// <param name="layers">The list of layer names to create a mask for.</param>
+		/// <returns>The exclusive layer mask.</returns>
 		public static int ExclusiveMask(params string[] layers)
 		{
 			return ~LayerMask.GetMask(layers);
 		}
+		/// <summary>
+		/// Creates an exclusive layer mask from a list of layer indices.
+		/// </summary>
+		/// <param name="layers">The list of layer indices to create a mask for.</param>
+		/// <returns>The exclusive layer mask.</returns>
 		public static int ExclusiveMask(params int[] layers)
 		{
 			return ExclusiveMask(layers.Select(layer => LayerMask.LayerToName(layer)).ToArray());
 		}
+		/// <summary>
+		/// Converts a boolean value to a number.
+		/// </summary>
+		/// <param name="condition">The boolean value to convert.</param>
+		/// <returns>1 if the condition is true, 0 otherwise.</returns>
 		public static int BoolToNumber(bool condition)
 		{
 			return condition ? 1 : 0;
 		}
+		/// <summary>
+		/// Converts a boolean value to a number with damping.
+		/// </summary>
+		/// <param name="source">The source number.</param>
+		/// <param name="condition">The boolean value to convert.</param>
+		/// <param name="damping">The damping factor.</param>
 		public static float BoolToNumber(float source, bool condition, float damping = 2.5f)
 		{
 			return Mathf.MoveTowards(source, BoolToNumber(condition), Time.deltaTime * damping);
 		}
+		/// <summary>
+		/// Inverts the sign of a boolean value.
+		/// </summary>
+		/// <param name="invert">The boolean value to invert.</param>
+		/// <returns>-1 if the value is true, 1 otherwise.</returns>
 		public static int InvertSign(bool invert)
 		{
 			return invert ? -1 : 1;
 		}
+		/// <summary>
+		/// Converts a number to a boolean value.
+		/// </summary>
+		/// <param name="number">The number to convert.</param>
+		/// <returns>True if the number is not zero, false otherwise.</returns>
 		public static bool NumberToBool(float number)
 		{
 			return Clamp01((int)math.round(number)) != 0f;
 		}
+		/// <summary>
+		/// Validates a username string according to specific rules.
+		/// </summary>
+		/// <param name="username">The username to validate.</param>
+		/// <returns>True if the username is valid, false otherwise.</returns>
+		/// <remarks>
+		/// A valid username must:
+		/// - Not be null or empty
+		/// - Be between 6 and 64 characters long
+		/// - Contain only alphanumeric characters and the symbols '_', '-', and '.'
+		/// </remarks>
 		public static bool ValidateUsername(string username)
 		{
 			if (username.IsNullOrEmpty())
@@ -3006,6 +3604,18 @@ namespace Utilities
 
 			return true;
 		}
+		/// <summary>
+		/// Validates a name string according to specific rules.
+		/// </summary>
+		/// <param name="name">The name to validate.</param>
+		/// <returns>True if the name is valid, false otherwise.</returns>
+		/// <remarks>
+		/// A valid name must:
+		/// - Not be null or empty (after trimming)
+		/// - Be between 2 and 64 characters long
+		/// - Contain only alphabetic characters and the symbols ' ', '.', and '-'
+		/// - Not contain any numeric characters
+		/// </remarks>
 		public static bool ValidateName(string name)
 		{
 			if ((name?.Trim()).IsNullOrEmpty())
@@ -3022,6 +3632,12 @@ namespace Utilities
 
 			return true;
 		}
+		/// <summary>
+		/// Validates an email address according to standard rules and optionally checks the domain.
+		/// </summary>
+		/// <param name="email">The email address to validate.</param>
+		/// <param name="lookUpDomain">Whether to check if the domain is a known disposable email domain.</param>
+		/// <returns>True if the email is valid, false otherwise.</returns>
 		public static bool ValidateEmail(string email, bool lookUpDomain)
 		{
 			if (email.IsNullOrEmpty())
@@ -3057,6 +3673,13 @@ namespace Utilities
 				return false;
 			}
 		}
+		/// <summary>
+		/// Validates a URL and optionally checks if it's accessible.
+		/// </summary>
+		/// <param name="url">The URL to validate. May be modified to include a protocol if missing.</param>
+		/// <param name="lookUpURL">Whether to check if the URL is accessible.</param>
+		/// <param name="throwOnError">Whether to throw exceptions on network errors.</param>
+		/// <returns>True if the URL is valid, false otherwise.</returns>
 		public static bool ValidateURL(ref string url, bool lookUpURL, bool throwOnError = true)
 		{
 			if (url.IsNullOrEmpty())
@@ -3113,6 +3736,11 @@ namespace Utilities
 
 			return true;
 		}
+		/// <summary>
+		/// Validates a date string format.
+		/// </summary>
+		/// <param name="date">The date string to validate.</param>
+		/// <returns>True if the date string is valid, false otherwise.</returns>
 		public static bool ValidateDate(string date)
 		{
 			if (date.Length != 10)
@@ -3128,11 +3756,21 @@ namespace Utilities
 
 			return true;
 		}
+		/// <summary>
+		/// Validates a date string format.
+		/// </summary>
+		/// <param name="data">The date string to validate.</param>
+		/// <returns>True if the date string is valid, false otherwise.</returns>
 		[Obsolete("Use Utility.ValidateDate instead", true)]
 		public static bool ValidDate(string data)
 		{
 			return false;
 		}
+		/// <summary>
+		/// Converts a time value to a string in the format "HH:MM:SS".
+		/// </summary>
+		/// <param name="time">The time value to convert.</param>
+		/// <returns>A string representing the time in the format "HH:MM:SS".</returns>
 		public static string TimeConverter(float time)
 		{
 			int seconds = (int)math.floor(time % 60);
@@ -3141,6 +3779,11 @@ namespace Utilities
 
 			return (hours == 0 ? minutes.ToString() : (hours + ":" + minutes.ToString("00"))) + ":" + seconds.ToString("00");
 		}
+		/// <summary>
+		/// Checks if a character is an alphabet letter.
+		/// </summary>
+		/// <param name="c">The character to check.</param>
+		/// <returns>True if the character is an alphabet letter, false otherwise.</returns>
 		public static bool IsAlphabet(char c)
 		{
 			c = char.ToUpper(c);
@@ -3149,14 +3792,33 @@ namespace Utilities
 				|| c == 'M' || c == 'N' || c == 'O' || c == 'P' || c == 'Q' || c == 'R' || c == 'S' || c == 'T' || c == 'U' || c == 'V' || c == 'W' || c == 'X'
 				|| c == 'Y' || c == 'Z';
 		}
+		/// <summary>
+		/// Checks if a character is a numeric digit.
+		/// </summary>
+		/// <param name="c">The character to check.</param>
+		/// <returns>True if the character is a numeric digit, false otherwise.</returns>
 		public static bool IsNumber(char c)
 		{
 			return c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9';
 		}
+		/// <summary>
+		/// Checks if a character is a symbol.
+		/// </summary>
+		/// <param name="c">The character to check.</param>
+		/// <returns>True if the character is a symbol, false otherwise.</returns>
 		public static bool IsSymbol(char c)
 		{
 			return !IsAlphabet(c) && !IsNumber(c);
 		}
+		/// <summary>
+		/// Generates a random string with specified characteristics.
+		/// </summary>
+		/// <param name="length">The length of the random string to generate.</param>
+		/// <param name="upperChars">Whether to include uppercase letters.</param>
+		/// <param name="lowerChars">Whether to include lowercase letters.</param>
+		/// <param name="numbers">Whether to include numeric digits.</param>
+		/// <param name="symbols">Whether to include symbols.</param>
+		/// <returns>A randomly generated string with the specified characteristics.</returns>
 		public static string RandomString(int length, bool upperChars = true, bool lowerChars = true, bool numbers = true, bool symbols = true)
 		{
 			string chars = "";
@@ -3168,6 +3830,11 @@ namespace Utilities
 
 			return new string(Enumerable.Repeat(chars, length).Select(s => s[UnityEngine.Random.Range(0, s.Length)]).ToArray());
 		}
+		/// <summary>
+		/// Converts a byte size to a human-readable string with appropriate units.
+		/// </summary>
+		/// <param name="length">The size in bytes.</param>
+		/// <returns>A formatted string representing the size with appropriate units (B, KB, MB, etc.).</returns>
 		public static string GetReadableSize(long length)
 		{
 			string[] sizes = { "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB", "BB" };
@@ -3183,6 +3850,12 @@ namespace Utilities
 
 			return $"{Round(size, 2):0.00} {sizes[index]}";
 		}
+		/// <summary>
+		/// Draws an arrow using Gizmos for visualization in the Game view.
+		/// </summary>
+		/// <param name="pos">The starting position of the arrow.</param>
+		/// <param name="direction">The direction and length of the arrow.</param>
+		/// <param name="arrowHeadLength">The length of the arrow head lines.</param>
 		public static void DrawArrowForGizmos(Vector3 pos, Vector3 direction, float arrowHeadLength = .25f, float arrowHeadAngle = 20f)
 		{
 			Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0f, 180f + arrowHeadAngle, 0f) * Vector3.forward;
@@ -3192,6 +3865,12 @@ namespace Utilities
 			Gizmos.DrawRay(pos + direction, right * arrowHeadLength);
 			Gizmos.DrawRay(pos + direction, left * arrowHeadLength);
 		}
+		/// <summary>
+		/// Draws an arrow using Gizmos for visualization in the Game view.
+		/// </summary>
+		/// <param name="pos">The starting position of the arrow.</param>
+		/// <param name="direction">The direction and length of the arrow.</param>
+		/// <param name="color">The color of the arrow.</param>
 		public static void DrawArrowForGizmos(Vector3 pos, Vector3 direction, UnityEngine.Color color, float arrowHeadLength = .25f, float arrowHeadAngle = 20f)
 		{
 			UnityEngine.Color orgColor = Gizmos.color;
@@ -3202,10 +3881,25 @@ namespace Utilities
 
 			Gizmos.color = orgColor;
 		}
+		/// <summary>
+		/// Draws an arrow using Debug.DrawLine for visualization in the Game view.
+		/// </summary>
+		/// <param name="pos">The starting position of the arrow.</param>
+		/// <param name="direction">The direction and length of the arrow.</param>
+		/// <param name="arrowHeadLength">The length of the arrow head lines.</param>
+		/// <param name="arrowHeadAngle">The angle of the arrow head lines in degrees.</param>
 		public static void DrawArrowForDebug(Vector3 pos, Vector3 direction, float arrowHeadLength = .25f, float arrowHeadAngle = 20f)
 		{
 			DrawArrowForDebug(pos, direction, UnityEngine.Color.white, arrowHeadLength, arrowHeadAngle);
 		}
+		/// <summary>
+		/// Draws a colored arrow using Debug.DrawLine for visualization in the Game view.
+		/// </summary>
+		/// <param name="pos">The starting position of the arrow.</param>
+		/// <param name="direction">The direction and length of the arrow.</param>
+		/// <param name="color">The color of the arrow.</param>
+		/// <param name="arrowHeadLength">The length of the arrow head lines.</param>
+		/// <param name="arrowHeadAngle">The angle of the arrow head lines in degrees.</param>
 		public static void DrawArrowForDebug(Vector3 pos, Vector3 direction, UnityEngine.Color color, float arrowHeadLength = .25f, float arrowHeadAngle = 20f)
 		{
 			Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0f, 180f + arrowHeadAngle, 0f) * Vector3.forward;
@@ -3215,6 +3909,10 @@ namespace Utilities
 			Debug.DrawRay(pos + direction, right * arrowHeadLength, color);
 			Debug.DrawRay(pos + direction, left * arrowHeadLength, color);
 		}
+		/// <summary>
+		/// Draws the bounds of an object using Debug.DrawLine for visualization in the Game view.
+		/// </summary>
+		/// <param name="bounds">The bounds to draw.</param>
 		public static void DrawBoundsForDebug(Bounds bounds)
 		{
 			// bottom
@@ -3245,6 +3943,12 @@ namespace Utilities
 			Debug.DrawLine(p3, p7, UnityEngine.Color.green);
 			Debug.DrawLine(p4, p8, UnityEngine.Color.cyan);
 		}
+		/// <summary>
+		/// Checks if a point is inside a triangle.
+		/// </summary>
+		/// <param name="point">The point to check.</param>
+		/// <param name="point1">The first point of the triangle.</param>
+		/// <param name="point2">The second point of the triangle.</param>
 		public static bool PointInTriangle(Vector2 point, Vector2 point1, Vector2 point2, Vector2 point3)
 		{
 			float d1, d2, d3;
@@ -3259,6 +3963,12 @@ namespace Utilities
 
 			return !(isNegative && isPositive);
 		}
+		/// <summary>
+		/// Calculates a point from a circle based on a given angle and surface.
+		/// </summary>
+		/// <param name="center">The center of the circle.</param>
+		/// <param name="radius">The radius of the circle.</param>
+		/// <param name="angle">The angle in degrees.</param>
 		public static Vector3 PointFromCircle(Vector3 center, float radius, float angle, WorldSurface surface, Quaternion rotation)
 		{
 			Vector3 newPosition = Vector3.zero;
@@ -3283,112 +3993,272 @@ namespace Utilities
 
 			return center + rotation * newPosition;
 		}
+		/// <summary>
+		/// Calculates a point along a line based on a normalized position.
+		/// </summary>
+		/// <param name="start">The starting point of the line.</param>
+		/// <param name="direction">The direction of the line (should be normalized).</param>
+		/// <param name="length">The total length of the line.</param>
+		/// <param name="position">The normalized position along the line (0 to 1).</param>
+		/// <returns>A point along the line at the specified position.</returns>
 		public static Vector3 PointFromLine(Vector3 start, Vector3 direction, float length, float position)
 		{
 			return start + length * position * direction;
 		}
+		/// <summary>
+		/// Converts a point from world space to local space relative to a parent transform.
+		/// </summary>
+		/// <param name="worldPoint">The point in world space.</param>
+		/// <param name="parentPosition">The position of the parent transform.</param>
+		/// <param name="parentRotation">The rotation of the parent transform.</param>
+		/// <returns>The point in local space relative to the parent transform.</returns>
 		public static Vector3 PointWorldToLocal(Vector3 worldPoint, Vector3 parentPosition, Quaternion parentRotation)
 		{
-			return parentRotation * (worldPoint - parentPosition);
+			return Quaternion.Inverse(parentRotation) * (worldPoint - parentPosition);
 		}
+		/// <summary>
+		/// Converts a point from world space to local space relative to a parent transform using float3.
+		/// </summary>
+		/// <param name="worldPoint">The point in world space.</param>
+		/// <param name="parentPosition">The position of the parent transform.</param>
+		/// <param name="parentRotation">The rotation of the parent transform.</param>
+		/// <returns>The point in local space relative to the parent transform.</returns>
 		public static float3 PointWorldToLocal(float3 worldPoint, float3 parentPosition, quaternion parentRotation)
 		{
-			return math.mul(parentRotation, worldPoint - parentPosition);
+			return math.mul(math.inverse(parentRotation), worldPoint - parentPosition);
 		}
+		/// <summary>
+		/// Converts a point from world space to local space relative to a parent transform with scaling.
+		/// </summary>
+		/// <param name="worldPoint">The point in world space.</param>
+		/// <param name="parentPosition">The position of the parent transform.</param>
+		/// <param name="parentRotation">The rotation of the parent transform.</param>
 		public static Vector3 PointWorldToLocal(Vector3 worldPoint, Vector3 parentPosition, Quaternion parentRotation, Vector3 parentScale)
 		{
-			return Quaternion.Inverse(parentRotation) * Divide(worldPoint - parentPosition, parentScale);
+			return Vector3.Scale(Quaternion.Inverse(parentRotation) * (worldPoint - parentPosition), new Vector3(1f/parentScale.x, 1f/parentScale.y, 1f/parentScale.z));
 		}
+		/// <summary>
+		/// Converts a point from world space to local space relative to a parent transform with scaling using float3.
+		/// </summary>
+		/// <param name="worldPoint">The point in world space.</param>
+		/// <param name="parentPosition">The position of the parent transform.</param>
+		/// <param name="parentRotation">The rotation of the parent transform.</param>
 		public static float3 PointWorldToLocal(float3 worldPoint, float3 parentPosition, quaternion parentRotation, float3 parentScale)
 		{
-			return math.mul(math.inverse(parentRotation), Divide(worldPoint - parentPosition, parentScale));
+			return math.mul(math.inverse(parentRotation), worldPoint - parentPosition) / parentScale;
 		}
+		/// <summary>
+		/// Converts a point from local space to world space relative to a parent transform.
+		/// </summary>
+		/// <param name="localPoint">The point in local space.</param>
+		/// <param name="parentPosition">The position of the parent transform.</param>
+		/// <param name="parentRotation">The rotation of the parent transform.</param>
 		public static Vector3 PointLocalToWorld(Vector3 localPoint, Vector3 parentPosition, Quaternion parentRotation, Vector3 parentScale)
 		{
-			return Multiply(parentRotation * localPoint, parentScale) + parentPosition;
+			return parentRotation * Vector3.Scale(localPoint, parentScale) + parentPosition;
 		}
+		/// <summary>
+		/// Converts a point from local space to world space relative to a parent transform with scaling using float3.
+		/// </summary>
+		/// <param name="localPoint">The point in local space.</param>
+		/// <param name="parentPosition">The position of the parent transform.</param>
+		/// <param name="parentRotation">The rotation of the parent transform.</param>
 		public static float3 PointLocalToWorld(float3 localPoint, float3 parentPosition, quaternion parentRotation, float3 parentScale)
 		{
-			return Multiply(math.mul(parentRotation, localPoint), parentScale) + parentPosition;
+			return math.mul(parentRotation, localPoint * parentScale) + parentPosition;
 		}
+		/// <summary>
+		/// Returns the absolute values of the components of a vector.
+		/// </summary>
+		/// <param name="vector">The vector to get the absolute values of.</param>
+		/// <returns>A vector with the absolute values of the components of the input vector.</returns>
 		public static Vector3 Abs(Vector3 vector)
 		{
 			return new Vector3(vector.x, vector.y, vector.z);
 		}
+		/// <summary>
+		/// Returns the absolute values of the components of a vector using float3.
+		/// </summary>
+		/// <param name="vector">The vector to get the absolute values of.</param>
+		/// <returns>A vector with the absolute values of the components of the input vector.</returns>
 		public static float3 Abs(float3 vector)
 		{
 			return new float3(vector.x, vector.y, vector.z);
 		}
+		/// <summary>
+		/// Returns a vector with the rounded values of the components of the input vector.
+		/// </summary>
+		/// <param name="vector">The vector to round.</param>
+		/// <returns>A vector with the rounded values of the components of the input vector.</returns>
 		public static Vector3 Round(Vector3 vector)
 		{
 			return new Vector3(math.round(vector.x), math.round(vector.y), math.round(vector.z));
 		}
+		/// <summary>
+		/// Returns a vector with the rounded values of the components of the input vector to a specified number of decimal places.
+		/// </summary>
+		/// <param name="vector">The vector to round.</param>
+		/// <param name="decimals">The number of decimal places to round to.</param>
+		/// <returns>A vector with the rounded values of the components of the input vector to the specified number of decimal places.</returns>
 		public static Vector3 Round(Vector3 vector, uint decimals)
 		{
 			return new Vector3(Round(vector.x, decimals), Round(vector.y, decimals), Round(vector.z, decimals));
 		}
+		/// <summary>
+		/// Returns a vector with the rounded values of the components of the input vector.
+		/// </summary>
+		/// <param name="vector">The vector to round.</param>
+		/// <returns>A vector with the rounded values of the components of the input vector.</returns>
 		public static Vector2 Round(Vector2 vector)
 		{
 			return new Vector2(math.round(vector.x), math.round(vector.y));
 		}
+		/// <summary>
+		/// Returns a vector with the rounded values of the components of the input vector to a specified number of decimal places.
+		/// </summary>
+		/// <param name="vector">The vector to round.</param>
+		/// <param name="decimals">The number of decimal places to round to.</param>
+		/// <returns>A vector with the rounded values of the components of the input vector to the specified number of decimal places.</returns>
 		public static Vector2 Round(Vector2 vector, uint decimals)
 		{
 			return new Vector2(Round(vector.x, decimals), Round(vector.y, decimals));
 		}
+		/// <summary>
+		/// Returns a vector with the rounded values of the components of the input vector as an integer.
+		/// </summary>
+		/// <param name="vector">The vector to round.</param>
+		/// <returns>A vector with the rounded values of the components of the input vector as an integer.</returns>
 		public static Vector3Int RoundToInt(Vector3 vector)
 		{
 			return new Vector3Int((int)math.round(vector.x), (int)math.round(vector.y), (int)math.round(vector.z));
 		}
+		/// <summary>
+		/// Returns a vector with the rounded values of the components of the input vector as an integer.
+		/// </summary>
+		/// <param name="vector">The vector to round.</param>
+		/// <returns>A vector with the rounded values of the components of the input vector as an integer.</returns>
 		public static Vector2Int RoundToInt(Vector2 vector)
 		{
 			return new Vector2Int((int)math.round(vector.x), (int)math.round(vector.y));
 		}
+		/// <summary>
+		/// Returns a float with the rounded value of the input float to a specified number of decimal places.
+		/// </summary>
+		/// <param name="number">The float to round.</param>
+		/// <param name="decimals">The number of decimal places to round to.</param>
+		/// <returns>A float with the rounded value of the input float to the specified number of decimal places.</returns>
 		public static float Round(float number, uint decimals)
 		{
 			float multiplier = math.pow(10f, decimals);
 
 			return math.round(number * multiplier) / multiplier;
 		}
+		/// <summary>
+		/// Calculates the normalized direction vector from origin to destination.
+		/// </summary>
+		/// <param name="origin">The starting point.</param>
+		/// <param name="destination">The end point.</param>
+		/// <returns>A normalized direction vector pointing from origin to destination.</returns>
 		public static Vector3 Direction(Vector3 origin, Vector3 destination)
 		{
 			return (destination - origin).normalized;
 		}
+		/// <summary>
+		/// Calculates the unnormalized direction vector from origin to destination.
+		/// </summary>
+		/// <param name="origin">The starting point.</param>
+		/// <param name="destination">The end point.</param>
+		/// <returns>An unnormalized vector pointing from origin to destination.</returns>
 		public static Vector3 DirectionUnNormalized(Vector3 origin, Vector3 destination)
 		{
 			return destination - origin;
 		}
+		/// <summary>
+		/// Calculates the right vector based on forward and up vectors.
+		/// </summary>
+		/// <param name="forward">The forward direction.</param>
+		/// <param name="up">The up direction.</param>
+		/// <returns>The right vector perpendicular to both forward and up.</returns>
 		public static Vector3 DirectionRight(Vector3 forward, Vector3 up)
 		{
 			return Quaternion.AngleAxis(90f, up) * forward;
 		}
+		/// <summary>
+		/// Calculates the normalized direction vector from origin to destination using float3.
+		/// </summary>
+		/// <param name="origin">The starting point.</param>
+		/// <param name="destination">The end point.</param>
+		/// <returns>A normalized direction vector pointing from origin to destination.</returns>
 		public static float3 Direction(float3 origin, float3 destination)
 		{
 			return math.normalize(destination - origin);
 		}
+		/// <summary>
+		/// Calculates the unnormalized direction vector from origin to destination using float3.
+		/// </summary>
+		/// <param name="origin">The starting point.</param>
+		/// <param name="destination">The end point.</param>
+		/// <returns>An unnormalized vector pointing from origin to destination.</returns>
 		public static float3 DirectionUnNormalized(float3 origin, float3 destination)
 		{
 			return destination - origin;
 		}
+		/// <summary>
+		/// Calculates the right vector based on forward and up vectors using float3.
+		/// </summary>
+		/// <param name="forward">The forward direction.</param>
+		/// <param name="up">The up direction.</param>
+		/// <returns>The right vector perpendicular to both forward and up.</returns>
 		public static float3 DirectionRight(float3 forward, float3 up)
 		{
 			return math.mul(quaternion.AxisAngle(up, math.PI * .5f), forward);
 		}
+		/// <summary>
+		/// Calculates the normalized direction vector from origin to destination.
+		/// </summary>
+		/// <param name="origin">The starting point.</param>
+		/// <param name="destination">The end point.</param>
+		/// <returns>A normalized direction vector pointing from origin to destination.</returns>
 		public static Vector2 Direction(Vector2 origin, Vector2 destination)
 		{
 			return (destination - origin).normalized;
 		}
+		/// <summary>
+		/// Calculates the unnormalized direction vector from origin to destination.
+		/// </summary>
+		/// <param name="origin">The starting point.</param>
+		/// <param name="destination">The end point.</param>
+		/// <returns>An unnormalized vector pointing from origin to destination.</returns>
 		public static Vector2 DirectionUnNormalized(Vector2 origin, Vector2 destination)
 		{
 			return destination - origin;
 		}
+		/// <summary>
+		/// Calculates the normalized direction vector from origin to destination using float2.
+		/// </summary>
+		/// <param name="origin">The starting point.</param>
+		/// <param name="destination">The end point.</param>
+		/// <returns>A normalized direction vector pointing from origin to destination.</returns>
 		public static float2 Direction(float2 origin, float2 destination)
 		{
 			return math.normalize(destination - origin);
 		}
+		/// <summary>
+		/// Calculates the unnormalized direction vector from origin to destination using float2.
+		/// </summary>
+		/// <param name="origin">The starting point.</param>
+		/// <param name="destination">The end point.</param>
+		/// <returns>An unnormalized vector pointing from origin to destination.</returns>
 		public static float2 DirectionUnNormalized(float2 origin, float2 destination)
 		{
 			return destination - origin;
 		}
+		/// <summary>
+		/// Determines the side of a point compared to a reference point and forward direction.
+		/// </summary>
+		/// <param name="point">The point to compare.</param>
+		/// <param name="comparingPoint">The reference point.</param>
+		/// <param name="comparingForward">The forward direction of the reference point.</param>
 		public static WorldSide GetPointSideCompared(Vector3 point, Vector3 comparingPoint, Vector3 comparingForward, Vector3 comparingUp)
 		{
 			Vector3 pointForward = Direction(comparingPoint, point);
@@ -3401,6 +4271,13 @@ namespace Utilities
 			else
 				return WorldSide.Center;
 		}
+		/// <summary>
+		/// Calculates the angle around an axis between a direction and a reference forward direction.
+		/// </summary>
+		/// <param name="direction">The direction to measure.</param>
+		/// <param name="axis">The axis to measure around.</param>
+		/// <param name="forward">The reference forward direction.</param>
+		/// <returns>The angle in degrees.</returns>
 		public static float AngleAroundAxis(Vector3 direction, Vector3 axis, Vector3 forward)
 		{
 			Vector3 right = Vector3.Cross(axis, forward).normalized;
@@ -3409,6 +4286,13 @@ namespace Utilities
 
 			return math.atan2(Vector3.Dot(direction, right), Vector3.Dot(direction, forward)) * Mathf.Rad2Deg;
 		}
+		/// <summary>
+		/// Calculates the angle around an axis between a direction and a reference forward direction using float3.
+		/// </summary>
+		/// <param name="direction">The direction to measure.</param>
+		/// <param name="axis">The axis to measure around.</param>
+		/// <param name="forward">The reference forward direction.</param>
+		/// <returns>The angle in degrees.</returns>
 		public static float AngleAroundAxis(float3 direction, float3 axis, float3 forward)
 		{
 			float3 right = math.normalizesafe(math.cross(axis, forward), Float3Right);
@@ -3417,10 +4301,26 @@ namespace Utilities
 
 			return math.atan2(math.dot(direction, right), math.dot(direction, forward)) * Mathf.Rad2Deg;
 		}
+		/// <summary>
+		/// Calculates the interpolation parameter that would result in the value t when linearly interpolating from a to b.
+		/// The result is clamped between 0 and 1.
+		/// </summary>
+		/// <param name="a">The start point of the interpolation.</param>
+		/// <param name="b">The end point of the interpolation.</param>
+		/// <param name="t">The point to find the interpolation parameter for.</param>
+		/// <returns>The interpolation parameter clamped between 0 and 1.</returns>
 		public static float InverseLerp(Vector3 a, Vector3 b, Vector3 t)
 		{
 			return Clamp01(InverseLerpUnclamped(a, b, t));
-		}
+		}		
+		/// <summary>
+		/// Calculates the interpolation parameter that would result in the value t when linearly interpolating from a to b.
+		/// The result is not clamped.
+		/// </summary>
+		/// <param name="a">The start point of the interpolation.</param>
+		/// <param name="b">The end point of the interpolation.</param>
+		/// <param name="t">The point to find the interpolation parameter for.</param>
+		/// <returns>The interpolation parameter (can be outside the 0-1 range).</returns>
 		public static float InverseLerpUnclamped(Vector3 a, Vector3 b, Vector3 t)
 		{
 			Vector3 AB = b - a;
@@ -3428,10 +4328,26 @@ namespace Utilities
 
 			return Vector3.Dot(AT, AB) / Vector3.Dot(AB, AB);
 		}
+		/// <summary>
+		/// Calculates the interpolation parameter that would result in the value t when linearly interpolating from a to b.
+		/// The result is clamped between 0 and 1.
+		/// </summary>
+		/// <param name="a">The start point of the interpolation.</param>
+		/// <param name="b">The end point of the interpolation.</param>
+		/// <param name="t">The point to find the interpolation parameter for.</param>
+		/// <returns>The interpolation parameter clamped between 0 and 1.</returns>
 		public static float InverseLerp(float3 a, float3 b, float3 t)
 		{
 			return Clamp01(InverseLerpUnclamped(a, b, t));
 		}
+		/// <summary>
+		/// Calculates the interpolation parameter that would result in the value t when linearly interpolating from a to b.
+		/// The result is not clamped.
+		/// </summary>
+		/// <param name="a">The start point of the interpolation.</param>
+		/// <param name="b">The end point of the interpolation.</param>
+		/// <param name="t">The point to find the interpolation parameter for.</param>
+		/// <returns>The interpolation parameter (can be outside the 0-1 range).</returns>
 		public static float InverseLerpUnclamped(float3 a, float3 b, float3 t)
 		{
 			float3 AB = b - a;
@@ -3439,62 +4355,181 @@ namespace Utilities
 
 			return math.dot(AT, AB) / math.dot(AB, AB);
 		}
+		/// <summary>
+		/// Calculates the interpolation parameter that would result in the value t when linearly interpolating from a to b.
+		/// The result is clamped between 0 and 1.
+		/// </summary>
+		/// <param name="a">The start point of the interpolation.</param>
+		/// <param name="b">The end point of the interpolation.</param>
+		/// <param name="t">The point to find the interpolation parameter for.</param>
+		/// <returns>The interpolation parameter clamped between 0 and 1.</returns>
 		public static float InverseLerp(float a, float b, float t)
 		{
 			return Clamp01(InverseLerpUnclamped(a, b, t));
 		}
+		/// <summary>
+		/// Calculates the interpolation parameter that would result in the value t when linearly interpolating from a to b.
+		/// The result is not clamped.
+		/// </summary>
+		/// <param name="a">The start point of the interpolation.</param>
+		/// <param name="b">The end point of the interpolation.</param>
+		/// <param name="t">The point to find the interpolation parameter for.</param>
+		/// <returns>The interpolation parameter (can be outside the 0-1 range).</returns>
 		public static float InverseLerpUnclamped(float a, float b, float t)
 		{
 			return (t - a) / (b - a);
 		}
+		/// <summary>
+		/// Calculates the value that would result from linearly interpolating between a and b by the interpolation parameter t.
+		/// The result is not clamped.
+		/// </summary>
+		/// <param name="a">The start point of the interpolation.</param>
+		/// <param name="b">The end point of the interpolation.</param>
+		/// <param name="t">The interpolation parameter.</param>
+		/// <returns>The value resulting from the interpolation.</returns>
 		public static float LerpUnclamped(float a, float b, float t)
 		{
 			return a + (b - a) * t;
 		}
+		/// <summary>
+		/// Calculates the value that would result from linearly interpolating between a and b by the interpolation parameter t.
+		/// The result is not clamped.
+		/// </summary>
+		/// <param name="a">The start point of the interpolation.</param>
+		/// <param name="b">The end point of the interpolation.</param>
+		/// <param name="t">The interpolation parameter.</param>
+		/// <returns>The value resulting from the interpolation.</returns>
 		public static float3 LerpUnclamped(float3 a, float3 b, float t)
 		{
 			return new float3(LerpUnclamped(a.x, b.x, t), LerpUnclamped(a.y, b.y, t), LerpUnclamped(a.z, b.z, t));
 		}
+		/// <summary>
+		/// Calculates the value that would result from linearly interpolating between a and b by the interpolation parameter t.
+		/// The result is not clamped.
+		/// </summary>
+		/// <param name="a">The start point of the interpolation.</param>
+		/// <param name="b">The end point of the interpolation.</param>
+		/// <param name="t">The interpolation parameter.</param>
+		/// <returns>The value resulting from the interpolation.</returns>
 		public static Vector3 LerpUnclamped(Vector3 a, Vector3 b, float t)
 		{
 			return new float3(LerpUnclamped(a.x, b.x, t), LerpUnclamped(a.y, b.y, t), LerpUnclamped(a.z, b.z, t));
 		}
+		/// <summary>
+		/// Calculates the value that would result from linearly interpolating between a and b by the interpolation parameter t.
+		/// The result is not clamped.
+		/// </summary>
+		/// <param name="a">The start point of the interpolation.</param>
+		/// <param name="b">The end point of the interpolation.</param>
+		/// <param name="t">The interpolation parameter.</param>
+		/// <returns>The value resulting from the interpolation.</returns>
 		public static float2 LerpUnclamped(float2 a, float2 b, float t)
 		{
 			return new float2(LerpUnclamped(a.x, b.x, t), LerpUnclamped(a.y, b.y, t));
 		}
+		/// <summary>
+		/// Calculates the value that would result from linearly interpolating between a and b by the interpolation parameter t.
+		/// The result is not clamped.
+		/// </summary>
+		/// <param name="a">The start point of the interpolation.</param>
+		/// <param name="b">The end point of the interpolation.</param>
+		/// <param name="t">The interpolation parameter.</param>
+		/// <returns>The value resulting from the interpolation.</returns>
 		public static Vector2 LerpUnclamped(Vector2 a, Vector2 b, float t)
 		{
 			return new float2(LerpUnclamped(a.x, b.x, t), LerpUnclamped(a.y, b.y, t));
 		}
+		/// <summary>
+		/// Calculates the value that would result from linearly interpolating between a and b by the interpolation parameter t.
+		/// The result is not clamped.
+		/// </summary>
+		/// <param name="a">The start point of the interpolation.</param>
+		/// <param name="b">The end point of the interpolation.</param>
+		/// <param name="t">The interpolation parameter.</param>
+		/// <returns>The value resulting from the interpolation.</returns>
 		public static quaternion LerpUnclamped(quaternion a, quaternion b, float t)
 		{
 			return math.nlerp(a, b, t);
 		}
+		/// <summary>
+		/// Calculates the value that would result from linearly interpolating between a and b by the interpolation parameter t.
+		/// The result is clamped between 0 and 1.
+		/// </summary>
+		/// <param name="a">The start point of the interpolation.</param>
+		/// <param name="b">The end point of the interpolation.</param>
+		/// <param name="t">The interpolation parameter.</param>
+		/// <returns>The value resulting from the interpolation.</returns>
 		public static float Lerp(float a, float b, float t)
 		{
 			return LerpUnclamped(a, b, Clamp01(t));
 		}
+		/// <summary>
+		/// Calculates the value that would result from linearly interpolating between a and b by the interpolation parameter t.
+		/// The result is clamped between 0 and 1.
+		/// </summary>
+		/// <param name="a">The start point of the interpolation.</param>
+		/// <param name="b">The end point of the interpolation.</param>
+		/// <param name="t">The interpolation parameter.</param>
+		/// <returns>The value resulting from the interpolation.</returns>
 		public static Vector3 Lerp(Vector3 a, Vector3 b, float t)
 		{
 			return LerpUnclamped(a, b, Clamp01(t));
 		}
+		/// <summary>
+		/// Calculates the value that would result from linearly interpolating between a and b by the interpolation parameter t.
+		/// The result is clamped between 0 and 1.
+		/// </summary>
+		/// <param name="a">The start point of the interpolation.</param>
+		/// <param name="b">The end point of the interpolation.</param>
+		/// <param name="t">The interpolation parameter.</param>
+		/// <returns>The value resulting from the interpolation.</returns>
 		public static float3 Lerp(float3 a, float3 b, float t)
 		{
 			return LerpUnclamped(a, b, Clamp01(t));
 		}
+		/// <summary>
+		/// Calculates the value that would result from linearly interpolating between a and b by the interpolation parameter t.
+		/// The result is clamped between 0 and 1.
+		/// </summary>
+		/// <param name="a">The start point of the interpolation.</param>
+		/// <param name="b">The end point of the interpolation.</param>
+		/// <param name="t">The interpolation parameter.</param>
+		/// <returns>The value resulting from the interpolation.</returns>
 		public static Vector2 Lerp(Vector2 a, Vector2 b, float t)
 		{
 			return LerpUnclamped(a, b, Clamp01(t));
 		}
+		/// <summary>
+		/// Calculates the value that would result from linearly interpolating between a and b by the interpolation parameter t.
+		/// The result is clamped between 0 and 1.
+		/// </summary>
+		/// <param name="a">The start point of the interpolation.</param>
+		/// <param name="b">The end point of the interpolation.</param>
+		/// <param name="t">The interpolation parameter.</param>
+		/// <returns>The value resulting from the interpolation.</returns>
 		public static float2 Lerp(float2 a, float2 b, float t)
 		{
 			return LerpUnclamped(a, b, Clamp01(t));
 		}
+		/// <summary>
+		/// Calculates the value that would result from linearly interpolating between a and b by the interpolation parameter t.
+		/// The result is clamped between 0 and 1.
+		/// </summary>
+		/// <param name="a">The start point of the interpolation.</param>
+		/// <param name="b">The end point of the interpolation.</param>
+		/// <param name="t">The interpolation parameter.</param>
+		/// <returns>The value resulting from the interpolation.</returns>
 		public static quaternion Lerp(quaternion a, quaternion b, float t)
 		{
 			return LerpUnclamped(a, b, Clamp01(t));
 		}
+		/// <summary>
+		/// Moves a color towards a target color by a maximum delta.
+		/// </summary>
+		/// <param name="a">The current color.</param>
+		/// <param name="b">The target color.</param>
+		/// <param name="maxDelta">The maximum change that should be applied to each component.</param>
+		/// <returns>The new color resulting from the movement.</returns>
 		public static UnityEngine.Color MoveTowards(UnityEngine.Color a, UnityEngine.Color b, float maxDelta)
 		{
 			return new UnityEngine.Color()
@@ -3505,6 +4540,14 @@ namespace Utilities
 				a = Mathf.MoveTowards(a.a, b.a, maxDelta)
 			};
 		}
+		
+		/// <summary>
+		/// Moves a color towards a target color by component-specific maximum deltas.
+		/// </summary>
+		/// <param name="a">The current color.</param>
+		/// <param name="b">The target color.</param>
+		/// <param name="maxDelta">The maximum change that should be applied to each component, specified as a color.</param>
+		/// <returns>The new color resulting from the movement.</returns>
 		public static UnityEngine.Color MoveTowards(UnityEngine.Color a, UnityEngine.Color b, UnityEngine.Color maxDelta)
 		{
 			return new UnityEngine.Color()
@@ -3515,6 +4558,11 @@ namespace Utilities
 				a = Mathf.MoveTowards(a.a, b.a, maxDelta.a)
 			};
 		}
+		/// <summary>
+		/// Calculates the Euclidean distance between a series of Transform points.
+		/// </summary>
+		/// <param name="transforms">The series of Transform points.</param>
+		/// <returns>The total distance between the points.</returns>
 		public static float Distance(params Transform[] transforms)
 		{
 			float distance = 0f;
@@ -3524,10 +4572,21 @@ namespace Utilities
 
 			return distance;
 		}
+		/// <summary>
+		/// Calculates the Euclidean distance between two Transform points.
+		/// </summary>
+		/// <param name="a">The first point.</param>
+		/// <param name="b">The second point.</param>
+		/// <returns>The distance between the points.</returns>
 		public static float Distance(Transform a, Transform b)
 		{
 			return Utility.Distance(a.position, b.position);
 		}
+		/// <summary>
+		/// Calculates the Euclidean distance between a series of Vector3 points.
+		/// </summary>
+		/// <param name="vectors">The series of Vector3 points.</param>
+		/// <returns>The total distance between the points.</returns>
 		public static float Distance(params Vector3[] vectors)
 		{
 			float distance = 0f;
@@ -3537,6 +4596,11 @@ namespace Utilities
 
 			return distance;
 		}
+		/// <summary>
+		/// Calculates the Euclidean distance between a series of float3 points.
+		/// </summary>
+		/// <param name="vectors">The series of float3 points.</param>
+		/// <returns>The total distance between the points.</returns>
 		public static float Distance(params float3[] vectors)
 		{
 			float distance = 0f;
@@ -3546,14 +4610,31 @@ namespace Utilities
 
 			return distance;
 		}
+		/// <summary>
+		/// Calculates the Euclidean distance between two Vector3 points.
+		/// </summary>
+		/// <param name="a">The first point.</param>
+		/// <param name="b">The second point.</param>
+		/// <returns>The distance between the points.</returns>
 		public static float Distance(Vector3 a, Vector3 b)
 		{
 			return (a - b).magnitude;
-		}
+		}		
+		/// <summary>
+		/// Calculates the Euclidean distance between two float3 points.
+		/// </summary>
+		/// <param name="a">The first point.</param>
+		/// <param name="b">The second point.</param>
+		/// <returns>The distance between the points.</returns>
 		public static float Distance(float3 a, float3 b)
 		{
 			return math.length(a - b);
 		}
+		/// <summary>
+		/// Calculates the Euclidean distance between a series of Vector2 points.
+		/// </summary>
+		/// <param name="vectors">The series of Vector2 points.</param>
+		/// <returns>The total distance between the points.</returns>
 		public static float Distance(params Vector2[] vectors)
 		{
 			float distance = 0f;
@@ -3563,6 +4644,11 @@ namespace Utilities
 
 			return distance;
 		}
+		/// <summary>
+		/// Calculates the Euclidean distance between a series of float2 points.
+		/// </summary>
+		/// <param name="vectors">The series of float2 points.</param>
+		/// <returns>The total distance between the points.</returns>
 		public static float Distance(params float2[] vectors)
 		{
 			float distance = 0f;
@@ -3572,34 +4658,83 @@ namespace Utilities
 
 			return distance;
 		}
+		/// <summary>
+		/// Calculates the Euclidean distance between two Vector2 points.
+		/// </summary>
+		/// <param name="a">The first point.</param>
+		/// <param name="b">The second point.</param>
+		/// <returns>The distance between the points.</returns>
 		public static float Distance(Vector2 a, Vector2 b)
 		{
 			return (a - b).magnitude;
 		}
+		/// <summary>
+		/// Calculates the Euclidean distance between two float2 points.
+		/// </summary>
+		/// <param name="a">The first point.</param>
+		/// <param name="b">The second point.</param>
+		/// <returns>The distance between the points.</returns>
 		public static float Distance(float2 a, float2 b)
 		{
 			return math.length(a - b);
 		}
+		/// <summary>
+		/// Calculates the squared Euclidean distance between two Vector3 points.
+		/// </summary>
+		/// <param name="a">The first point.</param>
+		/// <param name="b">The second point.</param>
+		/// <returns>The squared distance between the points.</returns>
 		public static float DistanceSqr(Vector3 a, Vector3 b)
 		{
 			return (a - b).sqrMagnitude;
 		}
+		/// <summary>
+		/// Calculates the squared Euclidean distance between two float3 points.
+		/// </summary>
+		/// <param name="a">The first point.</param>
+		/// <param name="b">The second point.</param>
+		/// <returns>The squared distance between the points.</returns>
 		public static float DistanceSqr(float3 a, float3 b)
 		{
 			return math.lengthsq(a - b);
 		}
+		/// <summary>
+		/// Calculates the difference between two float values.
+		/// </summary>
+		/// <param name="a">The first value.</param>
+		/// <param name="b">The second value.</param>
+		/// <returns>The difference between the values.</returns>
 		public static float Distance(float a, float b)
 		{
 			return math.max(a, b) - math.min(a, b);
 		}
+		/// <summary>
+		/// Calculates the velocity of a value between two states.
+		/// </summary>
+		/// <param name="current">The current value.</param>
+		/// <param name="last">The previous value.</param>
+		/// <param name="deltaTime">The time delta.</param>
 		public static float Velocity(float current, float last, float deltaTime)
 		{
 			return (last - current) / deltaTime;
 		}
+		/// <summary>
+		/// Calculates the velocity of a value between two Vector3 states.
+		/// </summary>
+		/// <param name="current">The current value.</param>
+		/// <param name="last">The previous value.</param>
+		/// <param name="deltaTime">The time delta.</param>
 		public static Vector3 Velocity(Vector3 current, Vector3 last, float deltaTime)
 		{
 			return Divide(last - current, deltaTime);
 		}
+		/// <summary>
+		/// Loops a number within the range [0, after).
+		/// Similar to the modulo operation but works correctly with negative numbers.
+		/// </summary>
+		/// <param name="number">The number to loop.</param>
+		/// <param name="after">The upper bound (exclusive) of the range.</param>
+		/// <returns>The looped number within the range [0, after).</returns>
 		public static float LoopNumber(float number, float after)
 		{
 			while (number >= after)
@@ -3610,42 +4745,100 @@ namespace Utilities
 
 			return number;
 		}
+		/// <summary>
+		/// Determines if a value has transitioned from off to on (false to true) between states.
+		/// </summary>
+		/// <param name="current">The current value.</param>
+		/// <param name="last">The previous value.</param>
+		/// <returns>True if the value has transitioned from off to on, false otherwise.</returns>
 		public static bool IsDownFromLastState(float current, float last)
 		{
 			return IsDownFromLastState(NumberToBool(current), NumberToBool(last));
 		}
+		/// <summary>
+		/// Determines if a value has transitioned from off to on (0 to non-zero) between states.
+		/// </summary>
+		/// <param name="current">The current value.</param>
+		/// <param name="last">The previous value.</param>
+		/// <returns>True if the value has transitioned from off to on, false otherwise.</returns>
 		public static bool IsDownFromLastState(int current, int last)
 		{
 			return IsDownFromLastState(NumberToBool(current), NumberToBool(last));
 		}
+		/// <summary>
+		/// Determines if a boolean value has transitioned from false to true between states.
+		/// </summary>
+		/// <param name="current">The current value.</param>
+		/// <param name="last">The previous value.</param>
+		/// <returns>True if the value has transitioned from false to true, false otherwise.</returns>
 		public static bool IsDownFromLastState(bool current, bool last)
 		{
 			return !last && current;
 		}
+		/// <summary>
+		/// Determines if a value has transitioned from on to off (true to false) between states.
+		/// </summary>
+		/// <param name="current">The current value.</param>
+		/// <param name="last">The previous value.</param>
+		/// <returns>True if the value has transitioned from on to off, false otherwise.</returns>
 		public static bool IsUpFromLastState(float current, float last)
 		{
 			return IsUpFromLastState(NumberToBool(current), NumberToBool(last));
 		}
+		/// <summary>
+		/// Determines if a value has transitioned from on to off (non-zero to 0) between states.
+		/// </summary>
+		/// <param name="current">The current value.</param>
+		/// <param name="last">The previous value.</param>
+		/// <returns>True if the value has transitioned from on to off, false otherwise.</returns>
 		public static bool IsUpFromLastState(int current, int last)
 		{
 			return IsUpFromLastState(NumberToBool(current), NumberToBool(last));
 		}
+		/// <summary>
+		/// Determines if a boolean value has transitioned from true to false between states.
+		/// </summary>
+		/// <param name="current">The current value.</param>
+		/// <param name="last">The previous value.</param>
+		/// <returns>True if the value has transitioned from true to false, false otherwise.</returns>
 		public static bool IsUpFromLastState(bool current, bool last)
 		{
 			return last && !current;
 		}
+		/// <summary>
+		/// Divides a float3 by another float3.
+		/// </summary>
+		/// <param name="a">The dividend.</param>
+		/// <param name="b">The divisor.</param>
+		/// <returns>The result of the division.</returns>
 		public static float3 Divide(float3 a, float3 b)
 		{
 			return new Vector3(b.x != 0f ? a.x / b.x : 0f, b.y != 0f ? a.y / b.y : 0f, b.z != 0f ? a.z / b.z : 0f);
 		}
+		/// <summary>
+		/// Divides a Vector3 by another Vector3.
+		/// </summary>
+		/// <param name="a">The dividend.</param>
+		/// <param name="b">The divisor.</param>
+		/// <returns>The result of the division.</returns>
 		public static Vector3 Divide(Vector3 a, Vector3 b)
 		{
 			return new Vector3(b.x != 0f ? a.x / b.x : 0f, b.y != 0f ? a.y / b.y : 0f, b.z != 0f ? a.z / b.z : 0f);
 		}
+		/// <summary>
+		/// Divides a series of Vector3 vectors.
+		/// </summary>
+		/// <param name="vectors">The series of Vector3 vectors.</param>
+		/// <returns>The result of the division.</returns>
 		public static Vector3 Divide(params Vector3[] vectors)
 		{
 			return Divide(vectors as IEnumerable<Vector3>);
 		}
+		/// <summary>
+		/// Divides a series of Vector3 vectors.
+		/// </summary>
+		/// <param name="vectors">The series of Vector3 vectors.</param>
+		/// <returns>The result of the division.</returns>
 		public static Vector3 Divide(IEnumerable<Vector3> vectors)
 		{
 			if (vectors.Count() < 1)
@@ -3662,6 +4855,12 @@ namespace Utilities
 
 			return result;
 		}
+		/// <summary>
+		/// Divides a Vector3 by a float.
+		/// </summary>
+		/// <param name="vector">The dividend.</param>
+		/// <param name="divider">The divisor.</param>
+		/// <returns>The result of the division.</returns>
 		public static Vector3 Divide(Vector3 vector, float divider)
 		{
 			if (divider == 0f)
@@ -3669,6 +4868,12 @@ namespace Utilities
 
 			return new Vector3(vector.x / divider, vector.y / divider, vector.z / divider);
 		}
+		/// <summary>
+		/// Divides a float3 by a float.
+		/// </summary>
+		/// <param name="vector">The dividend.</param>
+		/// <param name="divider">The divisor.</param>
+		/// <returns>The result of the division.</returns>
 		public static float3 Divide(float3 vector, float divider)
 		{
 			if (divider == 0f)
@@ -3676,18 +4881,40 @@ namespace Utilities
 
 			return new float3(vector.x / divider, vector.y / divider, vector.z / divider);
 		}
+		/// <summary>
+		/// Multiplies two float3 vectors.
+		/// </summary>
+		/// <param name="a">The first vector.</param>
+		/// <param name="b">The second vector.</param>
+		/// <returns>The result of the multiplication.</returns>
 		public static float3 Multiply(float3 a, float3 b)
 		{
 			return new float3(a.x * b.x, a.y * b.y, a.z * b.z);
 		}
+		/// <summary>
+		/// Multiplies two Vector3 vectors.
+		/// </summary>
+		/// <param name="a">The first vector.</param>
+		/// <param name="b">The second vector.</param>
+		/// <returns>The result of the multiplication.</returns>
 		public static Vector3 Multiply(Vector3 a, Vector3 b)
 		{
 			return new Vector3(a.x * b.x, a.y * b.y, a.z * b.z);
 		}
+		/// <summary>
+		/// Multiplies a series of Vector3 vectors.
+		/// </summary>
+		/// <param name="vectors">The series of Vector3 vectors.</param>
+		/// <returns>The result of the multiplication.</returns>
 		public static Vector3 Multiply(params Vector3[] vectors)
 		{
 			return Multiply(vectors as IEnumerable<Vector3>);
 		}
+		/// <summary>
+		/// Multiplies a series of Vector3 vectors.
+		/// </summary>
+		/// <param name="vectors">The series of Vector3 vectors.</param>
+		/// <returns>The result of the multiplication.</returns>
 		public static Vector3 Multiply(IEnumerable<Vector3> vectors)
 		{
 			if (vectors.Count() < 1)
@@ -3704,18 +4931,40 @@ namespace Utilities
 
 			return result;
 		}
+		/// <summary>
+		/// Calculates the average of two float3 vectors.
+		/// </summary>
+		/// <param name="a">The first vector.</param>
+		/// <param name="b">The second vector.</param>
+		/// <returns>The average of the two vectors.</returns>
 		public static float3 Average(float3 a, float3 b)
 		{
 			return new float3((a.x + b.x) * .5f, (a.y + b.y) * .5f, (a.z + b.z) * .5f);
 		}
+		/// <summary>
+		/// Calculates the average of three float3 vectors.
+		/// </summary>
+		/// <param name="a">The first vector.</param>
+		/// <param name="b">The second vector.</param>
+		/// <param name="c">The third vector.</param>
 		public static float3 Average(float3 a, float3 b, float3 c)
 		{
 			return new float3((a.x + b.x + c.x) / 3f, (a.y + b.y + c.y) / 3f, (a.z + b.z + c.z) / 3f);
 		}
+		/// <summary>
+		/// Calculates the average of multiple Vector3 vectors.
+		/// </summary>
+		/// <param name="vectors">The vectors to average.</param>
+		/// <returns>A new Vector3 representing the average of all input vectors.</returns>
 		public static Vector3 Average(params Vector3[] vectors)
 		{
 			return Average(vectors as IEnumerable<Vector3>);
 		}
+		/// <summary>
+		/// Calculates the average of multiple Vector3 vectors from an enumerable collection.
+		/// </summary>
+		/// <param name="vectors">The enumerable collection of vectors to average.</param>
+		/// <returns>A new Vector3 representing the average of all input vectors.</returns>
 		public static Vector3 Average(IEnumerable<Vector3> vectors)
 		{
 			if (vectors.Count() < 1)
@@ -3728,10 +4977,20 @@ namespace Utilities
 				z = vectors.Average(vector => vector.z)
 			};
 		}
+		/// <summary>
+		/// Calculates the average of multiple Vector2 vectors.
+		/// </summary>
+		/// <param name="vectors">The vectors to average.</param>
+		/// <returns>A new Vector2 representing the average of all input vectors.</returns>
 		public static Vector2 Average(params Vector2[] vectors)
 		{
 			return Average(vectors as IEnumerable<Vector2>);
 		}
+		/// <summary>
+		/// Calculates the average of multiple Vector2 vectors from an enumerable collection.
+		/// </summary>
+		/// <param name="vectors">The enumerable collection of vectors to average.</param>
+		/// <returns>A new Vector2 representing the average of all input vectors.</returns>
 		public static Vector2 Average(IEnumerable<Vector2> vectors)
 		{
 			if (vectors.Count() < 1)
@@ -3743,10 +5002,20 @@ namespace Utilities
 				y = vectors.Average(vector => vector.y)
 			};
 		}
+		/// <summary>
+		/// Calculates the average of multiple Vector3Int vectors.
+		/// </summary>
+		/// <param name="vectors">The vectors to average.</param>
+		/// <returns>A new Vector3Int representing the average of all input vectors.</returns>
 		public static Vector3Int Average(params Vector3Int[] vectors)
 		{
 			return Average(vectors as IEnumerable<Vector3Int>);
 		}
+		/// <summary>
+		/// Calculates the average of multiple Vector3Int vectors from an enumerable collection.
+		/// </summary>
+		/// <param name="vectors">The enumerable collection of vectors to average.</param>
+		/// <returns>A new Vector3Int representing the average of all input vectors.</returns>
 		public static Vector3Int Average(IEnumerable<Vector3Int> vectors)
 		{
 			if (vectors.Count() < 1)
@@ -3759,10 +5028,20 @@ namespace Utilities
 				z = (float)vectors.Average(vector => vector.z)
 			});
 		}
+		/// <summary>
+		/// Calculates the average of multiple Vector2Int vectors.
+		/// </summary>
+		/// <param name="vectors">The vectors to average.</param>
+		/// <returns>A new Vector2Int representing the average of all input vectors.</returns>
 		public static Vector2Int Average(params Vector2Int[] vectors)
 		{
 			return Average(vectors as IEnumerable<Vector2Int>);
 		}
+		/// <summary>
+		/// Calculates the average of multiple Vector2Int vectors from an enumerable collection.
+		/// </summary>
+		/// <param name="vectors">The enumerable collection of vectors to average.</param>
+		/// <returns>A new Vector2Int representing the average of all input vectors.</returns>
 		public static Vector2Int Average(IEnumerable<Vector2Int> vectors)
 		{
 			if (vectors.Count() < 1)
@@ -3774,10 +5053,20 @@ namespace Utilities
 				y = (float)vectors.Average(vector => vector.y)
 			});
 		}
+		/// <summary>
+		/// Calculates the average of multiple Quaternion vectors.
+		/// </summary>
+		/// <param name="quaternions">The quaternions to average.</param>
+		/// <returns>A new Quaternion representing the average of all input quaternions.</returns>
 		public static Quaternion Average(params Quaternion[] quaternions)
 		{
 			return Average(quaternions as IEnumerable<Quaternion>);
 		}
+		/// <summary>
+		/// Calculates the average of multiple Quaternion vectors from an enumerable collection.
+		/// </summary>
+		/// <param name="quaternions">The enumerable collection of quaternions to average.</param>
+		/// <returns>A new Quaternion representing the average of all input quaternions.</returns>
 		public static Quaternion Average(IEnumerable<Quaternion> quaternions)
 		{
 			if (quaternions.Count() < 1)
@@ -3793,23 +5082,58 @@ namespace Utilities
 			}
 
 			return average;
-		}
+		}		
+		/// <summary>
+		/// Calculates the average of two float values.
+		/// </summary>
+		/// <param name="a">The first value.</param>
+		/// <param name="b">The second value.</param>
+		/// <returns>The average of the two values.</returns>
 		public static float Average(float a, float b)
 		{
 			return (a + b) * .5f;
 		}
+		/// <summary>
+		/// Calculates the average of three float values.
+		/// </summary>
+		/// <param name="a">The first value.</param>
+		/// <param name="b">The second value.</param>
+		/// <param name="c">The third value.</param>
+		/// <returns>The average of the three values.</returns>
 		public static float Average(float a, float b, float c)
 		{
 			return (a + b + c) / 3f;
 		}
+		/// <summary>
+		/// Calculates the average of four float values.
+		/// </summary>
+		/// <param name="a">The first value.</param>
+		/// <param name="b">The second value.</param>
+		/// <param name="c">The third value.</param>
+		/// <param name="d">The fourth value.</param>
+		/// <returns>The average of the four values.</returns>
 		public static float Average(float a, float b, float c, float d)
 		{
 			return (a + b + c + d) * .25f;
 		}
+		/// <summary>
+		/// Calculates the average of five float values.
+		/// </summary>
+		/// <param name="a">The first value.</param>
+		/// <param name="b">The second value.</param>
+		/// <param name="c">The third value.</param>
+		/// <param name="d">The fourth value.</param>
+		/// <param name="e">The fifth value.</param>
+		/// <returns>The average of the five values.</returns>
 		public static float Average(float a, float b, float c, float d, float e)
 		{
 			return (a + b + c + d + e) * .2f;
 		}
+		/// <summary>
+		/// Calculates the average of multiple float values.
+		/// </summary>
+		/// <param name="floats">The values to average.</param>
+		/// <returns>The average of all input values, or 0 if the array is empty.</returns>
 		public static float Average(params float[] floats)
 		{
 			if (floats.Length < 1)
@@ -3817,6 +5141,11 @@ namespace Utilities
 
 			return floats.Average();
 		}
+		/// <summary>
+		/// Calculates the average of multiple byte values.
+		/// </summary>
+		/// <param name="bytes">The values to average.</param>
+		/// <returns>The average of all input values, or 0 if the array is empty.</returns>
 		public static byte Average(params byte[] bytes)
 		{
 			if (bytes.Length < 1)
@@ -3824,6 +5153,11 @@ namespace Utilities
 
 			return (byte)(int)math.round(bytes.Select(@byte => (float)@byte).Average());
 		}
+		/// <summary>
+		/// Calculates the average of multiple integer values.
+		/// </summary>
+		/// <param name="integers">The values to average.</param>
+		/// <returns>The average of all input values, or 0 if the array is empty.</returns>
 		public static int Average(params int[] integers)
 		{
 			if (integers.Length < 1)
@@ -3831,14 +5165,29 @@ namespace Utilities
 
 			return (int)math.round((float)integers.Average());
 		}
+		/// <summary>
+		/// Squares an integer value.
+		/// </summary>
+		/// <param name="number">The value to square.</param>
+		/// <returns>The square of the input value.</returns>
 		public static int Square(int number)
 		{
 			return number * number;
 		}
+		/// <summary>
+		/// Squares a float value.
+		/// </summary>
+		/// <param name="number">The value to square.</param>
+		/// <returns>The square of the input value.</returns>
 		public static float Square(float number)
 		{
 			return number * number;
 		}
+		/// <summary>
+		/// Finds the maximum value among multiple byte values.
+		/// </summary>
+		/// <param name="numbers">The values to compare.</param>
+		/// <returns>The maximum value among the input values, or default if the array is empty.</returns>
 		public static byte Max(params byte[] numbers)
 		{
 			if (numbers.Length < 1)
@@ -3852,6 +5201,11 @@ namespace Utilities
 
 			return max;
 		}
+		/// <summary>
+		/// Finds the minimum value among multiple byte values.
+		/// </summary>
+		/// <param name="numbers">The values to compare.</param>
+		/// <returns>The minimum value among the input values, or default if the array is empty.</returns>
 		public static byte Min(params byte[] numbers)
 		{
 			if (numbers.Length < 1)
@@ -3865,38 +5219,111 @@ namespace Utilities
 
 			return min;
 		}
+		/// <summary>
+		/// Finds the maximum value among three float values.
+		/// </summary>
+		/// <param name="a">The first value.</param>
+		/// <param name="b">The second value.</param>
+		/// <param name="c">The third value.</param>
+		/// <returns>The maximum of the three values.</returns>
 		public static float Max(float a, float b, float c)
 		{
 			return math.max(a, math.max(b, c));
-		}
+		}		
+		/// <summary>
+		/// Finds the minimum value among three float values.
+		/// </summary>
+		/// <param name="a">The first value.</param>
+		/// <param name="b">The second value.</param>
+		/// <param name="c">The third value.</param>
+		/// <returns>The minimum of the three values.</returns>
 		public static float Min(float a, float b, float c)
 		{
 			return math.min(a, math.min(b, c));
 		}
+		/// <summary>
+		/// Finds the maximum value among four float values.
+		/// </summary>
+		/// <param name="a">The first value.</param>
+		/// <param name="b">The second value.</param>
+		/// <param name="c">The third value.</param>
+		/// <param name="d">The fourth value.</param>
+		/// <returns>The maximum of the four values.</returns>
 		public static float Max(float a, float b, float c, float d)
 		{
 			return math.max(math.max(a, b), math.max(c, d));
 		}
+		/// <summary>
+		/// Finds the minimum value among four float values.
+		/// </summary>
+		/// <param name="a">The first value.</param>
+		/// <param name="b">The second value.</param>
+		/// <param name="c">The third value.</param>
+		/// <param name="d">The fourth value.</param>
+		/// <returns>The minimum of the four values.</returns>
 		public static float Min(float a, float b, float c, float d)
 		{
 			return math.min(math.min(a, b), math.min(c, d));
 		}
+		/// <summary>
+		/// Finds the maximum value among five float values.
+		/// </summary>
+		/// <param name="a">The first value.</param>
+		/// <param name="b">The second value.</param>
+		/// <param name="c">The third value.</param>
+		/// <param name="d">The fourth value.</param>
+		/// <param name="e">The fifth value.</param>
+		/// <returns>The maximum of the five values.</returns>
 		public static float Max(float a, float b, float c, float d, float e)
 		{
 			return math.max(math.max(math.max(a, b), math.max(c, d)), e);
 		}
+		/// <summary>
+		/// Finds the minimum value among five float values.
+		/// </summary>
+		/// <param name="a">The first value.</param>
+		/// <param name="b">The second value.</param>
+		/// <param name="c">The third value.</param>
+		/// <param name="d">The fourth value.</param>
+		/// <param name="e">The fifth value.</param>
+		/// <returns>The minimum of the five values.</returns>
 		public static float Min(float a, float b, float c, float d, float e)
 		{
 			return math.min(math.min(math.min(a, b), math.min(c, d)), e);
 		}
+		/// <summary>
+		/// Finds the maximum value among six float values.
+		/// </summary>
+		/// <param name="a">The first value.</param>
+		/// <param name="b">The second value.</param>
+		/// <param name="c">The third value.</param>
+		/// <param name="d">The fourth value.</param>
+		/// <param name="e">The fifth value.</param>
+		/// <param name="f">The sixth value.</param>
+		/// <returns>The maximum of the six values.</returns>
 		public static float Max(float a, float b, float c, float d, float e, float f)
 		{
 			return math.max(math.max(math.max(a, b), math.max(c, d)), math.max(e, f));
 		}
+		/// <summary>
+		/// Finds the minimum value among six float values.
+		/// </summary>
+		/// <param name="a">The first value.</param>
+		/// <param name="b">The second value.</param>
+		/// <param name="c">The third value.</param>
+		/// <param name="d">The fourth value.</param>
+		/// <param name="e">The fifth value.</param>
+		/// <param name="f">The sixth value.</param>
+		/// <returns>The minimum of the six values.</returns>
 		public static float Min(float a, float b, float c, float d, float e, float f)
 		{
 			return math.min(math.min(math.min(a, b), math.min(c, d)), math.min(e, f));
 		}
+		/// <summary>
+		/// Finds the maximum value among multiple float values.
+		/// </summary>
+		/// <param name="numbers">The values to compare.</param>
+		/// <returns>The maximum value among the input values, or default if the array is empty.</returns>
 		public static float Max(params float[] numbers)
 		{
 			if (numbers.Length < 1)
@@ -3910,6 +5337,11 @@ namespace Utilities
 
 			return max;
 		}
+		/// <summary>
+		/// Finds the minimum value among multiple float values.
+		/// </summary>
+		/// <param name="numbers">The values to compare.</param>
+		/// <returns>The minimum value among the input values, or default if the array is empty.</returns>
 		public static float Min(params float[] numbers)
 		{
 			if (numbers.Length < 1)
@@ -3923,94 +5355,211 @@ namespace Utilities
 
 			return min;
 		}
+		/// <summary>
+		/// Clamps a float value between a minimum and maximum value.
+		/// </summary>
+		/// <param name="number">The value to clamp.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <returns>The clamped value.</returns>
 		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static float ClampInfinity(float number, float min = 0f)
 		{
 			return min >= 0f ? math.max(number, min) : math.min(number, min);
 		}
+		/// <summary>
+		/// Clamps an integer value between a minimum and maximum value.
+		/// </summary>
+		/// <param name="number">The value to clamp.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <returns>The clamped value.</returns>
 		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static int ClampInfinity(int number, int min = 0)
 		{
 			return min >= 0 ? math.max(number, min) : math.min(number, min);
 		}
+		/// <summary>
+		/// Clamps the absolute value of a float between a minimum value.
+		/// </summary>
+		/// <param name="number">The value to clamp.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <returns>The clamped value.</returns>
 		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static float ClampInfinityAbs(float number, float min = 0f)
 		{
 			return math.max(math.abs(number), min);
 		}
+		/// <summary>
+		/// Clamps the absolute value of an integer between a minimum value.
+		/// </summary>
+		/// <param name="number">The value to clamp.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <returns>The clamped value.</returns>
 		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static int ClampInfinityAbs(int number, int min = 0)
 		{
 			return math.max(math.abs(number), min);
 		}
+		/// <summary>
+		/// Clamps the absolute value of a vector3 between a minimum value.
+		/// </summary>
+		/// <param name="vector">The value to clamp.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <returns>The clamped value.</returns>
 		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static Vector3 ClampInfinity(Vector3 vector, float min = 0f)
 		{
 			return min >= 0f ? new Vector3(math.max(vector.x, min), math.max(vector.y, min), math.max(vector.z, min)) : new Vector3(math.min(vector.x, min), math.min(vector.y, min), math.min(vector.z, min));
 		}
+		/// <summary>
+		/// Clamps the absolute value of a vector3 between a minimum value.
+		/// </summary>
+		/// <param name="vector">The value to clamp.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <returns>The clamped value.</returns>
 		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static Vector3 ClampInfinity(Vector3 vector, Vector3 min)
 		{
 			return Average(min.x, min.y, min.z) >= 0f ? new Vector3(math.max(vector.x, min.x), math.max(vector.y, min.y), math.max(vector.z, min.z)) : new Vector3(math.min(vector.x, min.x), math.min(vector.y, min.y), math.min(vector.z, min.z));
 		}
+		/// <summary>
+		/// Clamps the absolute value of a vector2 between a minimum value.
+		/// </summary>
+		/// <param name="vector">The value to clamp.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <returns>The clamped value.</returns>
 		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static Vector2 ClampInfinity(Vector2 vector, float min = 0f)
 		{
 			return min >= 0f ? new Vector2(math.max(vector.x, min), math.max(vector.y, min)) : new Vector2(math.min(vector.x, min), math.min(vector.y, min));
 		}
+		/// <summary>
+		/// Clamps the absolute value of a vector2 between a minimum value.
+		/// </summary>
+		/// <param name="vector">The value to clamp.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <returns>The clamped value.</returns>
 		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static Vector2 ClampInfinity(Vector2 vector, Vector2 min)
 		{
 			return Average(min.x, min.y) >= 0f ? new Vector2(math.max(vector.x, min.x), math.max(vector.y, min.y)) : new Vector2(math.min(vector.x, min.x), math.min(vector.y, min.y));
 		}
+		/// <summary>
+		/// Clamps the absolute value of a float3 between a minimum value.
+		/// </summary>
+		/// <param name="vector">The value to clamp.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <returns>The clamped value.</returns>
 		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static float3 ClampInfinity(float3 vector, float min = 0f)
 		{
 			return min >= 0f ? new float3(math.max(vector.x, min), math.max(vector.y, min), math.max(vector.z, min)) : new float3(math.min(vector.x, min), math.min(vector.y, min), math.min(vector.z, min));
 		}
+		/// <summary>
+		/// Clamps the absolute value of a float3 between a minimum value.
+		/// </summary>
+		/// <param name="vector">The value to clamp.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <returns>The clamped value.</returns>
 		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static float3 ClampInfinity(float3 vector, float3 min)
 		{
 			return Average(min.x, min.y, min.z) >= 0f ? new float3(math.max(vector.x, min.x), math.max(vector.y, min.y), math.max(vector.z, min.z)) : new float3(math.min(vector.x, min.x), math.min(vector.y, min.y), math.min(vector.z, min.z));
 		}
+		/// <summary>
+		/// Clamps the absolute value of a float2 between a minimum value.
+		/// </summary>
+		/// <param name="vector">The value to clamp.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <returns>The clamped value.</returns>
 		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static float2 ClampInfinity(float2 vector, float min = 0f)
 		{
 			return min >= 0f ? new float2(math.max(vector.x, min), math.max(vector.y, min)) : new float2(math.min(vector.x, min), math.min(vector.y, min));
 		}
+		/// <summary>
+		/// Clamps the absolute value of a float2 between a minimum value.
+		/// </summary>
+		/// <param name="vector">The value to clamp.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <returns>The clamped value.</returns>
 		[Obsolete("Use `Math.Min` or `Math.Max` instead.")]
 		public static float2 ClampInfinity(float2 vector, float2 min)
 		{
 			return Average(min.x, min.y) >= 0f ? new float2(math.max(vector.x, min.x), math.max(vector.y, min.y)) : new float2(math.min(vector.x, min.x), math.min(vector.y, min.y));
 		}
+		/// <summary>
+		/// Clamps a float value between 0 and 1.
+		/// </summary>
+		/// <param name="number">The value to clamp.</param>
+		/// <returns>The clamped value.</returns>
 		public static float Clamp01(float number)
 		{
 			return math.clamp(number, 0f, 1f);
 		}
+		/// <summary>
+		/// Determines if two float3 vectors are approximately equal.
+		/// </summary>
+		/// <param name="vector1">The first vector.</param>
+		/// <param name="vector2">The second vector.</param>
+		/// <returns>True if the vectors are approximately equal, false otherwise.</returns>
 		public static bool Approximately(Vector3 vector1, Vector3 vector2)
 		{
 			return Mathf.Approximately(vector1.x, vector2.x) && Mathf.Approximately(vector1.y, vector2.y) && Mathf.Approximately(vector1.z, vector2.z);
 		}
+		/// <summary>
+		/// Determines if two float3 vectors are approximately equal.
+		/// </summary>
+		/// <param name="vector1">The first vector.</param>
+		/// <param name="vector2">The second vector.</param>
+		/// <returns>True if the vectors are approximately equal, false otherwise.</returns>
 		public static bool Approximately(float3 vector1, float3 vector2)
 		{
 			return Mathf.Approximately(vector1.x, vector2.x) && Mathf.Approximately(vector1.y, vector2.y) && Mathf.Approximately(vector1.z, vector2.z);
 		}
+		/// <summary>
+		/// Determines if two float2 vectors are approximately equal.
+		/// </summary>
+		/// <param name="vector1">The first vector.</param>
+		/// <param name="vector2">The second vector.</param>
+		/// <returns>True if the vectors are approximately equal, false otherwise.</returns>
 		public static bool Approximately(Vector2 vector1, Vector2 vector2)
 		{
 			return Mathf.Approximately(vector1.x, vector2.x) && Mathf.Approximately(vector1.y, vector2.y);
 		}
+		/// <summary>
+		/// Determines if two float2 vectors are approximately equal.
+		/// </summary>
+		/// <param name="vector1">The first vector.</param>
+		/// <param name="vector2">The second vector.</param>
+		/// <returns>True if the vectors are approximately equal, false otherwise.</returns>
 		public static bool Approximately(float2 vector1, float2 vector2)
 		{
 			return Mathf.Approximately(vector1.x, vector2.x) && Mathf.Approximately(vector1.y, vector2.y);
 		}
+		/// <summary>
+		/// Gets the timestamp of a given date and time.
+		/// </summary>
+		/// <param name="dateTime">The date and time to get the timestamp of.</param>
+		/// <returns>The timestamp of the given date and time.</returns>
 		public static long GetTimestamp(DateTime dateTime)
 		{
 			return long.Parse(dateTime.ToString("yyyyMMddHHmmssffff"));
 		}
+		/// <summary>
+		/// Gets the timestamp of the current date and time.
+		/// </summary>
+		/// <param name="UTC">Whether to use UTC time.</param>
+		/// <returns>The timestamp of the current date and time.</returns>
 		public static long GetTimestamp(bool UTC = false)
 		{
 			return GetTimestamp(UTC ? DateTime.UtcNow : DateTime.Now);
 		}
+		/// <summary>
+		/// Finds the intersection point of two line segments.
+		/// </summary>
+		/// <param name="p1">The first point of the first line segment.</param>
+		/// <param name="p2">The second point of the first line segment.</param>
+		/// <param name="p3">The first point of the second line segment.</param>
 		public static bool FindIntersection(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, out Vector3 intersection)
 		{
 			intersection = Vector3.zero;
@@ -4031,6 +5580,12 @@ namespace Utilities
 
 			return true;
 		}
+		/// <summary>
+		/// Adds torque to a rigidbody at a specific position.
+		/// </summary>
+		/// <param name="rigid">The rigidbody to add torque to.</param>
+		/// <param name="torque">The torque to add.</param>
+		/// <param name="point">The position to add the torque at.</param>
 		public static void AddTorqueAtPosition(Rigidbody rigid, Vector3 torque, Vector3 point, ForceMode mode)
 		{
 			rigid.AddForceAtPosition(.5f * torque.y * Vector3.forward, point + Vector3.left, mode);
@@ -4040,6 +5595,11 @@ namespace Utilities
 			rigid.AddForceAtPosition(.5f * torque.z * Vector3.right, point + Vector3.up, mode);
 			rigid.AddForceAtPosition(.5f * torque.z * Vector3.left, point + Vector3.down, mode);
 		}
+		/// <summary>
+		/// Checks if a directory is empty.
+		/// </summary>
+		/// <param name="path">The path to check.</param>
+		/// <returns>True if the directory is empty, false otherwise.</returns>
 		public static bool IsDirectoryEmpty(string path)
 		{
 			IEnumerable<string> items = Directory.EnumerateFileSystemEntries(path);
@@ -4049,6 +5609,12 @@ namespace Utilities
 				return !entry.MoveNext();
 #pragma warning restore IDE0063 // Use simple 'using' statement
 		}
+		/// <summary>
+		/// Creates a new audio source.
+		/// </summary>
+		/// <param name="sourceName">The name of the audio source.</param>
+		/// <param name="minDistance">The minimum distance of the audio source.</param>
+		/// <param name="maxDistance">The maximum distance of the audio source.</param>
 		public static AudioSource NewAudioSource(string sourceName, float minDistance, float maxDistance, float volume, AudioClip clip, bool loop, bool playNow, bool destroyAfterFinished, bool mute = false, Transform parent = null, AudioMixerGroup mixer = null, bool spatialize = false)
 		{
 			AudioSource source = new GameObject(sourceName).AddComponent<AudioSource>();
@@ -4080,6 +5646,11 @@ namespace Utilities
 
 			return source;
 		}
+		/// <summary>
+		/// Gets the event listeners of a UnityEvent.
+		/// </summary>
+		/// <param name="unityEvent">The UnityEvent to get the event listeners of.</param>
+		/// <returns>An array of the event listeners.</returns>
 		public static string[] GetEventListeners(UnityEvent unityEvent)
 		{
 			List<string> result = new List<string>();
@@ -4089,6 +5660,12 @@ namespace Utilities
 
 			return result.ToArray();
 		}
+		/// <summary>
+		/// Clones a component from one game object to another.
+		/// </summary>
+		/// <typeparam name="T">The type of the component to clone.</typeparam>
+		/// <param name="original">The original component to clone.</param>
+		/// <param name="destination">The destination game object to clone the component to.</param>
 		public static T CloneComponent<T>(T original, GameObject destination) where T : Component
 		{
 			Type type = typeof(T);
@@ -4115,6 +5692,12 @@ namespace Utilities
 
 			return target;
 		}
+		/// <summary>
+		/// Gets a specific item from a Texture2DArray.
+		/// </summary>
+		/// <param name="array">The Texture2DArray to get the item from.</param>
+		/// <param name="index">The index of the item to get.</param>
+		/// <returns>The item from the Texture2DArray.</returns>
 		public static Texture2D GetTextureArrayItem(Texture2DArray array, int index)
 		{
 			bool isReadable = array.isReadable;
@@ -4132,6 +5715,11 @@ namespace Utilities
 
 			return texture;
 		}
+		/// <summary>
+		/// Gets all items from a Texture2DArray.
+		/// </summary>
+		/// <param name="array">The Texture2DArray to get the items from.</param>
+		/// <returns>An array of the items from the Texture2DArray.</returns>
 		public static Texture2D[] GetTextureArrayItems(Texture2DArray array)
 		{
 			bool isReadable = array.isReadable;
@@ -4154,6 +5742,12 @@ namespace Utilities
 
 			return textures;
 		}
+		/// <summary>
+		/// Saves a Texture2D to a file.
+		/// </summary>
+		/// <param name="texture">The Texture2D to save.</param>
+		/// <param name="type">The type of the file to save.</param>
+		/// <param name="path">The path to save the file to.</param>
 		public static void SaveTexture2D(Texture2D texture, TextureEncodingType type, string path)
 		{
 			if (!texture)
@@ -4175,6 +5769,12 @@ namespace Utilities
 
 			File.WriteAllBytes($"{path}/{fileName}.{type.ToString().ToLower()}", bytes);
 		}
+		/// <summary>
+		/// Takes a screenshot of a camera.
+		/// </summary>
+		/// <param name="camera">The camera to take the screenshot of.</param>
+		/// <param name="size">The size of the screenshot.</param>
+		/// <param name="depth">The depth of the screenshot.</param>
 		public static Texture2D TakeScreenshot(Camera camera, Vector2Int size, int depth = 72)
 		{
 			RenderTexture renderTexture = new RenderTexture(size.x, size.y, depth);
@@ -4192,6 +5792,12 @@ namespace Utilities
 
 			return texture;
 		}
+		/// <summary>
+		/// Converts a texture to a sprite.
+		/// </summary>
+		/// <param name="texture">The texture to convert.</param>
+		/// <param name="pixelsPerUnit">The number of pixels per unit.</param>
+		/// <returns>The sprite.</returns>
 		public static Sprite TextureToSprite(Texture texture, float pixelsPerUnit = 100f)
 		{
 			if (texture is Texture2D)
@@ -4199,6 +5805,10 @@ namespace Utilities
 
 			return null;
 		}
+		/// <summary>
+		/// Gets the current render pipeline.
+		/// </summary>
+		/// <returns>The current render pipeline.</returns>
 		public static RenderPipeline GetCurrentRenderPipeline()
 		{
 #if UNITY_2019_3_OR_NEWER
@@ -4222,14 +5832,32 @@ namespace Utilities
 			else
 				return RenderPipeline.Custom;
 		}
+		/// <summary>
+		/// Finds all game objects with a specific layer mask.
+		/// </summary>
+		/// <param name="layers">The layers to find the game objects with.</param>
+		/// <param name="includeInactive">Whether to include inactive game objects.</param>
+		/// <returns>An array of the game objects with the specific layer mask.</returns>
 		public static GameObject[] FindGameObjectsWithLayerMask(string[] layers, bool includeInactive = true)
 		{
 			return FindGameObjectsWithLayerMask(LayerMask.GetMask(layers), includeInactive);
 		}
+		/// <summary>
+		/// Finds all game objects with a specific layer mask.
+		/// </summary>
+		/// <param name="layerMask">The layer mask to find the game objects with.</param>
+		/// <param name="includeInactive">Whether to include inactive game objects.</param>
+		/// <returns>An array of the game objects with the specific layer mask.</returns>
 		public static GameObject[] FindGameObjectsWithLayerMask(LayerMask layerMask, bool includeInactive = true)
 		{
 			return FindGameObjectsWithLayerMask(layerMask.value, includeInactive);
 		}
+		/// <summary>
+		/// Finds all game objects with a specific layer mask.
+		/// </summary>
+		/// <param name="layerMask">The layer mask to find the game objects with.</param>
+		/// <param name="includeInactive">Whether to include inactive game objects.</param>
+		/// <returns>An array of the game objects with the specific layer mask.</returns>
 		public static GameObject[] FindGameObjectsWithLayerMask(int layerMask, bool includeInactive = true)
 		{
 			List<GameObject> gameObjects = new List<GameObject>();
@@ -4245,6 +5873,14 @@ namespace Utilities
 
 			return gameObjects.ToArray();
 		}
+		/// <summary>
+		/// Gets the physics bounds of an object.
+		/// </summary>
+		/// <param name="gameObject">The game object to get the physics bounds of.</param>
+		/// <param name="includeTriggers">Whether to include triggers.</param>
+		/// <param name="keepRotation">Whether to keep the rotation of the object.</param>
+		/// <param name="keepScale">Whether to keep the scale of the object.</param>
+		/// <returns>The physics bounds of the object.</returns>
 		public static Bounds GetObjectPhysicsBounds(GameObject gameObject, bool includeTriggers, bool keepRotation = false, bool keepScale = true)
 		{
 			IEnumerable<Collider> colliders = gameObject.GetComponentsInChildren<Collider>();
@@ -4276,6 +5912,13 @@ namespace Utilities
 
 			return bounds;
 		}
+		/// <summary>
+		/// Gets the bounds of an object.
+		/// </summary>
+		/// <param name="gameObject">The game object to get the bounds of.</param>
+		/// <param name="keepRotation">Whether to keep the rotation of the object.</param>
+		/// <param name="keepScale">Whether to keep the scale of the object.</param>
+		/// <returns>The bounds of the object.</returns>
 		public static Bounds GetObjectBounds(GameObject gameObject, bool keepRotation = false, bool keepScale = true)
 		{
 			IEnumerable<Renderer> renderers = gameObject.GetComponentsInChildren<Renderer>();
@@ -4307,6 +5950,12 @@ namespace Utilities
 
 			return bounds;
 		}
+		/// <summary>
+		/// Gets the bounds of a UI element.
+		/// </summary>
+		/// <param name="rectTransform">The RectTransform to get the bounds of.</param>
+		/// <param name="scaleFactor">The scale factor of the UI element.</param>
+		/// <returns>The bounds of the UI element.</returns>
 		public static Bounds GetUIBounds(RectTransform rectTransform, float scaleFactor)
 		{
 			Bounds bounds = default;
@@ -4331,16 +5980,35 @@ namespace Utilities
 
 			return bounds;
 		}
+		/// <summary>
+		/// Checks if a point is in a collider.
+		/// </summary>
+		/// <param name="collider">The collider to check.</param>
+		/// <param name="point">The point to check.</param>
+		/// <returns>True if the point is in the collider, false otherwise.</returns>
 		public static bool CheckPointInCollider(Collider collider, Vector3 point)
 		{
 			return CheckPointInCollider(collider, point, out _);
 		}
+		/// <summary>
+		/// Checks if a point is in a collider.
+		/// </summary>
+		/// <param name="collider">The collider to check.</param>
+		/// <param name="point">The point to check.</param>
+		/// <param name="closestPoint">The closest point on the collider to the point.</param>
+		/// <returns>True if the point is in the collider, false otherwise.</returns>
 		public static bool CheckPointInCollider(Collider collider, Vector3 point, out Vector3 closestPoint)
 		{
 			closestPoint = collider.ClosestPoint(point);
 
 			return closestPoint == point;
 		}
+		/// <summary>
+		/// Destroys an object.
+		/// </summary>
+		/// <param name="immediate">Whether to destroy the object immediately.</param>
+		/// <param name="obj">The object to destroy.</param>
+		/// <returns>True if the object was destroyed, false otherwise.</returns>
 		public static void Destroy(bool immediate, UnityEngine.Object obj)
 		{
 			if (immediate)
@@ -4348,19 +6016,43 @@ namespace Utilities
 			else
 				UnityEngine.Object.Destroy(obj);
 		}
+		/// <summary>
+		/// Destroys an object.
+		/// </summary>
+		/// <param name="obj">The object to destroy.</param>
+		/// <param name="time">The time to destroy the object.</param>
+		/// <returns>True if the object was destroyed, false otherwise.</returns>
 		public static void Destroy(UnityEngine.Object obj, float time)
 		{
 			UnityEngine.Object.Destroy(obj, time);
 		}
+		/// <summary>
+		/// Destroys an object.
+		/// </summary>
+		/// <param name="obj">The object to destroy.</param>
+		/// <param name="allowDestroyingAssets">Whether to allow destroying assets.</param>
+		/// <returns>True if the object was destroyed, false otherwise.</returns>
 		public static void Destroy(UnityEngine.Object obj, bool allowDestroyingAssets)
 		{
 			UnityEngine.Object.DestroyImmediate(obj, allowDestroyingAssets);
 		}
 
+		/// <summary>
+		/// Checks if a unit is a divider unit.
+		/// </summary>
+		/// <param name="unit">The unit to check.</param>
+		/// <returns>True if the unit is a divider unit, false otherwise.</returns>
 		private static bool IsDividerUnit(Units unit)
 		{
 			return unit == Units.FuelConsumption;
 		}
+		/// <summary>
+		/// Gets the sign of a point.
+		/// </summary>
+		/// <param name="point1">The first point.</param>
+		/// <param name="point2">The second point.</param>
+		/// <param name="point3">The third point.</param>
+		/// <returns>The sign of the point.</returns>
 		private static float PointSign(Vector2 point1, Vector2 point2, Vector2 point3)
 		{
 			return (point1.x - point3.x) * (point2.y - point3.y) - (point2.x - point3.x) * (point1.y - point3.y);
