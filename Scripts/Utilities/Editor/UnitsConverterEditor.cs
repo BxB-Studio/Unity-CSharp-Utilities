@@ -8,22 +8,29 @@ using UnityEditor;
 namespace Utilities.Editor
 {
 	/// <summary>
-	/// Editor window for converting units.
+	/// Editor window for converting between metric and imperial units.
+	/// Provides a user-friendly interface for real-time unit conversion across different measurement types.
 	/// </summary>
 	public class UnitsConverterEditor : EditorWindow
 	{
 		#region Variables
 
 		/// <summary>
-		/// The unit to convert.
+		/// The current unit type being converted (Distance, Weight, Volume, etc.).
+		/// Controls which conversion factors and unit labels are displayed in the interface.
 		/// </summary>
 		private static Utility.Units unit = Utility.Units.Distance;
+		
 		/// <summary>
-		/// The metric value.
+		/// The current value in metric units.
+		/// This value is synchronized with the imperial value using the appropriate conversion factor.
 		/// </summary>
 		private static float metricValue = 1f;
+		
 		/// <summary>
-		/// The imperial value.
+		/// The current value in imperial units.
+		/// This value is synchronized with the metric value using the appropriate conversion factor.
+		/// Default is 3.28084 (feet), which is the imperial equivalent of 1 meter.
 		/// </summary>
 		private static float imperialValue = 3.28084f;
 
@@ -34,7 +41,9 @@ namespace Utilities.Editor
 		#region Static Methods
 
 		/// <summary>
-		/// Shows the Units Converter window.
+		/// Shows the Units Converter window in the Unity Editor.
+		/// Creates a non-resizable window with fixed dimensions and registers it with Unity's window management system.
+		/// This method is called when the user selects the menu item "Tools/Utilities/Units Converter".
 		/// </summary>
 		[MenuItem("Tools/Utilities/Units Converter")]
 		public static void ShowWindow()
@@ -50,7 +59,9 @@ namespace Utilities.Editor
 		#region Global Methods
 
 		/// <summary>
-		/// Draws the GUI for the Units Converter.
+		/// Draws the GUI for the Units Converter window.
+		/// This method is called by Unity for each frame when the window is visible.
+		/// Handles the layout of controls, user input processing, and real-time conversion between metric and imperial units.
 		/// </summary>
 		private void OnGUI()
 		{

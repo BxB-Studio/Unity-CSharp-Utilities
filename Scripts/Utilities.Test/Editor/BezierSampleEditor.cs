@@ -9,7 +9,8 @@ using UnityEditor;
 namespace Utilities.Editor
 {
 	/// <summary>
-	/// Custom editor for the BezierSample class.
+	/// Custom editor for the BezierSample class that provides tools for creating, editing, and visualizing Bezier curves in the Unity Editor.
+	/// Allows manipulation of control points, segment creation/deletion, and mesh generation along the path.
 	/// </summary>
 	[CustomEditor(typeof(BezierSample))]
 	public class BezierSampleEditor : UnityEditor.Editor
@@ -19,39 +20,48 @@ namespace Utilities.Editor
 		#region Static Variables
 
 		/// <summary>
-		/// The color of the bezier curve.
+		/// The color used to render the bezier curve in the scene view.
+		/// Default is cyan for good visibility against most backgrounds.
 		/// </summary>
 		public static Color bezierCurveColor = Color.cyan;
 		/// <summary>
-		/// The color of the bezier curve when it is selected.
+		/// The color used to render the bezier curve when it is selected or hovered over.
+		/// Yellow provides a clear visual indication of selection state.
 		/// </summary>
 		public static Color bezierCurveSelectedColor = Color.yellow;
 		/// <summary>
-		/// The color of the anchor point.
+		/// The color used to render anchor points (main points) of the bezier curve.
+		/// Blue distinguishes anchor points from control points.
 		/// </summary>
 		public static Color anchorPointColor = Color.blue;
 		/// <summary>
-		/// The color of the control point.
+		/// The color used to render control points that influence the curve shape.
+		/// White makes control points visible but less prominent than anchor points.
 		/// </summary>
 		public static Color controlPointColor = Color.white;
 		/// <summary>
-		/// The color of the control point when it is disabled.
+		/// The color used to render control points when they are in a disabled or inactive state.
+		/// Gray indicates reduced functionality or availability.
 		/// </summary>
 		public static Color controlPointDisabledColor = Color.gray;
 		/// <summary>
-		/// The color of the control line.
+		/// The color used to render the lines connecting control points to their anchor points.
+		/// Black provides good contrast against most backgrounds.
 		/// </summary>
 		public static Color controlLineColor = Color.black;
 		/// <summary>
-		/// The width of the bezier curve.
+		/// The width of the bezier curve line in scene view, measured in pixels.
+		/// Thicker lines (2.0) improve visibility of the curve path.
 		/// </summary>
 		public static float bezierCurveWidth = 2f;
 		/// <summary>
-		/// The size of the anchor point.
+		/// The size of anchor point handles in the scene view.
+		/// Larger size (0.2) makes anchor points easier to select and manipulate.
 		/// </summary>
 		public static float anchorPointSize = .2f;
 		/// <summary>
-		/// The size of the control point.
+		/// The size of control point handles in the scene view.
+		/// Smaller size (0.05) distinguishes them from anchor points while maintaining usability.
 		/// </summary>
 		public static float controlPointSize = .05f;
 
@@ -60,7 +70,8 @@ namespace Utilities.Editor
 		#region Global Variables
 
 		/// <summary>
-		/// The instance of the BezierSample class.
+		/// Property that provides access to the BezierSample component being edited.
+		/// Caches the reference for improved performance and handles null checking.
 		/// </summary>
 		private BezierSample Instance
 		{
@@ -73,15 +84,18 @@ namespace Utilities.Editor
 			}
 		}
 		/// <summary>
-		/// The instance of the BezierSample class.
+		/// Cached reference to the BezierSample component being edited.
+		/// Used to avoid repeated casting of the target object.
 		/// </summary>
 		private BezierSample instance;
 		/// <summary>
-		/// The path of the BezierSample class.
+		/// Shorthand property to access the Bezier path data from the BezierSample instance.
+		/// Provides convenient access to the path without repeatedly accessing the Instance property.
 		/// </summary>
 		private Bezier.Path Path => Instance.path;
 		/// <summary>
-		/// The selected segment index.
+		/// Tracks which bezier curve segment is currently selected or hovered over.
+		/// -1 indicates no segment is selected. Used for highlighting and editing operations.
 		/// </summary>
 		private int selectedSegmentIndex = -1;
 
@@ -94,7 +108,9 @@ namespace Utilities.Editor
 		#region Editor
 
 		/// <summary>
-		/// Draws the inspector GUI.
+		/// Draws the custom inspector GUI for the BezierSample component.
+		/// Provides controls for path creation, looping, control point behavior, and mesh generation settings.
+		/// Handles undo registration for all modifications to ensure proper editor integration.
 		/// </summary>
 		public override void OnInspectorGUI()
 		{
@@ -247,7 +263,10 @@ namespace Utilities.Editor
 		#region Utilities
 
 		/// <summary>
-		/// Draws the bezier gizmos.
+		/// Draws all bezier curve elements in the scene view including curves, control points, and handles.
+		/// Renders the curve segments with appropriate colors based on selection state, and provides
+		/// interactive handles for manipulating anchor and control points. Also updates the mesh visualization
+		/// when enabled.
 		/// </summary>
 		private void BezierGizmos()
 		{
@@ -298,7 +317,10 @@ namespace Utilities.Editor
 				Instance.UpdateMesh();
 		}
 		/// <summary>
-		/// Handles user input.
+		/// Processes user input events in the scene view for interacting with the bezier curve.
+		/// Handles mouse clicks for adding new points (Shift+Left Click), removing points (Shift+Right Click),
+		/// and detects when the mouse hovers over curve segments to highlight them. Performs raycasting
+		/// to ensure accurate placement of new points on surfaces.
 		/// </summary>
 		private void UserInput()
 		{
@@ -369,7 +391,9 @@ namespace Utilities.Editor
 		#endregion
 
 		/// <summary>
-		/// Called when the editor is enabled.
+		/// Called when the editor is enabled or the component is first selected.
+		/// Ensures that a valid Bezier path exists for the BezierSample component,
+		/// creating one if necessary to prevent null reference exceptions.
 		/// </summary>
 		private void OnEnable()
 		{
@@ -377,7 +401,10 @@ namespace Utilities.Editor
 				Instance.CreatePath();
 		}
 		/// <summary>
-		/// Called when the scene is drawn.
+		/// Called when the scene view is being drawn. Handles all interactive elements
+		/// of the Bezier editor including processing user input for adding/removing points
+		/// and drawing the visual representation of the curve with its control points.
+		/// This is the main entry point for the editor's scene view functionality.
 		/// </summary>
 		private void OnSceneGUI()
 		{

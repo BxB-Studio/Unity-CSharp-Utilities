@@ -7,20 +7,34 @@ using UnityEditor;
 
 namespace Utilities.Editor
 {
+	/// <summary>
+	/// Editor window for calculating wheel radius based on standard tire size notation.
+	/// Provides a user-friendly interface for converting tire specifications (width, aspect ratio, rim diameter)
+	/// into actual wheel dimensions in meters.
+	/// </summary>
 	public class WheelRadiusCalculatorEditor : EditorWindow
 	{
 		#region Variables
 
 		/// <summary>
-		/// The width of the wheel.
+		/// The width of the tire in millimeters.
+		/// Represents the tire's section width from sidewall to sidewall.
+		/// Standard tire sizes typically range from 155mm to 335mm.
 		/// </summary>
 		private static int width = 225;
+		
 		/// <summary>
-		/// The aspect ratio of the wheel.
+		/// The aspect ratio of the tire as a percentage.
+		/// Represents the ratio of the tire's height to its width.
+		/// Lower aspect ratios (e.g., 35-55) indicate sportier, lower-profile tires,
+		/// while higher values (e.g., 65-80) indicate taller sidewalls.
 		/// </summary>
 		private static int aspect = 55;
+		
 		/// <summary>
-		/// The diameter of the wheel.
+		/// The diameter of the wheel rim in inches.
+		/// Represents the diameter of the metal wheel that the tire mounts onto.
+		/// Common values range from 14 to 22 inches for passenger vehicles.
 		/// </summary>
 		private static int diameter = 17;
 
@@ -31,7 +45,9 @@ namespace Utilities.Editor
 		#region Static Methods
 
 		/// <summary>
-		/// Shows the Wheel Radius Calculator window.
+		/// Shows the Wheel Radius Calculator window in the Unity Editor.
+		/// Creates a non-resizable window with fixed dimensions and registers it with Unity's window management system.
+		/// This method is called when the user selects the menu item "Tools/Utilities/Wheel Radius Calculator".
 		/// </summary>
 		[MenuItem("Tools/Utilities/Wheel Radius Calculator")]
 		public static void ShowWindow()
@@ -47,7 +63,12 @@ namespace Utilities.Editor
 		#region Global Methods
 
 		/// <summary>
-		/// Draws the GUI for the Wheel Radius Calculator.
+		/// Draws the GUI for the Wheel Radius Calculator window.
+		/// This method is called by Unity for each frame when the window is visible.
+		/// Handles the layout of controls for inputting tire specifications (width, aspect ratio, rim diameter)
+		/// and displays the calculated wheel diameter and radius in meters.
+		/// The calculation follows the standard tire size formula: diameter = (rim diameter in mm + 2 * sidewall height) / 1000,
+		/// where sidewall height = (width * aspect ratio) / 100.
 		/// </summary>
 		private void OnGUI()
 		{

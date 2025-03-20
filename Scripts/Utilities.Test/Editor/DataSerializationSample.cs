@@ -11,20 +11,35 @@ using UnityEditor;
 namespace Utilities.Editor
 {
 	/// <summary>
-	/// A sample editor window for data serialization.
+	/// A sample editor window that demonstrates data serialization and deserialization functionality.
+	/// This window allows users to create, view, edit, save, and load serialized data through a simple interface.
 	/// </summary>
 	internal class DataSerializationSample : EditorWindow
 	{
 		#region Modules
 
 		/// <summary>
-		/// A sample data class for serialization.
+		/// A sample data class for serialization that stores basic personal information.
+		/// This class demonstrates how to make a simple data structure serializable
+		/// by using the [Serializable] attribute and basic data types.
 		/// </summary>
 		[Serializable]
 		private class DataSample
 		{
+			/// <summary>
+			/// The first name of the person represented by this data sample.
+			/// </summary>
 			public string firstName;
+			
+			/// <summary>
+			/// The last name of the person represented by this data sample.
+			/// </summary>
 			public string lastName;
+			
+			/// <summary>
+			/// The age of the person represented by this data sample.
+			/// Must be a non-negative integer.
+			/// </summary>
 			public int age;
 		}
 
@@ -34,14 +49,19 @@ namespace Utilities.Editor
 
 		/// <summary>
 		/// The serialization utility for the data sample.
+		/// Handles the low-level operations of saving and loading the DataSample object to/from disk.
 		/// </summary>
 		private DataSerializationUtility<DataSample> serializationUtility;
+		
 		/// <summary>
-		/// The data sample.
+		/// The data sample instance that is currently being edited in the window.
+		/// When null, the UI will show empty fields and offer to load existing data or create new data.
 		/// </summary>
 		private DataSample data;
+		
 		/// <summary>
-		/// The path to the data sample.
+		/// The full file path where the data sample will be saved to or loaded from.
+		/// Located in the Resources/Assets folder within the project's Assets directory.
 		/// </summary>
 		private string DataPath => $"{Application.dataPath}/Resources/Assets/DataSample.data";
 
@@ -51,6 +71,8 @@ namespace Utilities.Editor
 
 		/// <summary>
 		/// Shows the data serialization sample window.
+		/// Creates and displays a new instance of the DataSerializationSample window,
+		/// making it visible in the Unity Editor.
 		/// </summary>
 		[MenuItem("Tools/Utilities/Debug/Data File Sample...")]
 		public static void ShowWindow()
@@ -59,7 +81,9 @@ namespace Utilities.Editor
 		}
 
 		/// <summary>
-		/// Loads the data sample.
+		/// Loads the data sample from disk.
+		/// Initializes the serialization utility if needed, then loads the data
+		/// from the specified file path and updates the UI to reflect the loaded data.
 		/// </summary>
 		private void Load()
 		{
@@ -68,8 +92,12 @@ namespace Utilities.Editor
 
 			data = serializationUtility.Load();
 		}
+		
 		/// <summary>
-		/// Saves the data sample.
+		/// Saves the current data sample to disk.
+		/// Initializes the serialization utility if needed, then saves the data
+		/// to the specified file path and refreshes the AssetDatabase to ensure
+		/// Unity recognizes the new or updated file.
 		/// </summary>
 		private void Save()
 		{
@@ -80,8 +108,13 @@ namespace Utilities.Editor
 
 			AssetDatabase.Refresh();
 		}
+		
 		/// <summary>
-		/// Draws the GUI for the data serialization sample.
+		/// Draws the GUI for the data serialization sample window.
+		/// Handles two main states:
+		/// 1. When data is loaded: Displays editable fields and a save button
+		/// 2. When no data is loaded: Shows disabled fields and options to load existing data or create new data
+		/// The UI adapts based on whether the data file exists on disk.
 		/// </summary>
 		private void OnGUI()
 		{

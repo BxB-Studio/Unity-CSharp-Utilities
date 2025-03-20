@@ -1,16 +1,16 @@
 {
   "displayName": "Utilities",
   "name": "dev.bxbstudio.utilities",
-  "description": "The Unity CSharp Utilities library provides a bunch of useful tools that are missing from the UnityEngine assembly",
-  "version": "1.1.9",
+  "description": "The Unity CSharp Utilities library provides a comprehensive collection of utility functions, extension methods, and data structures that are missing from the Unity Engine, helping developers write cleaner, more efficient code.",
+  "version": "1.1.10",
   "unity": "2020.3",
   "unityRelease": "17f1",
   "dependencies": {
     "com.unity.mathematics": "1.2.6"
   },
-  "documentationUrl": "https://github.com/BxB-Studio/Unity-CSharp-Utilities/blob/master/README.md",
-  "changelogUrl": "https://github.com/BxB-Studio/Unity-CSharp-Utilities/blob/master/README.md",
-  "licensesUrl": "https://github.com/BxB-Studio/Unity-CSharp-Utilities/blob/master/README.md",
+  "documentationUrl": "https://github.com/BxB-Studio/Unity-CSharp-Utilities/blob/master/Documentation/GettingStarted.md",
+  "changelogUrl": "https://github.com/BxB-Studio/Unity-CSharp-Utilities/blob/master/CHANGELOG.md",
+  "licensesUrl": "https://github.com/BxB-Studio/Unity-CSharp-Utilities/blob/master/LICENSE",
   "author": {
     "name": "BxB Studio",
     "email": "contact@bxbstudio.dev",

@@ -8,14 +8,18 @@ using UnityEditor;
 namespace Utilities.Editor.Test
 {
 	/// <summary>
-	/// A test editor window for layers management API.
+	/// A test editor window for demonstrating and testing the layers management API functionality.
+	/// This window provides a user interface to interact with layer operations such as adding, removing,
+	/// renaming layers, and checking if layers are empty, all through the LayersManager utility.
 	/// </summary>
 	public class LayersManagementAPITest : EditorWindow
 	{
 		#region Enumerators
 
 		/// <summary>
-		/// The type of input for the layers management API test.
+		/// Defines the type of input to be used for layer operations.
+		/// Integer: Use layer index for operations.
+		/// String: Use layer name for operations.
 		/// </summary>
 		private enum InputType { Integer, String }
 		
@@ -24,23 +28,34 @@ namespace Utilities.Editor.Test
 		#region Variables
 
 		/// <summary>
-		/// The current input type for the layers management API test.
+		/// The current input type selected for the layers management API test.
+		/// Controls whether operations use layer indices or layer names.
+		/// Defaults to Integer input type.
 		/// </summary>
 		private InputType currentInputType = InputType.Integer;
+		
 		/// <summary>
-		/// The index of the layer.
+		/// The index of the layer to be used in operations that require a layer index.
+		/// This value is used when the current input type is set to Integer.
 		/// </summary>
 		private int layerIndex;
+		
 		/// <summary>
-		/// The name of the layer.
+		/// The name of the layer to be used in operations that require a layer name.
+		/// This value is used when the current input type is set to String.
 		/// </summary>
 		private string layerName = string.Empty;
+		
 		/// <summary>
-		/// The target layer for renaming.
+		/// The target layer identifier (name or index as string) for the rename operation.
+		/// When using String input type, this represents the layer name to be renamed.
+		/// When using Integer input type, this should be a valid integer representing the layer index.
 		/// </summary>
 		private string renameLayerTarget = string.Empty;
+		
 		/// <summary>
-		/// The new name for the layer.
+		/// The new name to assign to the layer during a rename operation.
+		/// This will replace the current name of the layer specified by renameLayerTarget.
 		/// </summary>
 		private string renameLayerNewName = string.Empty;
 
@@ -49,7 +64,9 @@ namespace Utilities.Editor.Test
 		#region Utilities
 
 		/// <summary>
-		/// Shows the layers management API test window.
+		/// Shows the layers management API test window in the Unity Editor.
+		/// Creates a new window instance or focuses an existing one.
+		/// Accessible through the Unity Editor menu at Tools/Utilities/Layers Management API Test.
 		/// </summary>
 		[MenuItem("Tools/Utilities/Layers Management API Test")]
 		public static void ShowWindow()
@@ -58,7 +75,9 @@ namespace Utilities.Editor.Test
 		}
 
 		/// <summary>
-		/// Tries to add a layer.
+		/// Attempts to add a new layer with the specified name.
+		/// Uses the LayersManager.AddLayer method and handles any exceptions that may occur.
+		/// Logs success or failure messages to the Unity console.
 		/// </summary>
 		private void TryAddLayer()
 		{
@@ -72,8 +91,12 @@ namespace Utilities.Editor.Test
 				Debug.LogError($"Error adding layer: {ex.Message}");
 			}
 		}
+		
 		/// <summary>
-		/// Tries to remove a layer by name.
+		/// Attempts to remove a layer using its name.
+		/// Uses the LayersManager.RemoveLayer(string) method and handles any exceptions that may occur.
+		/// Logs success or failure messages to the Unity console.
+		/// This method is used when the current input type is set to String.
 		/// </summary>
 		private void TryRemoveLayerByName()
 		{
@@ -87,8 +110,12 @@ namespace Utilities.Editor.Test
 				Debug.LogError($"Error removing layer by name: {ex.Message}");
 			}
 		}
+		
 		/// <summary>
-		/// Tries to remove a layer by index.
+		/// Attempts to remove a layer using its index.
+		/// Uses the LayersManager.RemoveLayer(int) method and handles any exceptions that may occur.
+		/// Logs success or failure messages to the Unity console.
+		/// This method is used when the current input type is set to Integer.
 		/// </summary>
 		private void TryRemoveLayerByIndex()
 		{
@@ -102,8 +129,12 @@ namespace Utilities.Editor.Test
 				Debug.LogError($"Error removing layer by index: {ex.Message}");
 			}
 		}
+		
 		/// <summary>
-		/// Tries to rename a layer.
+		/// Attempts to rename a layer based on the current input type.
+		/// For String input type, uses LayersManager.RenameLayer(string, string) to rename by layer name.
+		/// For Integer input type, parses the target string to an integer and uses LayersManager.RenameLayer(int, string).
+		/// Handles any exceptions that may occur and logs appropriate messages to the Unity console.
 		/// </summary>
 		private void TryRenameLayer()
 		{
@@ -133,8 +164,11 @@ namespace Utilities.Editor.Test
 				Debug.LogError($"Error renaming layer: {ex.Message}");
 			}
 		}
+		
 		/// <summary>
-		/// Tries to check if a layer is empty.
+		/// Attempts to check if a layer at the specified index is empty.
+		/// Uses the LayersManager.IsLayerEmpty method to determine if any GameObjects are assigned to the layer.
+		/// Handles any exceptions that may occur and logs the result or error messages to the Unity console.
 		/// </summary>
 		private void TryCheckIfLayerIsEmpty()
 		{
@@ -154,7 +188,10 @@ namespace Utilities.Editor.Test
 		#region Methods
 
 		/// <summary>
-		/// Draws the GUI for the layers management API test.
+		/// Draws the GUI for the layers management API test window.
+		/// Provides UI elements for selecting input type, entering layer information,
+		/// and buttons for performing various layer operations.
+		/// This method is called automatically by Unity for each frame when the window is visible.
 		/// </summary>
 		private void OnGUI()
 		{
